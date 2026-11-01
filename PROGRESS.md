@@ -36,3 +36,39 @@ classifier. Consequences and mitigation:
 | B FS/coredump/posture | `fs/spiffs.py`, `fs/littlefs.py`, `coredump.py`, `posture.py`, `rules/{pt_*,img_*,ota_*,fs_*,core_*,sec_no_*}.py`, `tools/corpus/spiffs_writer.py` | spiffs → littlefs → coredump → posture → rules |
 | C pipeline/CLI/bench | `pipeline.py`, `context.py`, `commands.py`, `cli.py`, `diff.py`, `bench.py`, `tools/corpus/generate.py` | pipeline → CLI → corpus → bench → CI gate |
 | D ATT&CK/reports/docs | `attck.py`, `data/attck_ics_map.yaml`, `report/{json,markdown,html}.py`, `docs/*.md`, `examples/`, README | map → reports → docs → examples |
+
+## Phase A — NVS parser and secret detection ✅
+
+**Done**
+- `nvs.py`: pages (header CRC over bytes 4..28, all 6 states), entry bitmap, all 12
+  entry types, multi-span STR, legacy BLOB, BLOB_DATA reassembly via BLOB_IDX
+  (chunk_start aware), per-entry header + payload CRC (mismatch → anomaly),
+  namespaces, **ERASED-entry recovery** (`recovered_deleted`, incl. erased chunked
+  blobs and orphan chunks), encrypted-NVS detection (no parse), Evidence for every
+  value (header+span bytes, plus payload-only evidence with exact SHA-256).
+- `tools/corpus/nvs_writer.py`: port of esp-idf-nvs-partition-gen 0.2.0. **CI proves it
+  byte-identical** to the official tool (`tests/test_nvs_official.py`, 3 cases incl. a
+  300-entry multi-page image).
+- `wifi.py`: `nvs.net80211` decoding (key names confirmed from `libnet80211.a`).
+- `strings.py` (ASCII + UTF-16LE, offsets kept), `secrets.py` (PEM keys, PEM/DER certs
+  via `cryptography`, AWS key IDs, entropy-gated generic tokens, MQTT, URLs,
+  credential assignments, URL userinfo), `redact.py` (first/last 2 chars).
+- Rule registry (`rules/__init__.py`, auto-discovery) + `context.py` (parsed dump +
+  scan regions that map file/NVS bytes back to dump offsets).
+- Rules: NVS.WIFI_CREDENTIALS, NVS.DELETED_SECRET, SEC.HARDCODED_CREDENTIAL,
+  SEC.API_KEY, SEC.PRIVATE_KEY, SEC.CERT, SEC.MQTT_BROKER, SEC.URL — each with
+  positive + negative tests; clean fixture yields zero SEC.*/NVS.* findings.
+
+**Tests**: CI 133 passed / 0 skipped (3.11 + 3.12); local 116 passed / 3 skipped
+(tool-dependent modules).
+
+**Bugs found by the new tests and fixed**: generic-token regex could not match after
+`=`; DER detection missed certs whose tbsCertificate uses the 1-byte length form
+(`30 81`); credential regex missed `admin_password=` style keys.
+
+**CLAUDE.md corrections**: NVS header CRC range, INVALID page state, ILLEGAL bitmap
+state, entry/payload CRC definitions, varlen and BLOB_IDX layouts, v2 writes all
+binary values as chunked blobs; Wi-Fi key names verified, blob layout still unverified.
+
+**Known gaps**: v1 (0xFF) NVS images only tested via a hand-built legacy BLOB page;
+NVS encryption detection is heuristic (no XTS decryption by design).
