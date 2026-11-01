@@ -19,105 +19,6 @@
   },
   "findings": [
     {
-      "id": "DIFF.PARTITION_CHANGED:3b679cec33f2d253",
-      "rule_id": "DIFF.PARTITION_CHANGED",
-      "severity": "info",
-      "title": "Partition 'ota_0' contents changed",
-      "detail": {
-        "label": "ota_0",
-        "sha256_a": "c549ed148548b3e7368a434ffc323916eaa923b2f33c87df023463401465bbdb",
-        "sha256_b": "6507acac070a828163dec6269f174c780c5f80cc629e250ddcb14f284654525f",
-        "evidence_dumps": [
-          "A",
-          "B"
-        ]
-      },
-      "evidence": [
-        {
-          "partition": "ota_0",
-          "offset": 65536,
-          "offset_hex": "0x10000",
-          "length": 1572864,
-          "sha256": "c549ed148548b3e7368a434ffc323916eaa923b2f33c87df023463401465bbdb"
-        },
-        {
-          "partition": "ota_0",
-          "offset": 65536,
-          "offset_hex": "0x10000",
-          "length": 1572864,
-          "sha256": "6507acac070a828163dec6269f174c780c5f80cc629e250ddcb14f284654525f"
-        }
-      ],
-      "attck": [],
-      "confidence": 1.0
-    },
-    {
-      "id": "DIFF.PARTITION_CHANGED:8b647be5bf84f651",
-      "rule_id": "DIFF.PARTITION_CHANGED",
-      "severity": "info",
-      "title": "Partition 'ota_1' contents changed",
-      "detail": {
-        "label": "ota_1",
-        "sha256_a": "e963bf6d181d44ec27456b682e1a03545f05ed72c528cb08a74d182637a6cfc9",
-        "sha256_b": "058c857c8dbf1af013d3b970bdf29e68743f673947bdc9209de62a246fb54014",
-        "evidence_dumps": [
-          "A",
-          "B"
-        ]
-      },
-      "evidence": [
-        {
-          "partition": "ota_1",
-          "offset": 1638400,
-          "offset_hex": "0x190000",
-          "length": 1572864,
-          "sha256": "e963bf6d181d44ec27456b682e1a03545f05ed72c528cb08a74d182637a6cfc9"
-        },
-        {
-          "partition": "ota_1",
-          "offset": 1638400,
-          "offset_hex": "0x190000",
-          "length": 1572864,
-          "sha256": "058c857c8dbf1af013d3b970bdf29e68743f673947bdc9209de62a246fb54014"
-        }
-      ],
-      "attck": [],
-      "confidence": 1.0
-    },
-    {
-      "id": "DIFF.PARTITION_CHANGED:9d4bb50180c42493",
-      "rule_id": "DIFF.PARTITION_CHANGED",
-      "severity": "info",
-      "title": "Partition 'otadata' contents changed",
-      "detail": {
-        "label": "otadata",
-        "sha256_a": "b7e293bb607d3bddb99b7f38a7a45afd5823c0c61e3216e67858bbc759535282",
-        "sha256_b": "3a3dd76b7b4854a8c933ae683d67bdfb1f8c223a23f1419269803db6246716bc",
-        "evidence_dumps": [
-          "A",
-          "B"
-        ]
-      },
-      "evidence": [
-        {
-          "partition": "otadata",
-          "offset": 53248,
-          "offset_hex": "0xd000",
-          "length": 8192,
-          "sha256": "b7e293bb607d3bddb99b7f38a7a45afd5823c0c61e3216e67858bbc759535282"
-        },
-        {
-          "partition": "otadata",
-          "offset": 53248,
-          "offset_hex": "0xd000",
-          "length": 8192,
-          "sha256": "3a3dd76b7b4854a8c933ae683d67bdfb1f8c223a23f1419269803db6246716bc"
-        }
-      ],
-      "attck": [],
-      "confidence": 1.0
-    },
-    {
       "id": "DIFF.APP_DESC:c9d2781493937224",
       "rule_id": "DIFF.APP_DESC",
       "severity": "medium",
@@ -154,14 +55,20 @@
           "offset": 65568,
           "offset_hex": "0x10020",
           "length": 256,
-          "sha256": "229e740ce001e5cfa2efa124ff463bfcdd334cbd0cd9342b410004c5543dc410"
+          "sha256": "229e740ce001e5cfa2efa124ff463bfcdd334cbd0cd9342b410004c5543dc410",
+          "preview_hex": "3254cdab000000000000000000000000312e302e3000000000000000000000000000000000000000000000000000000073656e736f725f667700000000000000",
+          "preview_redacted": false,
+          "dump": "A"
         },
         {
           "partition": "ota_0",
           "offset": 65568,
           "offset_hex": "0x10020",
           "length": 256,
-          "sha256": "e474632dda4e3b3e2f1772e5bc89e4b1a3a4487e061bd92a43799dd9d2f43679"
+          "sha256": "e474632dda4e3b3e2f1772e5bc89e4b1a3a4487e061bd92a43799dd9d2f43679",
+          "preview_hex": "3254cdab010000000000000000000000312e302e3000000000000000000000000000000000000000000000000000000073656e736f725f667700000000000000",
+          "preview_redacted": false,
+          "dump": "B"
         }
       ],
       "attck": [],
@@ -204,14 +111,20 @@
           "offset": 1638432,
           "offset_hex": "0x190020",
           "length": 256,
-          "sha256": "9e7ea1917ea80511acf0084857587069179e8c9b56d07ca93afca6604694356b"
+          "sha256": "9e7ea1917ea80511acf0084857587069179e8c9b56d07ca93afca6604694356b",
+          "preview_hex": "3254cdab000000000000000000000000312e312e3000000000000000000000000000000000000000000000000000000073656e736f725f667700000000000000",
+          "preview_redacted": false,
+          "dump": "A"
         },
         {
           "partition": "ota_1",
           "offset": 1638432,
           "offset_hex": "0x190020",
           "length": 256,
-          "sha256": "f4d3f9f8b66f322fdef9c97ef6d32ee175c4e9012e4f4a3eb923d20df07663fe"
+          "sha256": "f4d3f9f8b66f322fdef9c97ef6d32ee175c4e9012e4f4a3eb923d20df07663fe",
+          "preview_hex": "3254cdab020000000000000000000000312e312e3000000000000000000000000000000000000000000000000000000073656e736f725f667700000000000000",
+          "preview_redacted": false,
+          "dump": "B"
         }
       ],
       "attck": [],
@@ -264,14 +177,137 @@
           "offset": 53248,
           "offset_hex": "0xd000",
           "length": 8192,
-          "sha256": "b7e293bb607d3bddb99b7f38a7a45afd5823c0c61e3216e67858bbc759535282"
+          "sha256": "b7e293bb607d3bddb99b7f38a7a45afd5823c0c61e3216e67858bbc759535282",
+          "preview_hex": "01000000ffffffffffffffffffffffffffffffffffffffff020000009a984347ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "preview_redacted": false,
+          "dump": "A"
         },
         {
           "partition": null,
           "offset": 53248,
           "offset_hex": "0xd000",
           "length": 8192,
-          "sha256": "3a3dd76b7b4854a8c933ae683d67bdfb1f8c223a23f1419269803db6246716bc"
+          "sha256": "3a3dd76b7b4854a8c933ae683d67bdfb1f8c223a23f1419269803db6246716bc",
+          "preview_hex": "03000000ffffffffffffffffffffffffffffffffffffffff0200000011504aedffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "preview_redacted": false,
+          "dump": "B"
+        }
+      ],
+      "attck": [],
+      "confidence": 1.0
+    },
+    {
+      "id": "DIFF.PARTITION_CHANGED:3b679cec33f2d253",
+      "rule_id": "DIFF.PARTITION_CHANGED",
+      "severity": "info",
+      "title": "Partition 'ota_0' contents changed",
+      "detail": {
+        "label": "ota_0",
+        "sha256_a": "c549ed148548b3e7368a434ffc323916eaa923b2f33c87df023463401465bbdb",
+        "sha256_b": "6507acac070a828163dec6269f174c780c5f80cc629e250ddcb14f284654525f",
+        "evidence_dumps": [
+          "A",
+          "B"
+        ]
+      },
+      "evidence": [
+        {
+          "partition": "ota_0",
+          "offset": 65536,
+          "offset_hex": "0x10000",
+          "length": 1572864,
+          "sha256": "c549ed148548b3e7368a434ffc323916eaa923b2f33c87df023463401465bbdb",
+          "preview_hex": "e904022004000840ee00000000000000008f0100000000012000403f080200003254cdab000000000000000000000000312e302e300000000000000000000000",
+          "preview_redacted": false,
+          "dump": "A"
+        },
+        {
+          "partition": "ota_0",
+          "offset": 65536,
+          "offset_hex": "0x10000",
+          "length": 1572864,
+          "sha256": "6507acac070a828163dec6269f174c780c5f80cc629e250ddcb14f284654525f",
+          "preview_hex": "e904022004000840ee00000000000000008f0100000000012000403f080200003254cdab010000000000000000000000312e302e300000000000000000000000",
+          "preview_redacted": false,
+          "dump": "B"
+        }
+      ],
+      "attck": [],
+      "confidence": 1.0
+    },
+    {
+      "id": "DIFF.PARTITION_CHANGED:8b647be5bf84f651",
+      "rule_id": "DIFF.PARTITION_CHANGED",
+      "severity": "info",
+      "title": "Partition 'ota_1' contents changed",
+      "detail": {
+        "label": "ota_1",
+        "sha256_a": "e963bf6d181d44ec27456b682e1a03545f05ed72c528cb08a74d182637a6cfc9",
+        "sha256_b": "058c857c8dbf1af013d3b970bdf29e68743f673947bdc9209de62a246fb54014",
+        "evidence_dumps": [
+          "A",
+          "B"
+        ]
+      },
+      "evidence": [
+        {
+          "partition": "ota_1",
+          "offset": 1638400,
+          "offset_hex": "0x190000",
+          "length": 1572864,
+          "sha256": "e963bf6d181d44ec27456b682e1a03545f05ed72c528cb08a74d182637a6cfc9",
+          "preview_hex": "e904022004000840ee00000000000000008f0100000000012000403f080200003254cdab000000000000000000000000312e312e300000000000000000000000",
+          "preview_redacted": false,
+          "dump": "A"
+        },
+        {
+          "partition": "ota_1",
+          "offset": 1638400,
+          "offset_hex": "0x190000",
+          "length": 1572864,
+          "sha256": "058c857c8dbf1af013d3b970bdf29e68743f673947bdc9209de62a246fb54014",
+          "preview_hex": "e904022004000840ee00000000000000008f0100000000012000403f080200003254cdab020000000000000000000000312e312e300000000000000000000000",
+          "preview_redacted": false,
+          "dump": "B"
+        }
+      ],
+      "attck": [],
+      "confidence": 1.0
+    },
+    {
+      "id": "DIFF.PARTITION_CHANGED:9d4bb50180c42493",
+      "rule_id": "DIFF.PARTITION_CHANGED",
+      "severity": "info",
+      "title": "Partition 'otadata' contents changed",
+      "detail": {
+        "label": "otadata",
+        "sha256_a": "b7e293bb607d3bddb99b7f38a7a45afd5823c0c61e3216e67858bbc759535282",
+        "sha256_b": "3a3dd76b7b4854a8c933ae683d67bdfb1f8c223a23f1419269803db6246716bc",
+        "evidence_dumps": [
+          "A",
+          "B"
+        ]
+      },
+      "evidence": [
+        {
+          "partition": "otadata",
+          "offset": 53248,
+          "offset_hex": "0xd000",
+          "length": 8192,
+          "sha256": "b7e293bb607d3bddb99b7f38a7a45afd5823c0c61e3216e67858bbc759535282",
+          "preview_hex": "01000000ffffffffffffffffffffffffffffffffffffffff020000009a984347ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "preview_redacted": false,
+          "dump": "A"
+        },
+        {
+          "partition": "otadata",
+          "offset": 53248,
+          "offset_hex": "0xd000",
+          "length": 8192,
+          "sha256": "3a3dd76b7b4854a8c933ae683d67bdfb1f8c223a23f1419269803db6246716bc",
+          "preview_hex": "03000000ffffffffffffffffffffffffffffffffffffffff0200000011504aedffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "preview_redacted": false,
+          "dump": "B"
         }
       ],
       "attck": [],

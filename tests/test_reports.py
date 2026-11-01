@@ -83,6 +83,10 @@ def test_html_diff_view() -> None:
     assert "id='diff'" in page and "DIFF.OTA_STATE" in page and "DIFF.APP_DESC" in page
     md = markdown.render(diff_dict(res))
     assert md.startswith("# FlashTrace diff")
+    assert "preview withheld" not in page and "(dump A)" in page and "(dump B)" in page
+    sev = [f.severity for f in res.findings]
+    order = ["critical", "high", "medium", "low", "info"]
+    assert sev == sorted(sev, key=order.index)
 
 
 def test_encrypted_report_mentions_skip() -> None:

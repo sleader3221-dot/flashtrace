@@ -236,6 +236,19 @@ def result_dict(r: AnalysisResult, *, previews: bool = True) -> dict[str, Any]:
     }
 
 
+def _diff_finding(f: Finding, d: DiffResult) -> dict[str, Any]:
+    out = finding_dict(f)
+    dumps = f.detail.get("evidence_dumps", [])
+    masked = f.detail.get("redacted") is True
+    for i, ev in enumerate(f.evidence):
+        src = d.a.dump if i < len(dumps) and dumps[i] == "A" else d.b.dump
+        out["evidence"][i] = {
+            **evidence_dict(ev, src, masked),
+            "dump": dumps[i] if i < len(dumps) else "B",
+        }
+    return out
+
+
 def diff_dict(d: DiffResult) -> dict[str, Any]:
     return {
         "schema_version": SCHEMA_VERSION,
@@ -246,5 +259,5 @@ def diff_dict(d: DiffResult) -> dict[str, Any]:
             "finding_count": len(d.findings),
             "rules_fired": sorted({f.rule_id for f in d.findings}),
         },
-        "findings": [finding_dict(f) for f in d.findings],
+        "findings": [_diff_finding(f, d) for f in d.findings],
     }

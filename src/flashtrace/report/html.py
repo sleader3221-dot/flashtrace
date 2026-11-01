@@ -62,9 +62,11 @@ def _e(x: Any) -> str:
     return html.escape("" if x is None else str(x), quote=True)
 
 
-def hexdump(hexstr: str | None, base: int) -> str:
+def hexdump(hexstr: str | None, base: int, redacted: bool = True) -> str:
     if hexstr is None:
-        return "(preview withheld: evidence backs a redacted secret; use --reveal-secrets)"
+        if redacted:
+            return "(preview withheld: evidence backs a redacted secret; use --reveal-secrets)"
+        return "(no preview available)"
     raw = bytes.fromhex(hexstr)
     rows = []
     for i in range(0, len(raw), 16):
@@ -92,13 +94,18 @@ def _findings(findings: list[dict[str, Any]]) -> str:
         evs = []
         for ev in f["evidence"]:
             evs.append(
-                "<tr><td class='mono'>{}</td><td>{}</td><td>{}</td><td class='mono'>{}</td></tr>"
+                "<tr><td class='mono'>{}</td><td>{}</td><td>{}{}</td><td class='mono'>{}</td></tr>"
                 "<tr><td colspan='4'><pre class='mono'>{}</pre></td></tr>".format(
                     _e(ev["offset_hex"]),
                     _e(ev["length"]),
                     _e(ev["partition"] or "-"),
+                    _e(f" (dump {ev['dump']})" if "dump" in ev else ""),
                     _e(ev["sha256"]),
-                    _e(hexdump(ev.get("preview_hex"), ev["offset"])),
+                    _e(
+                        hexdump(
+                            ev.get("preview_hex"), ev["offset"], bool(ev.get("preview_redacted"))
+                        )
+                    ),
                 )
             )
         detail = json.dumps(f["detail"], indent=2, default=str)

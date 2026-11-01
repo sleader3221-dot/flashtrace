@@ -216,7 +216,8 @@ def diff_contexts(a: AnalysisContext, b: AnalysisContext, reveal: bool = False) 
                     [("A", fa[fkey][1]), ("B", fb[fkey][1])],
                 )
             )
-    res.findings = enrich(res.findings)
+    rank = {"critical": 0, "high": 1, "medium": 2, "low": 3, "info": 4}
+    res.findings = sorted(enrich(res.findings), key=lambda f: (rank[f.severity], f.rule_id, f.id))
     return res
 
 

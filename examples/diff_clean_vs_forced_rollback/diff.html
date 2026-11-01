@@ -28,31 +28,7 @@ summary::-webkit-details-marker{display:none}
 details>div{padding:4px 12px 12px}pre{margin:6px 0;overflow-x:auto;white-space:pre}
 .filters{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}select{padding:4px;background:var(--card);
 color:var(--fg);border:1px solid var(--border);border-radius:4px}
-</style></head><body><header><h1>FlashTrace diff</h1><div class='meta'><div>Dump A</div><div class='mono'>53f71ba18313944b801bd6f78dbe7baaf17c1d181105d854ab947b5a7e1258f1 (4194304 bytes)</div><div>Dump B</div><div class='mono'>070d157a56719a63e2d51494215ff2fe8a01b2cdc75121941e9a065443d92d1a (4194304 bytes)</div><div>Differences</div><div>6</div></div></header><h2 id='diff'>Diff view</h2><div class='filters'><label>Severity <select id='f-sev' onchange='ftFilter()'><option value=''>all</option><option>critical</option><option>high</option><option>medium</option><option>low</option><option>info</option></select></label><label>Rule <select id='f-rule' onchange='ftFilter()'><option value=''>all</option><option>DIFF.APP_DESC</option><option>DIFF.OTA_STATE</option><option>DIFF.PARTITION_CHANGED</option></select></label></div><details class='finding' data-sev='info' data-rule='DIFF.PARTITION_CHANGED'><summary><span class='pill info'>info</span> <code>DIFF.PARTITION_CHANGED</code> Partition &#x27;ota_0&#x27; contents changed</summary><div><div class='muted'>id <code>DIFF.PARTITION_CHANGED:3b679cec33f2d253</code> · confidence 1.0 · ATT&amp;CK for ICS: none mapped</div><pre class='mono'>{
-  &quot;label&quot;: &quot;ota_0&quot;,
-  &quot;sha256_a&quot;: &quot;c549ed148548b3e7368a434ffc323916eaa923b2f33c87df023463401465bbdb&quot;,
-  &quot;sha256_b&quot;: &quot;6507acac070a828163dec6269f174c780c5f80cc629e250ddcb14f284654525f&quot;,
-  &quot;evidence_dumps&quot;: [
-    &quot;A&quot;,
-    &quot;B&quot;
-  ]
-}</pre><div class='tablewrap'><table><tr><th>Offset</th><th>Length</th><th>Partition</th><th>SHA-256</th></tr><tr><td class='mono'>0x10000</td><td>1572864</td><td>ota_0</td><td class='mono'>c549ed148548b3e7368a434ffc323916eaa923b2f33c87df023463401465bbdb</td></tr><tr><td colspan='4'><pre class='mono'>(preview withheld: evidence backs a redacted secret; use --reveal-secrets)</pre></td></tr><tr><td class='mono'>0x10000</td><td>1572864</td><td>ota_0</td><td class='mono'>6507acac070a828163dec6269f174c780c5f80cc629e250ddcb14f284654525f</td></tr><tr><td colspan='4'><pre class='mono'>(preview withheld: evidence backs a redacted secret; use --reveal-secrets)</pre></td></tr></table></div></div></details><details class='finding' data-sev='info' data-rule='DIFF.PARTITION_CHANGED'><summary><span class='pill info'>info</span> <code>DIFF.PARTITION_CHANGED</code> Partition &#x27;ota_1&#x27; contents changed</summary><div><div class='muted'>id <code>DIFF.PARTITION_CHANGED:8b647be5bf84f651</code> · confidence 1.0 · ATT&amp;CK for ICS: none mapped</div><pre class='mono'>{
-  &quot;label&quot;: &quot;ota_1&quot;,
-  &quot;sha256_a&quot;: &quot;e963bf6d181d44ec27456b682e1a03545f05ed72c528cb08a74d182637a6cfc9&quot;,
-  &quot;sha256_b&quot;: &quot;058c857c8dbf1af013d3b970bdf29e68743f673947bdc9209de62a246fb54014&quot;,
-  &quot;evidence_dumps&quot;: [
-    &quot;A&quot;,
-    &quot;B&quot;
-  ]
-}</pre><div class='tablewrap'><table><tr><th>Offset</th><th>Length</th><th>Partition</th><th>SHA-256</th></tr><tr><td class='mono'>0x190000</td><td>1572864</td><td>ota_1</td><td class='mono'>e963bf6d181d44ec27456b682e1a03545f05ed72c528cb08a74d182637a6cfc9</td></tr><tr><td colspan='4'><pre class='mono'>(preview withheld: evidence backs a redacted secret; use --reveal-secrets)</pre></td></tr><tr><td class='mono'>0x190000</td><td>1572864</td><td>ota_1</td><td class='mono'>058c857c8dbf1af013d3b970bdf29e68743f673947bdc9209de62a246fb54014</td></tr><tr><td colspan='4'><pre class='mono'>(preview withheld: evidence backs a redacted secret; use --reveal-secrets)</pre></td></tr></table></div></div></details><details class='finding' data-sev='info' data-rule='DIFF.PARTITION_CHANGED'><summary><span class='pill info'>info</span> <code>DIFF.PARTITION_CHANGED</code> Partition &#x27;otadata&#x27; contents changed</summary><div><div class='muted'>id <code>DIFF.PARTITION_CHANGED:9d4bb50180c42493</code> · confidence 1.0 · ATT&amp;CK for ICS: none mapped</div><pre class='mono'>{
-  &quot;label&quot;: &quot;otadata&quot;,
-  &quot;sha256_a&quot;: &quot;b7e293bb607d3bddb99b7f38a7a45afd5823c0c61e3216e67858bbc759535282&quot;,
-  &quot;sha256_b&quot;: &quot;3a3dd76b7b4854a8c933ae683d67bdfb1f8c223a23f1419269803db6246716bc&quot;,
-  &quot;evidence_dumps&quot;: [
-    &quot;A&quot;,
-    &quot;B&quot;
-  ]
-}</pre><div class='tablewrap'><table><tr><th>Offset</th><th>Length</th><th>Partition</th><th>SHA-256</th></tr><tr><td class='mono'>0xd000</td><td>8192</td><td>otadata</td><td class='mono'>b7e293bb607d3bddb99b7f38a7a45afd5823c0c61e3216e67858bbc759535282</td></tr><tr><td colspan='4'><pre class='mono'>(preview withheld: evidence backs a redacted secret; use --reveal-secrets)</pre></td></tr><tr><td class='mono'>0xd000</td><td>8192</td><td>otadata</td><td class='mono'>3a3dd76b7b4854a8c933ae683d67bdfb1f8c223a23f1419269803db6246716bc</td></tr><tr><td colspan='4'><pre class='mono'>(preview withheld: evidence backs a redacted secret; use --reveal-secrets)</pre></td></tr></table></div></div></details><details class='finding' data-sev='medium' data-rule='DIFF.APP_DESC'><summary><span class='pill medium'>medium</span> <code>DIFF.APP_DESC</code> App descriptor of ota_0 changed: secure_version</summary><div><div class='muted'>id <code>DIFF.APP_DESC:c9d2781493937224</code> · confidence 1.0 · ATT&amp;CK for ICS: none mapped</div><pre class='mono'>{
+</style></head><body><header><h1>FlashTrace diff</h1><div class='meta'><div>Dump A</div><div class='mono'>53f71ba18313944b801bd6f78dbe7baaf17c1d181105d854ab947b5a7e1258f1 (4194304 bytes)</div><div>Dump B</div><div class='mono'>070d157a56719a63e2d51494215ff2fe8a01b2cdc75121941e9a065443d92d1a (4194304 bytes)</div><div>Differences</div><div>6</div></div></header><h2 id='diff'>Diff view</h2><div class='filters'><label>Severity <select id='f-sev' onchange='ftFilter()'><option value=''>all</option><option>critical</option><option>high</option><option>medium</option><option>low</option><option>info</option></select></label><label>Rule <select id='f-rule' onchange='ftFilter()'><option value=''>all</option><option>DIFF.APP_DESC</option><option>DIFF.OTA_STATE</option><option>DIFF.PARTITION_CHANGED</option></select></label></div><details class='finding' data-sev='medium' data-rule='DIFF.APP_DESC'><summary><span class='pill medium'>medium</span> <code>DIFF.APP_DESC</code> App descriptor of ota_0 changed: secure_version</summary><div><div class='muted'>id <code>DIFF.APP_DESC:c9d2781493937224</code> · confidence 1.0 · ATT&amp;CK for ICS: none mapped</div><pre class='mono'>{
   &quot;label&quot;: &quot;ota_0&quot;,
   &quot;a&quot;: {
     &quot;project_name&quot;: &quot;sensor_fw&quot;,
@@ -77,7 +53,13 @@ color:var(--fg);border:1px solid var(--border);border-radius:4px}
     &quot;A&quot;,
     &quot;B&quot;
   ]
-}</pre><div class='tablewrap'><table><tr><th>Offset</th><th>Length</th><th>Partition</th><th>SHA-256</th></tr><tr><td class='mono'>0x10020</td><td>256</td><td>ota_0</td><td class='mono'>229e740ce001e5cfa2efa124ff463bfcdd334cbd0cd9342b410004c5543dc410</td></tr><tr><td colspan='4'><pre class='mono'>(preview withheld: evidence backs a redacted secret; use --reveal-secrets)</pre></td></tr><tr><td class='mono'>0x10020</td><td>256</td><td>ota_0</td><td class='mono'>e474632dda4e3b3e2f1772e5bc89e4b1a3a4487e061bd92a43799dd9d2f43679</td></tr><tr><td colspan='4'><pre class='mono'>(preview withheld: evidence backs a redacted secret; use --reveal-secrets)</pre></td></tr></table></div></div></details><details class='finding' data-sev='medium' data-rule='DIFF.APP_DESC'><summary><span class='pill medium'>medium</span> <code>DIFF.APP_DESC</code> App descriptor of ota_1 changed: secure_version</summary><div><div class='muted'>id <code>DIFF.APP_DESC:d702ab4e57feae18</code> · confidence 1.0 · ATT&amp;CK for ICS: none mapped</div><pre class='mono'>{
+}</pre><div class='tablewrap'><table><tr><th>Offset</th><th>Length</th><th>Partition</th><th>SHA-256</th></tr><tr><td class='mono'>0x10020</td><td>256</td><td>ota_0 (dump A)</td><td class='mono'>229e740ce001e5cfa2efa124ff463bfcdd334cbd0cd9342b410004c5543dc410</td></tr><tr><td colspan='4'><pre class='mono'>00010020  32 54 cd ab 00 00 00 00 00 00 00 00 00 00 00 00  2T..............
+00010030  31 2e 30 2e 30 00 00 00 00 00 00 00 00 00 00 00  1.0.0...........
+00010040  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+00010050  73 65 6e 73 6f 72 5f 66 77 00 00 00 00 00 00 00  sensor_fw.......</pre></td></tr><tr><td class='mono'>0x10020</td><td>256</td><td>ota_0 (dump B)</td><td class='mono'>e474632dda4e3b3e2f1772e5bc89e4b1a3a4487e061bd92a43799dd9d2f43679</td></tr><tr><td colspan='4'><pre class='mono'>00010020  32 54 cd ab 01 00 00 00 00 00 00 00 00 00 00 00  2T..............
+00010030  31 2e 30 2e 30 00 00 00 00 00 00 00 00 00 00 00  1.0.0...........
+00010040  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+00010050  73 65 6e 73 6f 72 5f 66 77 00 00 00 00 00 00 00  sensor_fw.......</pre></td></tr></table></div></div></details><details class='finding' data-sev='medium' data-rule='DIFF.APP_DESC'><summary><span class='pill medium'>medium</span> <code>DIFF.APP_DESC</code> App descriptor of ota_1 changed: secure_version</summary><div><div class='muted'>id <code>DIFF.APP_DESC:d702ab4e57feae18</code> · confidence 1.0 · ATT&amp;CK for ICS: none mapped</div><pre class='mono'>{
   &quot;label&quot;: &quot;ota_1&quot;,
   &quot;a&quot;: {
     &quot;project_name&quot;: &quot;sensor_fw&quot;,
@@ -102,7 +84,13 @@ color:var(--fg);border:1px solid var(--border);border-radius:4px}
     &quot;A&quot;,
     &quot;B&quot;
   ]
-}</pre><div class='tablewrap'><table><tr><th>Offset</th><th>Length</th><th>Partition</th><th>SHA-256</th></tr><tr><td class='mono'>0x190020</td><td>256</td><td>ota_1</td><td class='mono'>9e7ea1917ea80511acf0084857587069179e8c9b56d07ca93afca6604694356b</td></tr><tr><td colspan='4'><pre class='mono'>(preview withheld: evidence backs a redacted secret; use --reveal-secrets)</pre></td></tr><tr><td class='mono'>0x190020</td><td>256</td><td>ota_1</td><td class='mono'>f4d3f9f8b66f322fdef9c97ef6d32ee175c4e9012e4f4a3eb923d20df07663fe</td></tr><tr><td colspan='4'><pre class='mono'>(preview withheld: evidence backs a redacted secret; use --reveal-secrets)</pre></td></tr></table></div></div></details><details class='finding' data-sev='low' data-rule='DIFF.OTA_STATE'><summary><span class='pill low'>low</span> <code>DIFF.OTA_STATE</code> OTA selection/state changed</summary><div><div class='muted'>id <code>DIFF.OTA_STATE:6d140e68860a0472</code> · confidence 1.0 · ATT&amp;CK for ICS: none mapped</div><pre class='mono'>{
+}</pre><div class='tablewrap'><table><tr><th>Offset</th><th>Length</th><th>Partition</th><th>SHA-256</th></tr><tr><td class='mono'>0x190020</td><td>256</td><td>ota_1 (dump A)</td><td class='mono'>9e7ea1917ea80511acf0084857587069179e8c9b56d07ca93afca6604694356b</td></tr><tr><td colspan='4'><pre class='mono'>00190020  32 54 cd ab 00 00 00 00 00 00 00 00 00 00 00 00  2T..............
+00190030  31 2e 31 2e 30 00 00 00 00 00 00 00 00 00 00 00  1.1.0...........
+00190040  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+00190050  73 65 6e 73 6f 72 5f 66 77 00 00 00 00 00 00 00  sensor_fw.......</pre></td></tr><tr><td class='mono'>0x190020</td><td>256</td><td>ota_1 (dump B)</td><td class='mono'>f4d3f9f8b66f322fdef9c97ef6d32ee175c4e9012e4f4a3eb923d20df07663fe</td></tr><tr><td colspan='4'><pre class='mono'>00190020  32 54 cd ab 02 00 00 00 00 00 00 00 00 00 00 00  2T..............
+00190030  31 2e 31 2e 30 00 00 00 00 00 00 00 00 00 00 00  1.1.0...........
+00190040  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+00190050  73 65 6e 73 6f 72 5f 66 77 00 00 00 00 00 00 00  sensor_fw.......</pre></td></tr></table></div></div></details><details class='finding' data-sev='low' data-rule='DIFF.OTA_STATE'><summary><span class='pill low'>low</span> <code>DIFF.OTA_STATE</code> OTA selection/state changed</summary><div><div class='muted'>id <code>DIFF.OTA_STATE:6d140e68860a0472</code> · confidence 1.0 · ATT&amp;CK for ICS: none mapped</div><pre class='mono'>{
   &quot;a&quot;: {
     &quot;active_slot&quot;: &quot;ota_1&quot;,
     &quot;entries&quot;: [
@@ -137,7 +125,55 @@ color:var(--fg);border:1px solid var(--border);border-radius:4px}
     &quot;A&quot;,
     &quot;B&quot;
   ]
-}</pre><div class='tablewrap'><table><tr><th>Offset</th><th>Length</th><th>Partition</th><th>SHA-256</th></tr><tr><td class='mono'>0xd000</td><td>8192</td><td>-</td><td class='mono'>b7e293bb607d3bddb99b7f38a7a45afd5823c0c61e3216e67858bbc759535282</td></tr><tr><td colspan='4'><pre class='mono'>(preview withheld: evidence backs a redacted secret; use --reveal-secrets)</pre></td></tr><tr><td class='mono'>0xd000</td><td>8192</td><td>-</td><td class='mono'>3a3dd76b7b4854a8c933ae683d67bdfb1f8c223a23f1419269803db6246716bc</td></tr><tr><td colspan='4'><pre class='mono'>(preview withheld: evidence backs a redacted secret; use --reveal-secrets)</pre></td></tr></table></div></div></details><script>
+}</pre><div class='tablewrap'><table><tr><th>Offset</th><th>Length</th><th>Partition</th><th>SHA-256</th></tr><tr><td class='mono'>0xd000</td><td>8192</td><td>- (dump A)</td><td class='mono'>b7e293bb607d3bddb99b7f38a7a45afd5823c0c61e3216e67858bbc759535282</td></tr><tr><td colspan='4'><pre class='mono'>0000d000  01 00 00 00 ff ff ff ff ff ff ff ff ff ff ff ff  ................
+0000d010  ff ff ff ff ff ff ff ff 02 00 00 00 9a 98 43 47  ..............CG
+0000d020  ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff  ................
+0000d030  ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff  ................</pre></td></tr><tr><td class='mono'>0xd000</td><td>8192</td><td>- (dump B)</td><td class='mono'>3a3dd76b7b4854a8c933ae683d67bdfb1f8c223a23f1419269803db6246716bc</td></tr><tr><td colspan='4'><pre class='mono'>0000d000  03 00 00 00 ff ff ff ff ff ff ff ff ff ff ff ff  ................
+0000d010  ff ff ff ff ff ff ff ff 02 00 00 00 11 50 4a ed  .............PJ.
+0000d020  ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff  ................
+0000d030  ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff  ................</pre></td></tr></table></div></div></details><details class='finding' data-sev='info' data-rule='DIFF.PARTITION_CHANGED'><summary><span class='pill info'>info</span> <code>DIFF.PARTITION_CHANGED</code> Partition &#x27;ota_0&#x27; contents changed</summary><div><div class='muted'>id <code>DIFF.PARTITION_CHANGED:3b679cec33f2d253</code> · confidence 1.0 · ATT&amp;CK for ICS: none mapped</div><pre class='mono'>{
+  &quot;label&quot;: &quot;ota_0&quot;,
+  &quot;sha256_a&quot;: &quot;c549ed148548b3e7368a434ffc323916eaa923b2f33c87df023463401465bbdb&quot;,
+  &quot;sha256_b&quot;: &quot;6507acac070a828163dec6269f174c780c5f80cc629e250ddcb14f284654525f&quot;,
+  &quot;evidence_dumps&quot;: [
+    &quot;A&quot;,
+    &quot;B&quot;
+  ]
+}</pre><div class='tablewrap'><table><tr><th>Offset</th><th>Length</th><th>Partition</th><th>SHA-256</th></tr><tr><td class='mono'>0x10000</td><td>1572864</td><td>ota_0 (dump A)</td><td class='mono'>c549ed148548b3e7368a434ffc323916eaa923b2f33c87df023463401465bbdb</td></tr><tr><td colspan='4'><pre class='mono'>00010000  e9 04 02 20 04 00 08 40 ee 00 00 00 00 00 00 00  ... ...@........
+00010010  00 8f 01 00 00 00 00 01 20 00 40 3f 08 02 00 00  ........ .@?....
+00010020  32 54 cd ab 00 00 00 00 00 00 00 00 00 00 00 00  2T..............
+00010030  31 2e 30 2e 30 00 00 00 00 00 00 00 00 00 00 00  1.0.0...........</pre></td></tr><tr><td class='mono'>0x10000</td><td>1572864</td><td>ota_0 (dump B)</td><td class='mono'>6507acac070a828163dec6269f174c780c5f80cc629e250ddcb14f284654525f</td></tr><tr><td colspan='4'><pre class='mono'>00010000  e9 04 02 20 04 00 08 40 ee 00 00 00 00 00 00 00  ... ...@........
+00010010  00 8f 01 00 00 00 00 01 20 00 40 3f 08 02 00 00  ........ .@?....
+00010020  32 54 cd ab 01 00 00 00 00 00 00 00 00 00 00 00  2T..............
+00010030  31 2e 30 2e 30 00 00 00 00 00 00 00 00 00 00 00  1.0.0...........</pre></td></tr></table></div></div></details><details class='finding' data-sev='info' data-rule='DIFF.PARTITION_CHANGED'><summary><span class='pill info'>info</span> <code>DIFF.PARTITION_CHANGED</code> Partition &#x27;ota_1&#x27; contents changed</summary><div><div class='muted'>id <code>DIFF.PARTITION_CHANGED:8b647be5bf84f651</code> · confidence 1.0 · ATT&amp;CK for ICS: none mapped</div><pre class='mono'>{
+  &quot;label&quot;: &quot;ota_1&quot;,
+  &quot;sha256_a&quot;: &quot;e963bf6d181d44ec27456b682e1a03545f05ed72c528cb08a74d182637a6cfc9&quot;,
+  &quot;sha256_b&quot;: &quot;058c857c8dbf1af013d3b970bdf29e68743f673947bdc9209de62a246fb54014&quot;,
+  &quot;evidence_dumps&quot;: [
+    &quot;A&quot;,
+    &quot;B&quot;
+  ]
+}</pre><div class='tablewrap'><table><tr><th>Offset</th><th>Length</th><th>Partition</th><th>SHA-256</th></tr><tr><td class='mono'>0x190000</td><td>1572864</td><td>ota_1 (dump A)</td><td class='mono'>e963bf6d181d44ec27456b682e1a03545f05ed72c528cb08a74d182637a6cfc9</td></tr><tr><td colspan='4'><pre class='mono'>00190000  e9 04 02 20 04 00 08 40 ee 00 00 00 00 00 00 00  ... ...@........
+00190010  00 8f 01 00 00 00 00 01 20 00 40 3f 08 02 00 00  ........ .@?....
+00190020  32 54 cd ab 00 00 00 00 00 00 00 00 00 00 00 00  2T..............
+00190030  31 2e 31 2e 30 00 00 00 00 00 00 00 00 00 00 00  1.1.0...........</pre></td></tr><tr><td class='mono'>0x190000</td><td>1572864</td><td>ota_1 (dump B)</td><td class='mono'>058c857c8dbf1af013d3b970bdf29e68743f673947bdc9209de62a246fb54014</td></tr><tr><td colspan='4'><pre class='mono'>00190000  e9 04 02 20 04 00 08 40 ee 00 00 00 00 00 00 00  ... ...@........
+00190010  00 8f 01 00 00 00 00 01 20 00 40 3f 08 02 00 00  ........ .@?....
+00190020  32 54 cd ab 02 00 00 00 00 00 00 00 00 00 00 00  2T..............
+00190030  31 2e 31 2e 30 00 00 00 00 00 00 00 00 00 00 00  1.1.0...........</pre></td></tr></table></div></div></details><details class='finding' data-sev='info' data-rule='DIFF.PARTITION_CHANGED'><summary><span class='pill info'>info</span> <code>DIFF.PARTITION_CHANGED</code> Partition &#x27;otadata&#x27; contents changed</summary><div><div class='muted'>id <code>DIFF.PARTITION_CHANGED:9d4bb50180c42493</code> · confidence 1.0 · ATT&amp;CK for ICS: none mapped</div><pre class='mono'>{
+  &quot;label&quot;: &quot;otadata&quot;,
+  &quot;sha256_a&quot;: &quot;b7e293bb607d3bddb99b7f38a7a45afd5823c0c61e3216e67858bbc759535282&quot;,
+  &quot;sha256_b&quot;: &quot;3a3dd76b7b4854a8c933ae683d67bdfb1f8c223a23f1419269803db6246716bc&quot;,
+  &quot;evidence_dumps&quot;: [
+    &quot;A&quot;,
+    &quot;B&quot;
+  ]
+}</pre><div class='tablewrap'><table><tr><th>Offset</th><th>Length</th><th>Partition</th><th>SHA-256</th></tr><tr><td class='mono'>0xd000</td><td>8192</td><td>otadata (dump A)</td><td class='mono'>b7e293bb607d3bddb99b7f38a7a45afd5823c0c61e3216e67858bbc759535282</td></tr><tr><td colspan='4'><pre class='mono'>0000d000  01 00 00 00 ff ff ff ff ff ff ff ff ff ff ff ff  ................
+0000d010  ff ff ff ff ff ff ff ff 02 00 00 00 9a 98 43 47  ..............CG
+0000d020  ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff  ................
+0000d030  ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff  ................</pre></td></tr><tr><td class='mono'>0xd000</td><td>8192</td><td>otadata (dump B)</td><td class='mono'>3a3dd76b7b4854a8c933ae683d67bdfb1f8c223a23f1419269803db6246716bc</td></tr><tr><td colspan='4'><pre class='mono'>0000d000  03 00 00 00 ff ff ff ff ff ff ff ff ff ff ff ff  ................
+0000d010  ff ff ff ff ff ff ff ff 02 00 00 00 11 50 4a ed  .............PJ.
+0000d020  ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff  ................
+0000d030  ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff  ................</pre></td></tr></table></div></div></details><script>
 function ftFilter(){var s=document.getElementById('f-sev').value,
 r=document.getElementById('f-rule').value;
 document.querySelectorAll('details.finding').forEach(function(d){
