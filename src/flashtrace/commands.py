@@ -15,7 +15,9 @@ from typing import Any
 from flashtrace import __version__
 from flashtrace.bench import markdown_table, run_bench
 from flashtrace.diff import diff_dumps
+from flashtrace.explain import DEFAULT_MODEL, ExplainError, explain_report, render_markdown
 from flashtrace.io import DumpTooLargeError, load_dump
+from flashtrace.keys import KeyMaterial
 from flashtrace.pipeline import analyze, load_baselines, write_store
 from flashtrace.report import html, json_report, markdown
 from flashtrace.report.model import diff_dict, result_dict
@@ -58,6 +60,10 @@ def cmd_analyze(
     out: Path | None = None,
     formats: Sequence[str] = ("json",),
     reveal_secrets: bool = False,
+    flash_key: Path | None = None,
+    flash_crypt_conf: int = 0xF,
+    nvs_key: Path | None = None,
+    sb_pubkey: Path | None = None,
 ) -> int:
     if chip not in CHIPS:
         return _err(f"--chip must be one of {', '.join(CHIPS)}")
@@ -67,9 +73,19 @@ def cmd_analyze(
     try:
         data = load_dump(dump)
         base = load_baselines(baselines)
+        keys = None
+        if flash_key is not None or nvs_key is not None:
+            keys = KeyMaterial(
+                flash_key=flash_key.read_bytes() if flash_key else None,
+                flash_crypt_conf=flash_crypt_conf,
+                nvs_key=nvs_key.read_bytes() if nvs_key else None,
+            )
+        sb = sb_pubkey.read_bytes() if sb_pubkey else None
     except (OSError, DumpTooLargeError) as exc:
         return _err(str(exc))
-    result = analyze(data, reveal_secrets=reveal_secrets, baselines=base, chip=chip)
+    result = analyze(
+        data, reveal_secrets=reveal_secrets, baselines=base, chip=chip, keys=keys, sb_public_key=sb
+    )
     out_dir = out or Path("flashtrace_report")
     report = result_dict(result)
     try:
@@ -127,6 +143,25 @@ def cmd_bench(corpus: Path, *, out: Path) -> int:
     return EXIT_OK if res.passed else EXIT_FINDINGS
 
 
+def cmd_explain(
+    report: Path, *, out: Path, model: str = DEFAULT_MODEL, allow_revealed: bool = False
+) -> int:
+    try:
+        data = json.loads(report.read_text(encoding="utf-8"))
+        exp = explain_report(data, model=model, allow_revealed=allow_revealed)
+        out.mkdir(parents=True, exist_ok=True)
+        (out / "explanation.json").write_text(
+            json.dumps(exp.as_dict(), indent=2) + "\n", encoding="utf-8"
+        )
+        (out / "explanation.md").write_text(render_markdown(exp, data), encoding="utf-8")
+    except (OSError, json.JSONDecodeError, ExplainError) as exc:
+        return _err(str(exc))
+    print(
+        f"explained {len(exp.by_finding)} finding(s) with {exp.model} -> {out / 'explanation.md'}"
+    )
+    return EXIT_OK
+
+
 def fallback_main(argv: Sequence[str] | None = None) -> int:
     """argparse front-end with the same commands, for environments without typer."""
     p = argparse.ArgumentParser(prog="flashtrace")
@@ -139,10 +174,19 @@ def fallback_main(argv: Sequence[str] | None = None) -> int:
     a.add_argument("--out", type=Path, default=None)
     a.add_argument("--format", action="append", choices=FORMATS, default=None)
     a.add_argument("--reveal-secrets", action="store_true")
+    a.add_argument("--flash-key", type=Path, default=None)
+    a.add_argument("--flash-crypt-conf", type=lambda v: int(v, 0), default=0xF)
+    a.add_argument("--nvs-key", type=Path, default=None)
+    a.add_argument("--sb-pubkey", type=Path, default=None)
     d = sub.add_parser("diff")
     d.add_argument("dump_a", type=Path)
     d.add_argument("dump_b", type=Path)
     d.add_argument("--out", type=Path, required=True)
+    x = sub.add_parser("explain")
+    x.add_argument("report", type=Path)
+    x.add_argument("--out", type=Path, required=True)
+    x.add_argument("--model", default=DEFAULT_MODEL)
+    x.add_argument("--allow-revealed", action="store_true")
     b = sub.add_parser("bench")
     b.add_argument("corpus", type=Path)
     b.add_argument("--out", type=Path, default=Path("bench_results.json"))
@@ -155,7 +199,13 @@ def fallback_main(argv: Sequence[str] | None = None) -> int:
             out=ns.out,
             formats=ns.format or ["json"],
             reveal_secrets=ns.reveal_secrets,
+            flash_key=ns.flash_key,
+            flash_crypt_conf=ns.flash_crypt_conf,
+            nvs_key=ns.nvs_key,
+            sb_pubkey=ns.sb_pubkey,
         )
+    if ns.cmd == "explain":
+        return cmd_explain(ns.report, out=ns.out, model=ns.model, allow_revealed=ns.allow_revealed)
     if ns.cmd == "diff":
         return cmd_diff(ns.dump_a, ns.dump_b, out=ns.out)
     return cmd_bench(ns.corpus, out=ns.out)

@@ -49,6 +49,15 @@ def render(data: dict[str, Any]) -> str:
         ),
         f"- **Analysed:** {d['analysed_at']} with flashtrace {data['tool']['version']}",
         f"- **Secrets:** {'REVEALED' if d['secrets_revealed'] else 'redacted'}",
+        *(
+            [
+                f"- **Decrypted view:** flash scheme `{d['decryption']['flash_scheme']}`,"
+                f" NVS {d['decryption']['nvs_partitions'] or 'none'}; evidence hashes refer to"
+                f" the decrypted bytes (view SHA-256 `{d['decryption']['view_sha256']}`)"
+            ]
+            if d.get("decryption")
+            else []
+        ),
         "",
         "## Executive summary",
         "",

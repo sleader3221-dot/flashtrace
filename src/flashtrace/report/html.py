@@ -221,7 +221,15 @@ def render(data: dict[str, Any]) -> str:
         f"<div>Analysed</div><div>{_e(d['analysed_at'])}</div>"
         f"<div>Tool</div><div>flashtrace {_e(data['tool']['version'])}</div>"
         f"<div>Secrets</div><div>{'REVEALED' if d['secrets_revealed'] else 'redacted'}</div>"
-        "</div></header>"
+        + (
+            "<div>Decrypted view</div><div>flash "
+            f"{_e(d['decryption']['flash_scheme'] or 'not encrypted')}, NVS "
+            f"{_e(', '.join(d['decryption']['nvs_partitions']) or 'none')}; evidence hashes"
+            " refer to decrypted bytes</div>"
+            if d.get("decryption")
+            else ""
+        )
+        + "</div></header>"
         f"<h2 id='summary'>Severity summary</h2><div class='cards'>{cards}</div>{enc}"
         f"<h2 id='partitions'>Partition map</h2>{_partition_map(data)}"
         f"<h2 id='findings'>Findings</h2>{_findings(data['findings'])}"

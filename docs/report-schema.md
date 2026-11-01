@@ -12,11 +12,11 @@ All SHA-256 values are lowercase hex.
 | `schema_version` | string | `"1.0"` |
 | `kind` | string | `"analysis"` |
 | `tool` | object | `{name, version}` |
-| `dump` | object | `sha256`, `size`, `chip` (requested or detected), `chip_detected`, `chip_id`, `bootloader_offset`, `analysed_at` (ISO-8601 UTC), `secrets_revealed` |
+| `dump` | object | `sha256` (of the original dump), `size`, `chip` (requested or detected), `chip_detected`, `chip_id`, `bootloader_offset`, `analysed_at` (ISO-8601 UTC), `secrets_revealed`, `decryption` (null, or see below) |
 | `encryption` | object | `likely` (bool), `reason` (string or null) |
 | `partition_table` | object or null | `offset`, `md5_present`, `md5_valid` (null if no MD5 entry), `end_marker_found` |
 | `partitions[]` | array | `label`, `type`, `subtype`, `offset`, `offset_hex`, `size`, `present_bytes`, `entropy` (bits/byte), `sha256`, `encrypted_flag`, `readonly_flag` |
-| `apps[]` | array | `partition`, `offset`, `image_length`, `chip`, `segments`, `checksum_valid`, `sha256_valid`, `image_sha256` (over `[offset, offset+image_length)`), `signature_blocks[] {offset, version, scheme}`, `app_desc {project_name, version, secure_version, idf_ver, date, time, app_elf_sha256}` or null |
+| `apps[]` | array | `partition`, `offset`, `image_length`, `chip`, `segments`, `checksum_valid`, `sha256_valid`, `image_sha256` (over `[offset, offset+image_length)`), `signature_blocks[] {offset, version, scheme}`, `signature_verification` (null without `--sb-pubkey`, else `[{block, offset, scheme, verified, reason}]`), `app_desc {project_name, version, secure_version, idf_ver, date, time, app_elf_sha256}` or null |
 | `otadata` | object or null | `offset`, `active_slot` (label or null), `entries[] {index, offset, seq, state, crc_ok, valid, erased}` |
 | `nvs[]` | array | `partition`, `encrypted`, `encryption_reason`, `pages`, `namespaces {index: name}`, `entries[]`, `recovered_deleted[]` (see NVS entry) |
 | `filesystems[]` | array | `partition`, `type` (`spiffs`/`littlefs`), `mounted`, `detail`, `directories[]`, `files[] {path, size, sha256, located, complete, offset}` |
@@ -25,6 +25,14 @@ All SHA-256 values are lowercase hex.
 | `findings[]` | array | see Finding |
 | `timeline[]` | array | `ts_source` (where the value came from), `value` (raw), `iso` (normalised UTC or null), `trust` (always `"device-reported, untrusted"`), `evidence` |
 | `rule_errors[]` | array of string | rules that raised; non-empty ⇒ exit code 2 |
+
+### Decryption (`dump.decryption`)
+
+Present when `--flash-key` or `--nvs-key` was given. `original_sha256`, `view_sha256`
+(the decrypted view analysed), `flash_scheme` (`aes-xts`, `esp32` or null),
+`flash_regions[] {what, offset, length}`, `nvs_partitions[]`, `nvs_key_source`
+(`supplied` or `partition <label>`), `errors[]`, `evidence_basis` (`"decrypted view"`:
+evidence SHA-256 values refer to decrypted bytes).
 
 ### Finding
 

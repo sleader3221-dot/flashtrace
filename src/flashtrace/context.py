@@ -7,15 +7,17 @@ records anomalies, and anything that cannot be parsed is simply absent.
 from __future__ import annotations
 
 import hashlib
-from collections.abc import Iterable, Mapping
+from collections.abc import Iterable
 from dataclasses import dataclass, field
 
 from flashtrace.appimage import AppImage, parse_app_image
 from flashtrace.coredump import CoreDump, parse_coredump
+from flashtrace.crypto import SignatureCheck, load_public_key, verify_sbv2
 from flashtrace.fs import FsListing
 from flashtrace.fs.littlefs import parse_littlefs
 from flashtrace.fs.spiffs import parse_spiffs
 from flashtrace.io import ChipDetection, detect_chip, is_blank, shannon_entropy
+from flashtrace.keys import DecryptionInfo, KeyMaterial, decrypt_view
 from flashtrace.model import Anomaly, ByteSource, Evidence, Segment, sha256_hex
 from flashtrace.nvs import NvsPartition, parse_nvs
 from flashtrace.otadata import OtaData, parse_otadata
@@ -92,6 +94,9 @@ class AnalysisContext:
     encryption_reason: str | None = None
     anomalies: list[tuple[str | None, Anomaly]] = field(default_factory=list)
     extra_regions: list[ScanRegion] = field(default_factory=list)
+    decryption: DecryptionInfo | None = None  # set when keys were supplied
+    sb_key_supplied: bool = False
+    signature_checks: dict[str, list[SignatureCheck]] = field(default_factory=dict)
 
     # -- helpers -------------------------------------------------------------
     def ev(self, offset: int, length: int, partition: str | None) -> Evidence:
@@ -201,29 +206,44 @@ def build_context(
     reveal_secrets: bool = False,
     baselines: Iterable[str] = (),
     table_offset: int = DEFAULT_TABLE_OFFSET,
-    extra_parsers: Mapping[str, object] | None = None,
+    keys: KeyMaterial | None = None,
+    sb_public_key: bytes | None = None,
 ) -> AnalysisContext:
-    """Parse a dump into an :class:`AnalysisContext` (no rules are run here)."""
-    del extra_parsers  # reserved for phase B dispatch hooks
+    """Parse a dump into an :class:`AnalysisContext` (no rules are run here).
+
+    With ``keys``, analysis runs on a decrypted view of the dump (see
+    :mod:`flashtrace.keys`); ``dump_sha256`` stays the hash of the original bytes and
+    evidence hashes refer to the decrypted view.
+    """
+    original_sha = hashlib.sha256(dump).hexdigest()
+    decryption: DecryptionInfo | None = None
+    if keys is not None and (keys.flash_key is not None or keys.nvs_key is not None):
+        dump, decryption = decrypt_view(dump, keys, table_offset)
     ctx = AnalysisContext(
         dump=dump,
-        dump_sha256=hashlib.sha256(dump).hexdigest(),
+        dump_sha256=original_sha,
         reveal_secrets=reveal_secrets,
         baselines=frozenset(b.lower() for b in baselines),
+        decryption=decryption,
     )
+    if decryption is not None:
+        for err in decryption.errors:
+            ctx.anomalies.append((None, Anomaly("KEY_DECRYPTION_FAILED", err, table_offset, 0)))
     ctx.chip = detect_chip(dump)
     if ctx.chip is not None:
         _record(ctx, None, ctx.chip.anomalies)
 
     off = find_partition_table(dump, table_offset)
     if off is None:
-        region = dump[table_offset : table_offset + 0x10000] or dump[:0x10000]
+        # Only the table's own 0xC00 bytes: flash encryption always covers them, while the
+        # NVS partition that usually follows is never flash-encrypted and is mostly 0xFF.
+        region = dump[table_offset : table_offset + 0xC00] or dump[:0xC00]
         ent = shannon_entropy(region)
         if ent > ENCRYPTION_ENTROPY_THRESHOLD:
             ctx.encryption_likely = True
             ctx.encryption_reason = (
-                f"no partition table magic at {table_offset:#x} and entropy"
-                f" {ent:.2f} bits/byte > {ENCRYPTION_ENTROPY_THRESHOLD}"
+                f"no partition table magic at {table_offset:#x} and the table region's entropy"
+                f" is {ent:.2f} bits/byte (> {ENCRYPTION_ENTROPY_THRESHOLD})"
             )
         else:
             ctx.anomalies.append(
@@ -274,4 +294,21 @@ def build_context(
         elif e.type == TYPE_DATA and e.subtype == SUBTYPE_COREDUMP:
             ctx.coredump = parse_coredump(part, e.offset, e.label)
             _record(ctx, e.label, ctx.coredump.anomalies)
+    if sb_public_key is not None:
+        _verify_signatures(ctx, sb_public_key)
     return ctx
+
+
+def _verify_signatures(ctx: AnalysisContext, pem: bytes) -> None:
+    try:
+        key = load_public_key(pem)
+    except ValueError as exc:
+        ctx.anomalies.append((None, Anomaly("SB_KEY_INVALID", str(exc), 0, 0)))
+        return
+    ctx.sb_key_supplied = True
+    for label, img in ctx.apps.items():
+        if not img.signature_blocks or not img.image_length:
+            continue
+        sector = -(-img.image_length // 4096) * 4096
+        signed = ctx.dump[img.offset : img.offset + sector + 4096]
+        ctx.signature_checks[label] = verify_sbv2(signed, key, img.offset)

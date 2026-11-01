@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from flashtrace.diff import DiffResult
-from flashtrace.model import Evidence, Finding
+from flashtrace.model import Evidence, Finding, sha256_hex
 from flashtrace.nvs import NvsEntry
 from flashtrace.pipeline import AnalysisResult
 from flashtrace.redact import redact
@@ -99,6 +99,21 @@ def result_dict(r: AnalysisResult, *, previews: bool = True) -> dict[str, Any]:
             "bootloader_offset": ctx.chip.bootloader_offset if ctx.chip else None,
             "analysed_at": r.analysed_at,
             "secrets_revealed": reveal,
+            "decryption": None
+            if ctx.decryption is None
+            else {
+                "original_sha256": ctx.decryption.original_sha256,
+                "view_sha256": sha256_hex(ctx.dump),
+                "flash_scheme": ctx.decryption.flash_scheme,
+                "flash_regions": [
+                    {"what": w, "offset": o, "length": n}
+                    for w, o, n in ctx.decryption.flash_regions
+                ],
+                "nvs_partitions": ctx.decryption.nvs_partitions,
+                "nvs_key_source": ctx.decryption.nvs_key_source,
+                "errors": ctx.decryption.errors,
+                "evidence_basis": "decrypted view",
+            },
         },
         "encryption": {"likely": ctx.encryption_likely, "reason": ctx.encryption_reason},
         "partition_table": None
@@ -140,6 +155,18 @@ def result_dict(r: AnalysisResult, *, previews: bool = True) -> dict[str, Any]:
                 "signature_blocks": [
                     {"offset": b.offset, "version": b.version, "scheme": b.scheme}
                     for b in img.signature_blocks
+                ],
+                "signature_verification": None
+                if not ctx.sb_key_supplied
+                else [
+                    {
+                        "block": c.block,
+                        "offset": c.offset,
+                        "scheme": c.scheme,
+                        "verified": c.verified,
+                        "reason": c.reason,
+                    }
+                    for c in ctx.signature_checks.get(label, [])
                 ],
                 "app_desc": None
                 if img.app_desc is None

@@ -2,13 +2,18 @@
 
 from __future__ import annotations
 
+from cryptography.hazmat.primitives.asymmetric import ec
+from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
+
 from flashtrace import secrets
 from flashtrace.appimage import find_signature_blocks, parse_app_image
 from flashtrace.context import build_context
 from flashtrace.coredump import parse_coredump
+from flashtrace.crypto import parse_nvs_keys, verify_sbv2
 from flashtrace.fs.littlefs import parse_littlefs
 from flashtrace.fs.spiffs import parse_spiffs
 from flashtrace.io import detect_chip, shannon_entropy
+from flashtrace.keys import KeyMaterial, decrypt_view
 from flashtrace.model import Anomaly, anomaly_finding
 from flashtrace.nvs import parse_nvs
 from flashtrace.otadata import parse_otadata
@@ -22,6 +27,9 @@ from flashtrace.strings import extract_strings
 from flashtrace.wifi import decode_wifi_blob
 
 BASE = 0x10000
+_SB_PRIV = ec.derive_private_key(12345, ec.SECP256R1())
+_SB_KEY = _SB_PRIV.public_key()
+_SB_PEM = _SB_KEY.public_bytes(Encoding.PEM, PublicFormat.SubjectPublicKeyInfo)
 
 
 def _check(anoms: tuple[Anomaly, ...], base: int, size: int, data: bytes) -> None:
@@ -91,6 +99,12 @@ def run_all_parsers(data: bytes) -> None:
     decode_wifi_blob(data, "ssid")
     decode_wifi_blob(data, "password")
     build_context(data)
+    parse_nvs_keys(data)
+    for r in verify_sbv2(data + b"\xff" * (-len(data) % 4096), _SB_KEY):
+        assert not r.verified
+    view, _info = decrypt_view(data, KeyMaterial(flash_key=bytes(32), nvs_key=bytes(64)))
+    assert len(view) == n
+    build_context(data, keys=KeyMaterial(flash_key=bytes(range(32))), sb_public_key=_SB_PEM)
 
     for apps in (0, 1, 2, 16):
         ota = parse_otadata(data, BASE, apps)

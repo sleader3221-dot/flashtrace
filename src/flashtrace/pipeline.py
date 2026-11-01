@@ -17,6 +17,7 @@ from flashtrace.appimage import parse_app_image
 from flashtrace.attck import enrich
 from flashtrace.context import AnalysisContext, build_context
 from flashtrace.evidence import EvidenceStore
+from flashtrace.keys import KeyMaterial
 from flashtrace.model import SEVERITIES, Anomaly, Evidence, Finding, sha256_hex
 from flashtrace.nvs import NvsEntry
 from flashtrace.rules import load_rules
@@ -169,8 +170,16 @@ def analyze(
     baselines: Iterable[str] = (),
     chip: str = "auto",
     analysed_at: str | None = None,
+    keys: KeyMaterial | None = None,
+    sb_public_key: bytes | None = None,
 ) -> AnalysisResult:
-    ctx = build_context(dump, reveal_secrets=reveal_secrets, baselines=baselines)
+    ctx = build_context(
+        dump,
+        reveal_secrets=reveal_secrets,
+        baselines=baselines,
+        keys=keys,
+        sb_public_key=sb_public_key,
+    )
     if chip != "auto" and ctx.chip is not None and ctx.chip.chip not in (None, chip):
         ctx.anomalies.append(
             (

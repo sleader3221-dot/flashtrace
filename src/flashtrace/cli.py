@@ -8,7 +8,8 @@ from typing import Annotated
 import typer
 
 from flashtrace import __version__
-from flashtrace.commands import CHIPS, FORMATS, cmd_analyze, cmd_bench, cmd_diff
+from flashtrace.commands import CHIPS, FORMATS, cmd_analyze, cmd_bench, cmd_diff, cmd_explain
+from flashtrace.explain import DEFAULT_MODEL
 
 app = typer.Typer(
     name="flashtrace",
@@ -48,6 +49,21 @@ def analyze(
     reveal_secrets: Annotated[
         bool, typer.Option("--reveal-secrets", help="Show secret values unredacted.")
     ] = False,
+    flash_key: Annotated[
+        Path | None,
+        typer.Option("--flash-key", help="Flash-encryption key file (16/24/32/64 bytes)."),
+    ] = None,
+    flash_crypt_conf: Annotated[
+        str, typer.Option("--flash-crypt-conf", help="ESP32 FLASH_CRYPT_CONFIG eFuse value.")
+    ] = "0xF",
+    nvs_key: Annotated[
+        Path | None,
+        typer.Option("--nvs-key", help="NVS encryption key (64 bytes or nvs_keys image)."),
+    ] = None,
+    sb_pubkey: Annotated[
+        Path | None,
+        typer.Option("--sb-pubkey", help="Secure Boot V2 public key (PEM/DER) to verify apps."),
+    ] = None,
 ) -> None:
     """Analyse one dump and write evidence-linked reports."""
     raise typer.Exit(
@@ -58,6 +74,10 @@ def analyze(
             out=out,
             formats=fmt or ["json"],
             reveal_secrets=reveal_secrets,
+            flash_key=flash_key,
+            flash_crypt_conf=int(flash_crypt_conf, 0),
+            nvs_key=nvs_key,
+            sb_pubkey=sb_pubkey,
         )
     )
 
@@ -70,6 +90,19 @@ def diff(
 ) -> None:
     """Compare two dumps partition by partition (DIFF.* findings)."""
     raise typer.Exit(cmd_diff(dump_a, dump_b, out=out))
+
+
+@app.command()
+def explain(
+    report: Annotated[Path, typer.Argument(help="report.json written by analyze or diff.")],
+    out: Annotated[Path, typer.Option("--out", help="Output directory.")],
+    model: Annotated[str, typer.Option(help="Claude model ID.")] = DEFAULT_MODEL,
+    allow_revealed: Annotated[
+        bool, typer.Option("--allow-revealed", help="Allow sending an unredacted report.")
+    ] = False,
+) -> None:
+    """Optional: plain-language explanation of existing findings (needs flashtrace[explain])."""
+    raise typer.Exit(cmd_explain(report, out=out, model=model, allow_revealed=allow_revealed))
 
 
 @app.command()
