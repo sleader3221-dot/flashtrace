@@ -1,0 +1,41 @@
+<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>FlashTrace 00cf91481b2d</title><style>
+:root{--bg:#fff;--fg:#1d2330;--muted:#5f6b7a;--card:#f4f6f9;--border:#d9dee5;
+--critical:#8b1d2c;--high:#c0392b;--medium:#d68910;--low:#2e86c1;--info:#6c7a89}
+@media (prefers-color-scheme:dark){:root{--bg:#14171c;--fg:#e6e9ee;--muted:#9aa5b1;
+--card:#1e232b;--border:#2e3540}}
+*{box-sizing:border-box}body{margin:0;padding:16px;background:var(--bg);color:var(--fg);
+font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;max-width:1200px;margin:auto}
+h1{font-size:22px;margin:0 0 4px}h2{font-size:17px;margin:28px 0 8px;border-bottom:1px solid
+var(--border);padding-bottom:4px}code,.mono{font-family:ui-monospace,Menlo,Consolas,monospace;
+font-size:12.5px}.muted{color:var(--muted)}.meta{display:grid;grid-template-columns:max-content 1fr;
+gap:2px 12px;margin-top:8px}.meta div:nth-child(odd){color:var(--muted)}
+.meta div{overflow-wrap:anywhere}.cards{display:flex;flex-wrap:wrap;gap:8px}
+.card{background:var(--card);border:1px solid var(--border);border-left:5px solid;border-radius:6px;
+padding:8px 14px;min-width:96px}.card b{display:block;font-size:22px}
+.sev-critical{border-left-color:var(--critical)}.sev-high{border-left-color:var(--high)}
+.sev-medium{border-left-color:var(--medium)}.sev-low{border-left-color:var(--low)}
+.sev-info{border-left-color:var(--info)}.pill{display:inline-block;border-radius:10px;padding:0 8px;
+color:#fff;font-size:12px}.pill.critical{background:var(--critical)}.pill.high{background:var(--high)}
+.pill.medium{background:var(--medium)}.pill.low{background:var(--low)}.pill.info{background:var(--info)}
+.map{display:flex;height:34px;border:1px solid var(--border);border-radius:4px;overflow:hidden}
+.map div{height:100%;min-width:2px;border-right:1px solid var(--bg);color:#fff;font-size:11px;
+overflow:hidden;white-space:nowrap;padding:2px 3px}.legend{font-size:12px;margin-top:4px}
+table{border-collapse:collapse;width:100%}th,td{text-align:left;padding:4px 6px;border-bottom:1px
+solid var(--border);vertical-align:top}.tablewrap{overflow-x:auto}
+details{border:1px solid var(--border);border-radius:6px;margin:6px 0;background:var(--card)}
+summary{cursor:pointer;padding:8px 10px;list-style:none}
+summary::-webkit-details-marker{display:none}
+details>div{padding:4px 12px 12px}pre{margin:6px 0;overflow-x:auto;white-space:pre}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}select{padding:4px;background:var(--card);
+color:var(--fg);border:1px solid var(--border);border-radius:4px}
+</style></head><body><header><h1>FlashTrace report</h1><div class='meta'><div>Dump SHA-256</div><div class='mono'>00cf91481b2df786b71a12b4ded5b926ff66cbc9249f254cbc2422d7a11e891d</div><div>Size</div><div>4194304 bytes</div><div>Chip</div><div>esp32</div><div>Analysed</div><div>2026-01-01T00:00:00+00:00</div><div>Tool</div><div>flashtrace 0.1.0</div><div>Secrets</div><div>redacted</div></div></header><h2 id='summary'>Severity summary</h2><div class='cards'><div class='card sev-critical'><b>0</b>critical</div><div class='card sev-high'><b>0</b>high</div><div class='card sev-medium'><b>0</b>medium</div><div class='card sev-low'><b>0</b>low</div><div class='card sev-info'><b>1</b>info</div></div><p><b>Flash encryption likely enabled:</b> no partition table magic at 0x8000 and entropy 8.00 bits/byte &gt; 7.5. Structural parsing was skipped.</p><h2 id='partitions'>Partition map</h2><div class='map'></div><div class='legend muted'>Bar widths are proportional to flash offsets; hover for entropy (bits/byte).</div><div class='tablewrap'><table><tr><th>Label</th><th>Type</th><th>Offset</th><th>Size</th><th>Entropy</th><th>SHA-256</th></tr></table></div><h2 id='findings'>Findings</h2><div class='filters'><label>Severity <select id='f-sev' onchange='ftFilter()'><option value=''>all</option><option>critical</option><option>high</option><option>medium</option><option>low</option><option>info</option></select></label><label>Rule <select id='f-rule' onchange='ftFilter()'><option value=''>all</option><option>SEC.FLASH_ENCRYPTION_LIKELY</option></select></label></div><details class='finding' data-sev='info' data-rule='SEC.FLASH_ENCRYPTION_LIKELY'><summary><span class='pill info'>info</span> <code>SEC.FLASH_ENCRYPTION_LIKELY</code> Flash encryption likely enabled; structural parsing skipped</summary><div><div class='muted'>id <code>SEC.FLASH_ENCRYPTION_LIKELY:9411606a764b3cb9</code> · confidence 0.8 · ATT&amp;CK for ICS: none mapped</div><pre class='mono'>{
+  &quot;reason&quot;: &quot;no partition table magic at 0x8000 and entropy 8.00 bits/byte &gt; 7.5&quot;
+}</pre><div class='tablewrap'><table><tr><th>Offset</th><th>Length</th><th>Partition</th><th>SHA-256</th></tr><tr><td class='mono'>0x8000</td><td>4096</td><td>-</td><td class='mono'>7f4aba7a146c09d5d4f022f9bad335dab1371d347c8aa27c4d7f09ae57ad7131</td></tr><tr><td colspan='4'><pre class='mono'>00008000  5d 9c 6c 7c ee a8 b5 33 23 b2 42 fd a7 44 19 16  ].l|...3#.B..D..
+00008010  bd 89 84 a9 a6 ae c3 63 e4 b9 06 cd 2c 31 c3 f6  .......c....,1..
+00008020  5c 32 47 c0 bf 4e 9e 8a 46 c0 56 66 f7 25 4b f8  \2G..N..F.Vf.%K.
+00008030  49 b5 3a 9a ab 45 61 a9 19 f2 d0 85 f5 50 f0 66  I.:..Ea......P.f</pre></td></tr></table></div></div></details><h2 id='deleted-nvs'>Recovered deleted NVS entries</h2><p class='muted'>None recovered.</p><h2 id='timeline'>Device-reported timeline</h2><p class='muted'>No device-reported timestamps.</p><script>
+function ftFilter(){var s=document.getElementById('f-sev').value,
+r=document.getElementById('f-rule').value;
+document.querySelectorAll('details.finding').forEach(function(d){
+var ok=(!s||d.dataset.sev===s)&&(!r||d.dataset.rule===r);d.style.display=ok?'':'none';});}
+</script></body></html>

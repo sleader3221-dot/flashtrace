@@ -1,0 +1,38 @@
+{
+  "device": "pending_verify_ota",
+  "description": "Active slot ota_1 is in ESP_OTA_IMG_PENDING_VERIFY.",
+  "chip": "esp32",
+  "flash_size": 4194304,
+  "merge_tool": "internal",
+  "baselines": [],
+  "must_fire": [
+    "OTA.PENDING_VERIFY",
+    "SEC.NO_FLASH_ENCRYPTION"
+  ],
+  "must_not_fire": [
+    "CORE.PRESENT",
+    "FS.SUSPICIOUS_FILE",
+    "IMG.CHECKSUM_BAD",
+    "IMG.NO_APP_DESC",
+    "IMG.SHA256_BAD",
+    "IMG.SLOT_DIVERGENCE",
+    "IMG.UNKNOWN_BUILD",
+    "NVS.DELETED_SECRET",
+    "NVS.WIFI_CREDENTIALS",
+    "OTA.INVALID_ACTIVE",
+    "OTA.ROLLBACK_OR_DOWNGRADE",
+    "PARSE.ANOMALY",
+    "PT.MD5_MISMATCH",
+    "PT.OUT_OF_BOUNDS",
+    "PT.OVERLAP",
+    "SEC.API_KEY",
+    "SEC.CERT",
+    "SEC.FLASH_ENCRYPTION_LIKELY",
+    "SEC.HARDCODED_CREDENTIAL",
+    "SEC.MQTT_BROKER",
+    "SEC.NO_SECURE_BOOT",
+    "SEC.PRIVATE_KEY",
+    "SEC.URL"
+  ],
+  "dont_care": []
+}

@@ -1,0 +1,39 @@
+{
+  "device": "forced_rollback",
+  "description": "ota_0 (secure_version 1) was re-selected (seq 3) over ota_1 (secure_version 2).",
+  "chip": "esp32",
+  "flash_size": 4194304,
+  "merge_tool": "internal",
+  "baselines": [],
+  "must_fire": [
+    "OTA.ROLLBACK_OR_DOWNGRADE",
+    "SEC.NO_FLASH_ENCRYPTION"
+  ],
+  "must_not_fire": [
+    "CORE.PRESENT",
+    "FS.SUSPICIOUS_FILE",
+    "IMG.CHECKSUM_BAD",
+    "IMG.NO_APP_DESC",
+    "IMG.SHA256_BAD",
+    "IMG.UNKNOWN_BUILD",
+    "NVS.DELETED_SECRET",
+    "NVS.WIFI_CREDENTIALS",
+    "OTA.INVALID_ACTIVE",
+    "OTA.PENDING_VERIFY",
+    "PARSE.ANOMALY",
+    "PT.MD5_MISMATCH",
+    "PT.OUT_OF_BOUNDS",
+    "PT.OVERLAP",
+    "SEC.API_KEY",
+    "SEC.CERT",
+    "SEC.FLASH_ENCRYPTION_LIKELY",
+    "SEC.HARDCODED_CREDENTIAL",
+    "SEC.MQTT_BROKER",
+    "SEC.NO_SECURE_BOOT",
+    "SEC.PRIVATE_KEY",
+    "SEC.URL"
+  ],
+  "dont_care": [
+    "IMG.SLOT_DIVERGENCE"
+  ]
+}

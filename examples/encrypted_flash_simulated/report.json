@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0",
+  "kind": "analysis",
+  "tool": {
+    "name": "flashtrace",
+    "version": "0.1.0"
+  },
+  "dump": {
+    "sha256": "00cf91481b2df786b71a12b4ded5b926ff66cbc9249f254cbc2422d7a11e891d",
+    "size": 4194304,
+    "chip": "esp32",
+    "chip_detected": "esp32",
+    "chip_id": 0,
+    "bootloader_offset": 4096,
+    "analysed_at": "2026-01-01T00:00:00+00:00",
+    "secrets_revealed": false
+  },
+  "encryption": {
+    "likely": true,
+    "reason": "no partition table magic at 0x8000 and entropy 8.00 bits/byte > 7.5"
+  },
+  "partition_table": null,
+  "partitions": [],
+  "apps": [],
+  "otadata": null,
+  "nvs": [],
+  "filesystems": [],
+  "coredump": null,
+  "summary": {
+    "finding_count": 1,
+    "severity_counts": {
+      "info": 1,
+      "low": 0,
+      "medium": 0,
+      "high": 0,
+      "critical": 0
+    },
+    "max_severity": "info",
+    "rules_fired": [
+      "SEC.FLASH_ENCRYPTION_LIKELY"
+    ]
+  },
+  "findings": [
+    {
+      "id": "SEC.FLASH_ENCRYPTION_LIKELY:9411606a764b3cb9",
+      "rule_id": "SEC.FLASH_ENCRYPTION_LIKELY",
+      "severity": "info",
+      "title": "Flash encryption likely enabled; structural parsing skipped",
+      "detail": {
+        "reason": "no partition table magic at 0x8000 and entropy 8.00 bits/byte > 7.5"
+      },
+      "evidence": [
+        {
+          "partition": null,
+          "offset": 32768,
+          "offset_hex": "0x8000",
+          "length": 4096,
+          "sha256": "7f4aba7a146c09d5d4f022f9bad335dab1371d347c8aa27c4d7f09ae57ad7131",
+          "preview_hex": "5d9c6c7ceea8b53323b242fda7441916bd8984a9a6aec363e4b906cd2c31c3f65c3247c0bf4e9e8a46c05666f7254bf849b53a9aab4561a919f2d085f550f066",
+          "preview_redacted": false
+        }
+      ],
+      "attck": [],
+      "confidence": 0.8
+    }
+  ],
+  "timeline": [],
+  "rule_errors": []
+}

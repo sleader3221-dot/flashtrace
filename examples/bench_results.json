@@ -1,0 +1,276 @@
+{
+  "overall": {
+    "tp": 21,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0
+  },
+  "gate": {
+    "recall_threshold": 0.95,
+    "passed": true,
+    "violations": []
+  },
+  "per_rule": {
+    "FS.SUSPICIOUS_FILE": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "IMG.SLOT_DIVERGENCE": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "IMG.UNKNOWN_BUILD": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "NVS.DELETED_SECRET": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "NVS.WIFI_CREDENTIALS": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "OTA.PENDING_VERIFY": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "OTA.ROLLBACK_OR_DOWNGRADE": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "PT.MD5_MISMATCH": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "SEC.API_KEY": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "SEC.FLASH_ENCRYPTION_LIKELY": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "SEC.NO_FLASH_ENCRYPTION": {
+      "tp": 9,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "SEC.NO_SECURE_BOOT": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "SEC.PRIVATE_KEY": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    }
+  },
+  "devices": [
+    {
+      "device": "backdoored_ota_slot",
+      "must_fire": [
+        "IMG.SLOT_DIVERGENCE",
+        "IMG.UNKNOWN_BUILD",
+        "SEC.NO_FLASH_ENCRYPTION"
+      ],
+      "fired": [
+        "IMG.SLOT_DIVERGENCE",
+        "IMG.UNKNOWN_BUILD",
+        "SEC.NO_FLASH_ENCRYPTION"
+      ],
+      "missed": [],
+      "forbidden_fired": [],
+      "finding_count": 3,
+      "rule_errors": []
+    },
+    {
+      "device": "clean_control",
+      "must_fire": [
+        "SEC.NO_FLASH_ENCRYPTION"
+      ],
+      "fired": [
+        "SEC.NO_FLASH_ENCRYPTION"
+      ],
+      "missed": [],
+      "forbidden_fired": [],
+      "finding_count": 1,
+      "rule_errors": []
+    },
+    {
+      "device": "corrupted_partition_md5",
+      "must_fire": [
+        "PT.MD5_MISMATCH",
+        "SEC.NO_FLASH_ENCRYPTION"
+      ],
+      "fired": [
+        "PT.MD5_MISMATCH",
+        "SEC.NO_FLASH_ENCRYPTION"
+      ],
+      "missed": [],
+      "forbidden_fired": [],
+      "finding_count": 2,
+      "rule_errors": []
+    },
+    {
+      "device": "deleted_token_in_nvs",
+      "must_fire": [
+        "NVS.DELETED_SECRET",
+        "SEC.NO_FLASH_ENCRYPTION"
+      ],
+      "fired": [
+        "NVS.DELETED_SECRET",
+        "SEC.NO_FLASH_ENCRYPTION"
+      ],
+      "missed": [],
+      "forbidden_fired": [],
+      "finding_count": 2,
+      "rule_errors": []
+    },
+    {
+      "device": "encrypted_flash_simulated",
+      "must_fire": [
+        "SEC.FLASH_ENCRYPTION_LIKELY"
+      ],
+      "fired": [
+        "SEC.FLASH_ENCRYPTION_LIKELY"
+      ],
+      "missed": [],
+      "forbidden_fired": [],
+      "finding_count": 1,
+      "rule_errors": []
+    },
+    {
+      "device": "forced_rollback",
+      "must_fire": [
+        "OTA.ROLLBACK_OR_DOWNGRADE",
+        "SEC.NO_FLASH_ENCRYPTION"
+      ],
+      "fired": [
+        "IMG.SLOT_DIVERGENCE",
+        "OTA.ROLLBACK_OR_DOWNGRADE",
+        "SEC.NO_FLASH_ENCRYPTION"
+      ],
+      "missed": [],
+      "forbidden_fired": [],
+      "finding_count": 3,
+      "rule_errors": []
+    },
+    {
+      "device": "hardcoded_aws_key_in_app",
+      "must_fire": [
+        "SEC.API_KEY",
+        "SEC.NO_FLASH_ENCRYPTION",
+        "SEC.NO_SECURE_BOOT"
+      ],
+      "fired": [
+        "SEC.API_KEY",
+        "SEC.NO_FLASH_ENCRYPTION",
+        "SEC.NO_SECURE_BOOT"
+      ],
+      "missed": [],
+      "forbidden_fired": [],
+      "finding_count": 3,
+      "rule_errors": []
+    },
+    {
+      "device": "pem_private_key_in_spiffs",
+      "must_fire": [
+        "FS.SUSPICIOUS_FILE",
+        "SEC.NO_FLASH_ENCRYPTION",
+        "SEC.PRIVATE_KEY"
+      ],
+      "fired": [
+        "FS.SUSPICIOUS_FILE",
+        "SEC.NO_FLASH_ENCRYPTION",
+        "SEC.PRIVATE_KEY"
+      ],
+      "missed": [],
+      "forbidden_fired": [],
+      "finding_count": 3,
+      "rule_errors": []
+    },
+    {
+      "device": "pending_verify_ota",
+      "must_fire": [
+        "OTA.PENDING_VERIFY",
+        "SEC.NO_FLASH_ENCRYPTION"
+      ],
+      "fired": [
+        "OTA.PENDING_VERIFY",
+        "SEC.NO_FLASH_ENCRYPTION"
+      ],
+      "missed": [],
+      "forbidden_fired": [],
+      "finding_count": 2,
+      "rule_errors": []
+    },
+    {
+      "device": "wifi_creds_in_nvs",
+      "must_fire": [
+        "NVS.WIFI_CREDENTIALS",
+        "SEC.NO_FLASH_ENCRYPTION"
+      ],
+      "fired": [
+        "NVS.WIFI_CREDENTIALS",
+        "SEC.NO_FLASH_ENCRYPTION"
+      ],
+      "missed": [],
+      "forbidden_fired": [],
+      "finding_count": 2,
+      "rule_errors": []
+    }
+  ]
+}
