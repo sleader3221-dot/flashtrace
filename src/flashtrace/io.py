@@ -69,6 +69,12 @@ def shannon_entropy(data: ByteSource) -> float:
     return -sum((c / n) * math.log2(c / n) for c in counts.values())
 
 
+def is_blank(data: ByteSource) -> bool:
+    """True when every byte is 0xFF (erased flash). Empty input counts as blank."""
+    raw = bytes(data)
+    return raw.count(0xFF) == len(raw)
+
+
 @dataclass(frozen=True)
 class ChipDetection:
     chip: str | None  # None when chip_id is unknown

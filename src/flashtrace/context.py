@@ -11,8 +11,12 @@ from collections.abc import Iterable, Mapping
 from dataclasses import dataclass, field
 
 from flashtrace.appimage import AppImage, parse_app_image
-from flashtrace.io import ChipDetection, detect_chip, shannon_entropy
-from flashtrace.model import Anomaly, ByteSource, Evidence, sha256_hex
+from flashtrace.coredump import CoreDump, parse_coredump
+from flashtrace.fs import FsListing
+from flashtrace.fs.littlefs import parse_littlefs
+from flashtrace.fs.spiffs import parse_spiffs
+from flashtrace.io import ChipDetection, detect_chip, is_blank, shannon_entropy
+from flashtrace.model import Anomaly, ByteSource, Evidence, Segment, sha256_hex
 from flashtrace.nvs import NvsPartition, parse_nvs
 from flashtrace.otadata import OtaData, parse_otadata
 from flashtrace.partition import (
@@ -33,15 +37,6 @@ SUBTYPE_SPIFFS, SUBTYPE_LITTLEFS = 0x82, 0x83
 
 
 @dataclass(frozen=True)
-class Segment:
-    """Maps ``region[rel : rel+length]`` to ``dump[abs_offset : abs_offset+length]``."""
-
-    rel: int
-    abs_offset: int
-    length: int
-
-
-@dataclass(frozen=True)
 class ScanRegion:
     """Bytes to scan for secrets plus how to map matches back to the dump."""
 
@@ -50,6 +45,7 @@ class ScanRegion:
     data: bytes
     segments: tuple[Segment, ...]
     source: str  # "app" | "partition" | "file" | "nvs"
+    fallback: Evidence | None = None  # used when the bytes cannot be located precisely
 
     def evidence(self, dump: ByteSource, rel: int, length: int) -> tuple[Evidence, ...]:
         """Evidence for ``data[rel:rel+length]``: one item per dump segment touched."""
@@ -64,6 +60,8 @@ class ScanRegion:
             a_end = min(a + (hi - lo), len(mv))
             a = min(a, a_end)
             out.append(Evidence(self.partition, a, a_end - a, sha256_hex(mv[a:a_end])))
+        if not out and self.fallback is not None:
+            return (self.fallback,)
         return tuple(out)
 
 
@@ -88,8 +86,8 @@ class AnalysisContext:
     apps: dict[str, AppImage] = field(default_factory=dict)
     otadata: OtaData | None = None
     nvs: dict[str, NvsPartition] = field(default_factory=dict)
-    filesystems: dict[str, object] = field(default_factory=dict)  # filled in phase B
-    coredump: object | None = None  # filled in phase B
+    filesystems: dict[str, FsListing] = field(default_factory=dict)
+    coredump: CoreDump | None = None
     encryption_likely: bool = False
     encryption_reason: str | None = None
     anomalies: list[tuple[str | None, Anomaly]] = field(default_factory=list)
@@ -134,8 +132,47 @@ class AnalysisContext:
                 )
             )
         regions.extend(self.nvs_regions())
+        regions.extend(self.fs_regions())
+        regions.extend(self.raw_regions())
         regions.extend(self.extra_regions)
         return regions
+
+    def fs_regions(self) -> list[ScanRegion]:
+        out: list[ScanRegion] = []
+        for label, fs in self.filesystems.items():
+            if not fs.mounted:
+                continue
+            whole = self.ev(fs.offset, fs.size, label)
+            for f in fs.files:
+                out.append(ScanRegion(f"file:{f.path}", label, f.data, f.segments, "file", whole))
+        return out
+
+    def raw_regions(self) -> list[ScanRegion]:
+        """Raw string sweep of data partitions that no structured parser explained."""
+        if self.table is None:
+            return []
+        skip = {SUBTYPE_OTA, SUBTYPE_NVS, SUBTYPE_COREDUMP, SUBTYPE_NVS_KEYS, 0x01, 0x05}
+        out: list[ScanRegion] = []
+        for e in self.table.entries:
+            if e.type != TYPE_DATA or e.subtype in skip:
+                continue
+            fs = self.filesystems.get(e.label)
+            if fs is not None and fs.mounted:
+                continue
+            start = min(e.offset, len(self.dump))
+            end = min(e.offset + e.size, len(self.dump))
+            if end <= start or is_blank(self.dump[start:end]):
+                continue
+            out.append(
+                ScanRegion(
+                    f"partition:{e.label}",
+                    e.label,
+                    self.dump[start:end],
+                    (Segment(0, start, end - start),),
+                    "partition",
+                )
+            )
+        return out
 
     def nvs_regions(self) -> list[ScanRegion]:
         """Live NVS string/blob values (Wi-Fi keys excluded: NVS.WIFI_CREDENTIALS owns them)."""
@@ -227,4 +264,14 @@ def build_context(
             nvs = parse_nvs(part, e.offset, e.label, nvs_keys_present=nvs_keys_present)
             ctx.nvs[e.label] = nvs
             _record(ctx, e.label, nvs.anomalies)
+        elif e.type == TYPE_DATA and e.subtype in (SUBTYPE_SPIFFS, SUBTYPE_LITTLEFS):
+            if is_blank(part):
+                continue  # erased filesystem partition: nothing to list
+            parser = parse_spiffs if e.subtype == SUBTYPE_SPIFFS else parse_littlefs
+            fs = parser(part, e.offset, e.label)
+            ctx.filesystems[e.label] = fs
+            _record(ctx, e.label, fs.anomalies)
+        elif e.type == TYPE_DATA and e.subtype == SUBTYPE_COREDUMP:
+            ctx.coredump = parse_coredump(part, e.offset, e.label)
+            _record(ctx, e.label, ctx.coredump.anomalies)
     return ctx
