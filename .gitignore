@@ -13,3 +13,7 @@ htmlcov/
 # generated dumps never go in git (CLAUDE.md rule 7)
 *.bin
 tests/fixtures/cache/
+.corpus/
+/bench_results.json
+/bench_results.md
+flashtrace_report/

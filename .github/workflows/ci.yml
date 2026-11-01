@@ -49,3 +49,22 @@ jobs:
         run: mypy
       - name: Pytest
         run: pytest
+      - name: Cache benchmark corpus
+        uses: actions/cache@v4
+        with:
+          path: .corpus
+          key: corpus-v1-${{ hashFiles('tools/corpus/**', 'src/flashtrace/rules/**') }}
+      - name: Generate benchmark corpus (deterministic; esptool merge-bin)
+        run: |
+          if [ ! -f .corpus/clean_control/ground_truth.json ]; then
+            python -m tools.corpus.generate .corpus
+          fi
+          grep -h '"merge_tool"' .corpus/*/ground_truth.json | sort | uniq -c
+      - name: Benchmark gate (recall >= 0.95, no forbidden rule, clean_control quiet)
+        run: flashtrace bench .corpus --out bench_results.json
+      - name: Upload benchmark results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bench-results-${{ matrix.python-version }}
+          path: bench_results.*
