@@ -89,39 +89,58 @@ date, NVS key) — these are device-reported, not trusted wall-clock.
 
 ## Format notes (verify against official tool output — see rule 4)
 
+Verified so far (PR 1) against esptool v5.1.0 / v4.8.1 and ESP-IDF v5.3.1 source:
+layout, partition table, app image, otadata. Corrections are marked
+**[corrected]**. NVS / SPIFFS / LittleFS notes are still unverified.
+
 **Layout / chip detection**
 - Second-stage bootloader at 0x1000 on ESP32 and ESP32-S2; at 0x0 on ESP32-S3,
-  C3, C6, H2; 0x2000 on ESP32-P4 / C5. Detect by scanning those offsets for
+  C2, C3, C6, H2; 0x2000 on ESP32-P4 / C5. Detect by scanning those offsets for
   image magic 0xE9 and reading `chip_id` from the extended header.
+  `esp_chip_id_t`: 0 ESP32, 2 S2, 5 C3, 9 S3, 12 C2, 13 C6, 16 H2, 18 P4,
+  17 C5 (beta3) / 23 C5 (MP).
 - Partition table default offset 0x8000 (configurable; if not found, scan
   4 KB-aligned offsets for the table magic).
 
 **Partition table**: 32-byte entries; magic `0xAA 0x50` (LE u16 0x50AA);
 type u8, subtype u8, offset u32 LE, size u32 LE, label 16 bytes (NUL-padded),
-flags u32 (bit0 = encrypted). Optional MD5 entry: magic `0xEB 0xEB`, then MD5
-of all preceding entry bytes. Table ends at an all-0xFF entry. Types: 0 app,
+flags u32 (bit0 = encrypted, bit1 = readonly **[corrected]**). Optional MD5
+entry **[corrected]**: `0xEB 0xEB` + 14 × `0xFF` (16 bytes), then the 16-byte
+MD5 of all preceding entry bytes. Table ends at an all-0xFF entry; max table
+length 0xC00 bytes (gen_esp32part.py pads to that with 0xFF). Types: 0 app,
 1 data. App subtypes: 0x00 factory, 0x10–0x1F ota_0..ota_15, 0x20 test.
 Data subtypes: 0x00 ota, 0x01 phy, 0x02 nvs, 0x03 coredump, 0x04 nvs_keys,
-0x05 efuse, 0x80 esphttpd, 0x81 fat, 0x82 spiffs, 0x83 littlefs.
+0x05 efuse, 0x06 undefined **[corrected]**, 0x80 esphttpd, 0x81 fat, 0x82 spiffs, 0x83 littlefs.
 Validate the MD5 when present; mismatch = finding.
 
 **App image**: 8-byte header (magic 0xE9, segment_count, spi_mode, spi_speed/size,
-entry_addr u32) + 16-byte extended header (incl. chip_id u16, min chip rev,
-`hash_appended` u8 as last byte). Then segments: load_addr u32, data_len u32,
-data. After segments: pad to 16-byte boundary, 1-byte XOR checksum (seed 0xEF
-over segment data). If hash_appended, 32-byte SHA-256 of the image follows.
-`esp_app_desc_t` sits at the start of the first segment's data (DROM):
-magic_word u32 = 0xABCD5432, secure_version u32, reserv1[2] u32, version[32],
-project_name[32], time[16], date[16], idf_ver[32], app_elf_sha256[32], ...
-Cross-check parsed fields against `esptool image-info` (v5) / `image_info` (v4).
-Secure Boot V2 signature block: appended at a 4 KB-aligned offset after the image,
-begins with magic byte 0xE7 then version byte 0x02. Report presence; do not
-attempt verification beyond structural checks unless a public key is supplied.
+entry_addr u32; spi_speed = low nibble, spi_size = high nibble) + 16-byte
+extended header `<BBBBHBHH4sB`: wp_pin, spi_pin_drv[3], chip_id u16,
+min_chip_rev u8, min_chip_rev_full u16, max_chip_rev_full u16, reserved[4],
+`hash_appended` u8. Then segments: load_addr u32, data_len u32, data.
+After segments **[clarified]**: zero padding so the 1-byte XOR checksum (seed 0xEF,
+over segment *data* only) is the LAST byte of a 16-byte block (relative to image
+start). If hash_appended == 1, a 32-byte SHA-256 of image[0 : checksum+1] follows.
+`esp_app_desc_t` (256 bytes) starts the data of the DROM segment **[clarified]**
+(esptool picks the first segment in the chip's DROM address range; in IDF images
+that is segment 0): magic_word u32 = 0xABCD5432, secure_version u32,
+reserv1[2] u32, version[32], project_name[32], time[16], date[16], idf_ver[32],
+app_elf_sha256[32], min_efuse_blk_rev_full u16, max_efuse_blk_rev_full u16,
+mmu_page_size u8 (log2), reserv3[3], reserv2[18] u32.
+Cross-check parsed fields against `esptool image-info` (v5) / `image_info --version 2`
+(v4; v4 has no `image-info` spelling).
+Secure Boot V2 signature sector: at the next 4 KB boundary after the image
+(0xFF padding before it), up to 3 blocks of 1216 bytes, each beginning with magic
+0xE7 then version 0x02 (RSA-PSS) **or 0x03 (ECDSA) [corrected]** (espsecure).
+Report presence; do not attempt verification beyond structural checks unless a
+public key is supplied.
 
 **otadata**: partition of 2 × 4 KB sectors, each beginning with
 `esp_ota_select_entry_t { u32 ota_seq; u8 seq_label[20]; u32 ota_state; u32 crc; }`
-where crc = CRC32 (as used by ESP-IDF — verify) over the 4-byte ota_seq. Valid
-entry = crc matches and seq != 0xFFFFFFFF. Active OTA slot =
+where crc = `esp_rom_crc32_le(UINT32_MAX, &ota_seq, 4)` ==
+`binascii.crc32(ota_seq_le, 0xFFFFFFFF)` (ESP-IDF otatool.py). Valid entry
+**[corrected]** = crc matches AND seq != 0xFFFFFFFF AND ota_state is not
+INVALID (3) / ABORTED (4) (`bootloader_common_ota_select_valid`). Active OTA slot =
 (max valid ota_seq − 1) % number_of_ota_app_partitions. ota_state: 0 NEW,
 1 PENDING_VERIFY, 2 VALID, 3 INVALID, 4 ABORTED, 0xFFFFFFFF UNDEFINED.
 
