@@ -181,6 +181,31 @@ Encrypted NVS: page headers/bitmaps stay plaintext, entries are XTS-encrypted, s
 FlashTrace reports "NVS encrypted" when an nvs_keys partition exists and no
 written entry has a valid CRC, or when no page header is valid and entropy > 7.5.
 
+**SPIFFS [added]** (from ESP-IDF v5.3.1 `components/spiffs/spiffsgen.py`; FlashTrace's
+`tools/corpus/spiffs_writer.py` is checked byte-identical to it in CI): ESP-IDF
+defaults page 256, block 4096, obj_name_len 32, meta_len 4, little-endian, magic +
+magic_len on. Per block: one object-lookup page of u16 obj ids (MSB set = index page,
+0xFFFF free), magic at lookup slot 126 = `(0x20140529 ^ 256 ^ (blocks - bix)) & 0x1FFFF`.
+Data page: obj_id u16, span_ix u16, flags u8 (0xFC), 251 content bytes. Index page:
+obj_id|0x8000, span_ix, flags 0xF8, 3 pad bytes, then (span 0 only) size u32, type
+u8 (1 = file), name[32], meta[4], then u16 page indices (103 per head page, 124 per
+follow-up index page). ASSUMPTION (spiffsgen only writes fresh images): pages with
+flag bit 7 cleared or lookup id 0x0000 are deleted.
+
+**LittleFS [added]**: parsed only through littlefs-python 0.19.0. `LittleFS(mount=True)`
+**formats** the buffer on mount failure, so always `mount=False` + explicit `mount()`
+on a copy. On-flash file offsets are not exposed by the API; FlashTrace locates file
+content by searching the partition and marks files it cannot locate.
+
+**Coredump [added]** (ESP-IDF v5.3.1 `esp_core_dump_types.h`): `core_dump_header_t
+{data_len, version, tasks_num, tcb_sz, mem_segs_num, chip_rev}` (u32 each);
+`version = chip_id<<16 | major<<8 | minor`, major 0 binary / 1 ELF. Erased = all 0xFF.
+ELF dumps contain an ELF32 ET_CORE file; FlashTrace looks for `\x7fELF` in the first
+64 bytes (exact ELF-variant prefix layout not verified against a real device dump).
+
+**Secure Boot V2 [clarified]**: CLAUDE.md rule text says version 0x02; espsecure also
+emits 0x03 (ECDSA). SEC.NO_SECURE_BOOT accepts either.
+
 **Encryption heuristics**: if partition-table magic absent at expected offset AND
 Shannon entropy of the region > 7.5 bits/byte, report likely flash encryption.
 Compute per-partition entropy and include it in the report.
