@@ -53,7 +53,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .corpus
-          key: corpus-v1-${{ hashFiles('tools/corpus/**', 'src/flashtrace/rules/**') }}
+          key: corpus-v2-${{ hashFiles('tools/corpus/**', 'src/flashtrace/**') }}
       - name: Generate benchmark corpus (deterministic; esptool merge-bin)
         run: |
           if [ ! -f .corpus/clean_control/ground_truth.json ]; then
@@ -62,6 +62,11 @@ jobs:
           grep -h '"merge_tool"' .corpus/*/ground_truth.json | sort | uniq -c
       - name: Benchmark gate (recall >= 0.95, no forbidden rule, clean_control quiet)
         run: flashtrace bench .corpus --out bench_results.json
+      - name: Build sdist and wheel (packaging check)
+        run: |
+          python -m build
+          python -m pip install --force-reinstall --no-deps dist/*.whl
+          flashtrace --version
       - name: Upload benchmark results
         if: always()
         uses: actions/upload-artifact@v4

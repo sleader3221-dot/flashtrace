@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "flashtrace"
-version = "0.1.0"
+version = "0.2.0"
 description = "Forensic triage for ESP32-family SPI flash dumps"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -20,6 +20,8 @@ dependencies = [
 flashtrace = "flashtrace.cli:run"
 
 [project.optional-dependencies]
+# Optional LLM explanation layer (flashtrace explain). Never needed for detection.
+explain = ["anthropic==2.2.0"]
 # Versions are pinned (CLAUDE.md rule 5). The esptool and hypothesis APIs used
 # by the tests were confirmed by reading the source of exactly these tags.
 dev = [
@@ -30,6 +32,8 @@ dev = [
     "ruff==0.16.9",
     "mypy==2.3.1",
     "pytest-cov==7.0.0",
+    "build==1.2.2",
+    "anthropic==2.2.0",
 ]
 
 [tool.setuptools.packages.find]
@@ -68,7 +72,7 @@ files = ["src"]
 
 [[tool.mypy.overrides]]
 # Only consulted when the package is missing (local dev without PyPI); CI installs them.
-module = ["typer", "typer.*", "littlefs", "littlefs.*", "yaml"]
+module = ["typer", "typer.*", "littlefs", "littlefs.*", "yaml", "anthropic", "anthropic.*"]
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]

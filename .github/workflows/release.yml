@@ -1,0 +1,79 @@
+name: Release
+
+# Runs only when a version tag (v1.2.3) is pushed. Publishing uses PyPI trusted
+# publishing: configure the "flashtrace" project on PyPI to trust this repository,
+# workflow "release.yml" and environment "pypi" before the first release.
+on:
+  push:
+    tags: ["v*.*.*"]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    env:
+      FLASHTRACE_REQUIRE_TOOLS: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+          curl -fsSL -o "$RUNNER_TEMP/spiffsgen.py" \
+            https://raw.githubusercontent.com/espressif/esp-idf/v5.3.1/components/spiffs/spiffsgen.py
+          echo "FLASHTRACE_SPIFFSGEN=$RUNNER_TEMP/spiffsgen.py" >> "$GITHUB_ENV"
+      - name: Tag matches package version
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          ver="$(python -c 'import flashtrace; print(flashtrace.__version__)')"
+          test "$tag" = "$ver" || { echo "tag v$tag != package version $ver"; exit 1; }
+      - name: Checks
+        run: |
+          ruff check src tests tools
+          ruff format --check src tests tools
+          mypy
+          pytest
+          python -m tools.corpus.generate .corpus
+          flashtrace bench .corpus --out bench_results.json
+      - name: Build
+        run: python -m build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  publish-pypi:
+    needs: verify
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@v1.12.4
+
+  github-release:
+    needs: publish-pypi
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - name: Create GitHub release with the built files
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          notes="$(awk -v v="## ${GITHUB_REF_NAME#v}" '$0 ~ "^## " {p = (index($0, v) == 1)} p' CHANGELOG.md)"
+          gh release create "$GITHUB_REF_NAME" dist/* --title "$GITHUB_REF_NAME" --notes "${notes:-See CHANGELOG.md}"
