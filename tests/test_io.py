@@ -10,6 +10,7 @@ from tests.fixtures.generator import BOOTLOADER_OFFSET, CHIP_ID, bootloader_imag
 def test_entropy() -> None:
     assert shannon_entropy(b"") == 0.0
     assert shannon_entropy(b"\xff" * 4096) == 0.0
+    assert str(shannon_entropy(b"\xff" * 4096)) == "0.0"  # not "-0.0"
     assert shannon_entropy(bytes(range(256)) * 16) == pytest.approx(8.0)
     assert shannon_entropy(os.urandom(65536)) > 7.9
 

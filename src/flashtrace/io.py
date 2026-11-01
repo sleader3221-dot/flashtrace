@@ -66,7 +66,8 @@ def shannon_entropy(data: ByteSource) -> float:
     if n == 0:
         return 0.0
     counts = Counter(bytes(data))
-    return -sum((c / n) * math.log2(c / n) for c in counts.values())
+    # ``+ 0.0`` normalises IEEE negative zero (single-symbol input) to 0.0
+    return -sum((c / n) * math.log2(c / n) for c in counts.values()) + 0.0
 
 
 def is_blank(data: ByteSource) -> bool:
