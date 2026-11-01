@@ -72,3 +72,42 @@ binary values as chunked blobs; Wi-Fi key names verified, blob layout still unve
 
 **Known gaps**: v1 (0xFF) NVS images only tested via a hand-built legacy BLOB page;
 NVS encryption detection is heuristic (no XTS decryption by design).
+
+## Phase B — filesystems, coredump, OTA logic, crypto posture ✅
+
+**Done**
+- `fs/spiffs.py` (ESP-IDF default config) + `tools/corpus/spiffs_writer.py`, **CI-proven
+  byte-identical to ESP-IDF v5.3.1 `spiffsgen.py`** (fetched at the pinned tag in CI).
+  Files carry exact dump segments (one per 251-byte data page). Unrecognised SPIFFS →
+  `FS_SPIFFS_UNRECOGNISED` anomaly + raw string sweep of the partition.
+- `fs/littlefs.py` via littlefs-python 0.19.0; tries block sizes 4096/512/1024/2048/8192,
+  reports which mounted; never lets the library format the buffer (it does so on
+  `mount=True` failure — found by reading its source). Round-trip tests (nested dirs,
+  empty and binary files, two block sizes) run in CI.
+- `coredump.py`: empty / binary (task count from header, bounded) / ELF / unknown.
+- Context dispatch for FS + coredump; per-partition entropy; likely-encryption skip.
+- Rules (one file each): PT.MD5_MISMATCH, PT.OVERLAP, PT.OUT_OF_BOUNDS,
+  IMG.CHECKSUM_BAD, IMG.SHA256_BAD, IMG.NO_APP_DESC, IMG.UNKNOWN_BUILD,
+  IMG.SLOT_DIVERGENCE, OTA.ROLLBACK_OR_DOWNGRADE, OTA.PENDING_VERIFY,
+  OTA.INVALID_ACTIVE, FS.SUSPICIOUS_FILE, CORE.PRESENT, SEC.NO_FLASH_ENCRYPTION,
+  SEC.NO_SECURE_BOOT, plus SEC.FLASH_ENCRYPTION_LIKELY (info) and PARSE.ANOMALY (low,
+  every parser anomaly not owned by a dedicated rule). All with positive + negative tests.
+- Fuzz/robustness harness covers SPIFFS, LittleFS, coredump and full `build_context`.
+
+**Tests**: CI 177 passed / 0 skipped; local 158 passed / 5 skipped.
+
+**Design decisions**
+- OTA.INVALID_ACTIVE: the bootloader never *selects* an INVALID/ABORTED entry, so the
+  rule fires when (a) the highest-seq otadata entry is INVALID/ABORTED (latest OTA
+  rejected) or (b) the slot that will be selected has no image / fails checksum/SHA.
+- IMG.UNKNOWN_BUILD hashes the image bytes `[0:image_length]` (incl. checksum and
+  appended digest); `--baseline` files are hashed the same way.
+- FS.SUSPICIOUS_FILE follows the spec literally ("any file triggering a SEC.* rule"),
+  so a file containing only a URL is also flagged (reason `content:url`).
+
+**CLAUDE.md corrections/additions**: SPIFFS layout, LittleFS formatting hazard,
+coredump header, Secure Boot V2 version 0x03 (ECDSA).
+
+**Known gaps**: SPIFFS deleted-page semantics are an assumption (spiffsgen only writes
+fresh images); LittleFS file offsets come from content search; ELF coredump prefix
+layout not verified against a real device dump.
