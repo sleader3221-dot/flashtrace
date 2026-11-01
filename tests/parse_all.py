@@ -5,6 +5,9 @@ from __future__ import annotations
 from flashtrace import secrets
 from flashtrace.appimage import find_signature_blocks, parse_app_image
 from flashtrace.context import build_context
+from flashtrace.coredump import parse_coredump
+from flashtrace.fs.littlefs import parse_littlefs
+from flashtrace.fs.spiffs import parse_spiffs
 from flashtrace.io import detect_chip, shannon_entropy
 from flashtrace.model import Anomaly, anomaly_finding
 from flashtrace.nvs import parse_nvs
@@ -79,6 +82,12 @@ def run_all_parsers(data: bytes) -> None:
     ):
         for m in fn(data):
             assert m.rel >= 0 and m.rel + m.length <= n
+    for fs in (parse_spiffs(data, BASE, "fs"), parse_littlefs(data, BASE, "fs")):
+        _check(fs.anomalies, BASE, n, data)
+        for f in fs.files:
+            for seg in f.segments:
+                assert seg.abs_offset >= BASE and seg.abs_offset + seg.length <= BASE + n
+    _check(parse_coredump(data, BASE, "core").anomalies, BASE, n, data)
     decode_wifi_blob(data, "ssid")
     decode_wifi_blob(data, "password")
     build_context(data)

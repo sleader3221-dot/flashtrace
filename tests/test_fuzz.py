@@ -20,6 +20,7 @@ from tests.fixtures.generator import (  # noqa: E402
 from tests.fixtures.nvs_cases import ROWS  # noqa: E402
 from tests.parse_all import run_all_parsers  # noqa: E402
 from tools.corpus.nvs_writer import build_nvs  # noqa: E402
+from tools.corpus.spiffs_writer import build_spiffs  # noqa: E402
 
 FUZZ = settings(
     max_examples=200,
@@ -33,6 +34,7 @@ SEEDS = [
     partition_table(list(DEFAULT_LAYOUT))[:256],
     otadata((otadata_entry(1, 2), otadata_entry(2, 1))),
     build_nvs(ROWS, 0x6000)[:0x3000],
+    build_spiffs([("/k.pem", b"-----BEGIN PRIVATE KEY-----\nAA==\n"), ("/a", b"x" * 600)], 0x2000),
 ]
 
 
