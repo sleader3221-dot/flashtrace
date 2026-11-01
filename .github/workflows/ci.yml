@@ -47,8 +47,8 @@ jobs:
           ruff format --check src tests tools
       - name: Mypy
         run: mypy
-      - name: Pytest
-        run: pytest
+      - name: Pytest (with coverage, floor 85% on src/)
+        run: pytest --cov=flashtrace --cov-report=term-missing:skip-covered --cov-fail-under=85
       - name: Cache benchmark corpus
         uses: actions/cache@v4
         with:
