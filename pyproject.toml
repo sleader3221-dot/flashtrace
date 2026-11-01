@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "flashtrace"
+version = "0.1.0"
+description = "Forensic triage for ESP32-family SPI flash dumps"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+dependencies = []
+
+[project.optional-dependencies]
+# Versions are pinned (CLAUDE.md rule 5). The esptool and hypothesis APIs used
+# by the tests were confirmed by reading the source of exactly these tags.
+dev = [
+    "esptool==5.1.0",
+    "hypothesis==6.139.3",
+    "pytest==9.1.1",
+    "ruff==0.16.9",
+    "mypy==2.3.1",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+flashtrace = ["py.typed"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF", "S", "PL", "N"]
+ignore = [
+    "PLR2004", # magic values are the point of a binary-format parser
+    "PLR0913",
+    "PLR0912",
+    "PLR0915",
+    "PLR0911",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "S603", "PLC0415"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+files = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "."]
+addopts = "-ra"
