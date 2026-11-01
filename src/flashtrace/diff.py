@@ -9,6 +9,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
+from flashtrace.attck import enrich
 from flashtrace.context import AnalysisContext, build_context
 from flashtrace.model import Evidence, Finding, Severity, make_finding
 from flashtrace.nvs import NvsEntry
@@ -215,6 +216,7 @@ def diff_contexts(a: AnalysisContext, b: AnalysisContext, reveal: bool = False) 
                     [("A", fa[fkey][1]), ("B", fb[fkey][1])],
                 )
             )
+    res.findings = enrich(res.findings)
     return res
 
 

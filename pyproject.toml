@@ -29,13 +29,14 @@ dev = [
     "pytest==9.1.1",
     "ruff==0.16.9",
     "mypy==2.3.1",
+    "pytest-cov==7.0.0",
 ]
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.setuptools.package-data]
-flashtrace = ["py.typed"]
+flashtrace = ["py.typed", "data/*.yaml"]
 
 [tool.ruff]
 line-length = 100

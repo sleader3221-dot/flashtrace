@@ -1,0 +1,149 @@
+# MITRE ATT&CK for ICS mapping for FlashTrace rule IDs.
+#
+# technique: ATT&CK for ICS technique ID, or null.
+# review:    true  -> NOT attached to findings; needs a human to confirm or replace.
+#            false -> attached to every finding of the rule.
+# Only mappings whose published technique definition clearly covers the finding are
+# marked review: false. A technique listed with review: true is a *proposal* only.
+# No technique IDs are invented; every non-null ID is an existing ATT&CK for ICS ID.
+
+NVS.WIFI_CREDENTIALS:
+  technique: null
+  review: true
+  note: Exposed Wi-Fi passphrase enables network access; T0859 Valid Accounts or T0860 Wireless Compromise are candidates.
+NVS.DELETED_SECRET:
+  technique: null
+  review: true
+  note: Recoverable deleted secret; impact depends on what the secret unlocks.
+SEC.HARDCODED_CREDENTIAL:
+  technique: T0891
+  review: false
+  note: "T0891 Hardcoded Credentials: credentials embedded in firmware."
+SEC.API_KEY:
+  technique: T0891
+  review: true
+  note: Hardcoded API key/token in firmware; proposed T0891 Hardcoded Credentials (API keys are not interactive-session credentials in every case).
+SEC.PRIVATE_KEY:
+  technique: null
+  review: true
+  note: Private key material at rest; could enable impersonation or TLS interception (T0830 candidate).
+SEC.CERT:
+  technique: null
+  review: true
+  note: Informational indicator.
+SEC.MQTT_BROKER:
+  technique: null
+  review: true
+  note: Reveals the device's broker endpoint; reconnaissance value only.
+SEC.URL:
+  technique: null
+  review: true
+  note: Informational indicator.
+SEC.NO_FLASH_ENCRYPTION:
+  technique: null
+  review: true
+  note: Posture weakness; enables offline extraction of firmware and data.
+SEC.NO_SECURE_BOOT:
+  technique: null
+  review: true
+  note: Posture weakness; enables T0857 System Firmware modification but is not itself an adversary technique.
+SEC.FLASH_ENCRYPTION_LIKELY:
+  technique: null
+  review: true
+  note: Informational.
+PT.MD5_MISMATCH:
+  technique: null
+  review: true
+  note: Table edited after generation; tampering or corruption.
+PT.OVERLAP:
+  technique: null
+  review: true
+  note: Inconsistent layout.
+PT.OUT_OF_BOUNDS:
+  technique: null
+  review: true
+  note: Inconsistent layout or truncated dump.
+IMG.CHECKSUM_BAD:
+  technique: T0857
+  review: true
+  note: Modified or corrupted image; proposed T0857 System Firmware when tampering is confirmed.
+IMG.SHA256_BAD:
+  technique: T0857
+  review: true
+  note: Modified or corrupted image; proposed T0857 System Firmware when tampering is confirmed.
+IMG.NO_APP_DESC:
+  technique: null
+  review: true
+  note: Non-ESP-IDF or stripped image.
+IMG.UNKNOWN_BUILD:
+  technique: T0857
+  review: false
+  note: "T0857 System Firmware: device runs firmware that is not a known-good build."
+IMG.SLOT_DIVERGENCE:
+  technique: T0857
+  review: true
+  note: Proposed T0857 System Firmware; legitimate product changes also diverge.
+OTA.ROLLBACK_OR_DOWNGRADE:
+  technique: T0857
+  review: true
+  note: Downgrade to older (possibly vulnerable) firmware; proposed T0857 System Firmware.
+OTA.PENDING_VERIFY:
+  technique: null
+  review: true
+  note: Update state; usually benign.
+OTA.INVALID_ACTIVE:
+  technique: null
+  review: true
+  note: Failed/rejected update or broken active image.
+FS.SUSPICIOUS_FILE:
+  technique: null
+  review: true
+  note: Scripts could relate to T0853 Scripting; keys/certs to credential exposure.
+CORE.PRESENT:
+  technique: null
+  review: true
+  note: Crash artefact; may contain memory with secrets.
+PARSE.ANOMALY:
+  technique: null
+  review: true
+  note: Structural anomaly.
+DIFF.PARTITION_TABLE:
+  technique: null
+  review: true
+  note: Change between dumps.
+DIFF.PARTITION_CHANGED:
+  technique: null
+  review: true
+  note: Change between dumps.
+DIFF.APP_DESC:
+  technique: null
+  review: true
+  note: Firmware changed between dumps; T0857 candidate when unauthorised.
+DIFF.OTA_STATE:
+  technique: null
+  review: true
+  note: Change between dumps.
+DIFF.NVS_ADDED:
+  technique: null
+  review: true
+  note: Change between dumps.
+DIFF.NVS_REMOVED:
+  technique: null
+  review: true
+  note: Change between dumps.
+DIFF.NVS_CHANGED:
+  technique: null
+  review: true
+  note: Change between dumps.
+DIFF.FS_ADDED:
+  technique: null
+  review: true
+  note: Change between dumps.
+DIFF.FS_REMOVED:
+  technique: null
+  review: true
+  note: Change between dumps.
+DIFF.FS_CHANGED:
+  technique: null
+  review: true
+  note: Change between dumps.

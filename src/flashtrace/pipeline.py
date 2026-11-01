@@ -14,6 +14,7 @@ from typing import Any
 
 from flashtrace import __version__
 from flashtrace.appimage import parse_app_image
+from flashtrace.attck import enrich
 from flashtrace.context import AnalysisContext, build_context
 from flashtrace.evidence import EvidenceStore
 from flashtrace.model import SEVERITIES, Anomaly, Evidence, Finding, sha256_hex
@@ -95,7 +96,7 @@ def run_rules(ctx: AnalysisContext) -> tuple[list[Finding], list[str]]:
                 findings.setdefault(f.id, f)
         except Exception as exc:  # a rule bug must not hide every other finding
             errors.append(f"{rule_id}: {type(exc).__name__}: {exc}")
-    return sorted(findings.values(), key=_sort_key), errors
+    return sorted(enrich(list(findings.values())), key=_sort_key), errors
 
 
 def _nvs_timestamp(e: NvsEntry) -> str | None:
@@ -167,6 +168,7 @@ def analyze(
     reveal_secrets: bool = False,
     baselines: Iterable[str] = (),
     chip: str = "auto",
+    analysed_at: str | None = None,
 ) -> AnalysisResult:
     ctx = build_context(dump, reveal_secrets=reveal_secrets, baselines=baselines)
     if chip != "auto" and ctx.chip is not None and ctx.chip.chip not in (None, chip):
@@ -189,7 +191,7 @@ def analyze(
         timeline=build_timeline(ctx),
         rule_errors=errors,
         chip_requested=chip,
-        analysed_at=dt.datetime.now(dt.UTC).replace(microsecond=0).isoformat(),
+        analysed_at=analysed_at or dt.datetime.now(dt.UTC).replace(microsecond=0).isoformat(),
     )
 
 
