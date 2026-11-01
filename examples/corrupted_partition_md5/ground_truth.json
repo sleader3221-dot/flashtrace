@@ -1,0 +1,38 @@
+{
+  "device": "corrupted_partition_md5",
+  "description": "One partition-table byte was altered after the MD5 entry was computed.",
+  "chip": "esp32",
+  "flash_size": 4194304,
+  "merge_tool": "internal",
+  "baselines": [],
+  "must_fire": [
+    "PT.MD5_MISMATCH",
+    "SEC.NO_FLASH_ENCRYPTION"
+  ],
+  "must_not_fire": [
+    "CORE.PRESENT",
+    "FS.SUSPICIOUS_FILE",
+    "IMG.CHECKSUM_BAD",
+    "IMG.NO_APP_DESC",
+    "IMG.SHA256_BAD",
+    "IMG.SLOT_DIVERGENCE",
+    "IMG.UNKNOWN_BUILD",
+    "NVS.DELETED_SECRET",
+    "NVS.WIFI_CREDENTIALS",
+    "OTA.INVALID_ACTIVE",
+    "OTA.PENDING_VERIFY",
+    "OTA.ROLLBACK_OR_DOWNGRADE",
+    "PARSE.ANOMALY",
+    "PT.OUT_OF_BOUNDS",
+    "PT.OVERLAP",
+    "SEC.API_KEY",
+    "SEC.CERT",
+    "SEC.FLASH_ENCRYPTION_LIKELY",
+    "SEC.HARDCODED_CREDENTIAL",
+    "SEC.MQTT_BROKER",
+    "SEC.NO_SECURE_BOOT",
+    "SEC.PRIVATE_KEY",
+    "SEC.URL"
+  ],
+  "dont_care": []
+}
