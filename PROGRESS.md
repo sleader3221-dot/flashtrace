@@ -176,3 +176,31 @@ local 175 passed / 7 skipped.
    CI only; local runs skip those modules.
 3. **Wi-Fi blob layout** written by the closed-source driver is unverified (decoder is
    defensive; see CLAUDE.md).
+
+## Phase D — ATT&CK mapping, reports, documentation ✅
+
+**Done**
+- `attck.py` + `src/flashtrace/data/attck_ics_map.yaml`: every rule ID (incl. DIFF.*) is
+  present (tested). Only two mappings are confirmed (`review: false`) and attached to
+  findings: SEC.HARDCODED_CREDENTIAL → T0891 Hardcoded Credentials, IMG.UNKNOWN_BUILD →
+  T0857 System Firmware. Proposed-but-unconfirmed IDs (`review: true`, not attached):
+  SEC.API_KEY → T0891; IMG.CHECKSUM_BAD, IMG.SHA256_BAD, IMG.SLOT_DIVERGENCE,
+  OTA.ROLLBACK_OR_DOWNGRADE → T0857. All other rules: `technique: null, review: true`.
+- Reports (`report/`): JSON (schema in `docs/report-schema.md`), Markdown (executive
+  summary, severity counts, findings table, partitions, deleted NVS, timeline) and a
+  single self-contained HTML file (header, severity cards, proportional partition map
+  with entropy, filterable expandable findings with 64-byte hex/ASCII previews that are
+  withheld for redacted secrets, recovered deleted NVS, timeline, diff view). Verified in
+  headless Chromium: zero network requests.
+- Snapshot tests (JSON, Markdown), HTML smoke tests (sections present, no external
+  `src`/`href`/`url()`/`@import`), redaction tests.
+- `docs/rules.md` generated from the registry + ATT&CK map; README benchmark table
+  generated from `examples/bench_results.json`; tests fail if either is stale.
+- `examples/`: reports (json/md/html + ground truth) for all 10 corpus devices plus a
+  diff example; reproducible (fixed analysis time); no dumps committed.
+- README (problem, differentiators, quickstart, CLI, mermaid architecture, benchmark
+  table, screenshot, limitations, authorised use, MIT) and `LICENSE`.
+
+**Bugs found while building reports and fixed**: entropy printed as `-0.00` (IEEE
+negative zero); diff evidence lacked previews and was mislabelled as redacted; diff
+findings were not severity-sorted.

@@ -233,3 +233,9 @@ pending_verify_ota, pem_private_key_in_spiffs, corrupted_partition_md5,
 encrypted_flash_simulated (random bytes over table+apps).
 `flashtrace bench` computes per-rule precision/recall/F1 and overall scores.
 CI fails if overall recall < 0.95 or any false positive on clean_control.
+**[clarified]** Implementation: each device's `ground_truth.json` lists `must_fire`,
+`must_not_fire` (every other registered rule unless `dont_care`) and `dont_care`.
+A forbidden rule firing on any device fails CI. Because every plaintext dump lacks
+flash encryption, clean_control's only `must_fire` is the posture finding
+SEC.NO_FLASH_ENCRYPTION, and the gate fails on any *unexpected* finding >= medium
+there (open question, see PROGRESS.md "Blocked / needs human").
