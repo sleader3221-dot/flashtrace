@@ -235,14 +235,36 @@ def looks_like_table(dump: ByteSource, offset: int) -> bool:
     return bytes(mv[offset : offset + 2]) == ENTRY_MAGIC
 
 
+def plausible_table(dump: ByteSource, offset: int) -> bool:
+    """Stricter check used when *scanning* for a relocated table.
+
+    Two magic bytes alone match random/encrypted data at ~1 in 65536 offsets, so a
+    scanned candidate must also parse as a sane table: >= 1 entry, printable labels,
+    4 KB-aligned non-empty partitions, and an end marker or a valid MD5 entry.
+    """
+    if not looks_like_table(dump, offset):
+        return False
+    mv = memoryview(dump)
+    t = parse_partition_table(mv[offset : offset + MAX_TABLE_LENGTH], offset)
+    if not t.entries or not (t.end_marker_found or t.md5_valid):
+        return False
+    for e in t.entries:
+        if not e.label or not e.label.isprintable() or not e.label.isascii():
+            return False
+        if e.offset % SECTOR or e.size == 0:
+            return False
+    return True
+
+
 def find_partition_table(
     dump: ByteSource, default_offset: int = DEFAULT_TABLE_OFFSET
 ) -> int | None:
-    """Return the table offset: ``default_offset`` if valid there, else first 4 KB-aligned hit."""
+    """Return the table offset: ``default_offset`` if its magic is there, else the first
+    4 KB-aligned offset holding a :func:`plausible_table`."""
     if looks_like_table(dump, default_offset):
         return default_offset
     for off in range(0, len(dump) - ENTRY_SIZE + 1, SECTOR):
-        if looks_like_table(dump, off):
+        if plausible_table(dump, off):
             return off
     return None
 

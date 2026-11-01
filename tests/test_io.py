@@ -1,4 +1,4 @@
-import os
+import random
 from pathlib import Path
 
 import pytest
@@ -12,7 +12,7 @@ def test_entropy() -> None:
     assert shannon_entropy(b"\xff" * 4096) == 0.0
     assert str(shannon_entropy(b"\xff" * 4096)) == "0.0"  # not "-0.0"
     assert shannon_entropy(bytes(range(256)) * 16) == pytest.approx(8.0)
-    assert shannon_entropy(os.urandom(65536)) > 7.9
+    assert shannon_entropy(random.Random(65536).randbytes(65536)) > 7.9
 
 
 @pytest.mark.parametrize("chip", sorted(CHIP_ID))

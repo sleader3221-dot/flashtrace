@@ -80,6 +80,10 @@ def test_find_partition_table() -> None:
     dump[0xA000:0xAC00] = tbl
     assert find_partition_table(dump) == 0xA000
     assert find_partition_table(b"\xff" * 0x10000) is None
+    # a bare magic at an aligned offset is not enough when scanning
+    junk = bytearray(b"\x5a" * 0x10000)
+    junk[0x3000:0x3002] = b"\xaa\x50"
+    assert find_partition_table(bytes(junk)) is None
 
 
 def test_layout_anomalies() -> None:

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import random
 import subprocess
 import sys
 from pathlib import Path
@@ -35,7 +36,7 @@ def test_round_trip() -> None:
 
 
 def test_not_spiffs_reports_anomaly() -> None:
-    fs = parse_spiffs(os.urandom(SIZE), BASE, "spiffs")
+    fs = parse_spiffs(random.Random(SIZE).randbytes(SIZE), BASE, "spiffs")
     assert not fs.mounted and fs.files == ()
     assert [a.kind for a in fs.anomalies] == ["FS_SPIFFS_UNRECOGNISED"]
     assert not parse_spiffs(b"", 0).mounted

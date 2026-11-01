@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import hashlib
-import os
 import random
 import struct
 
@@ -195,7 +194,17 @@ def test_posture_rules() -> None:
 
 def test_encrypted_flash_simulated() -> None:
     enc = bytearray(CLEAN)
-    enc[0x8000:0x310000] = os.urandom(0x310000 - 0x8000)
+    enc[0x8000:0x310000] = random.Random(11).randbytes(0x310000 - 0x8000)
+    findings = run_all(bytes(enc))
+    assert [f.rule_id for f in findings] == ["SEC.FLASH_ENCRYPTION_LIKELY"]
+
+
+def test_encrypted_flash_with_chance_table_magic() -> None:
+    """Regression: ciphertext that happens to contain AA 50 at a 4 KB boundary."""
+    enc = bytearray(CLEAN)
+    enc[0x8000:0x310000] = random.Random(12).randbytes(0x310000 - 0x8000)
+    for off in (0xA000, 0x20000, 0x200000):
+        enc[off : off + 2] = b"\xaa\x50"
     findings = run_all(bytes(enc))
     assert [f.rule_id for f in findings] == ["SEC.FLASH_ENCRYPTION_LIKELY"]
 

@@ -1,5 +1,5 @@
 import hashlib
-import os
+import random
 import struct
 import zlib
 
@@ -114,13 +114,13 @@ def test_page_header_crc_and_state(image: bytes) -> None:
 
 
 def test_encrypted_detection(image: bytes) -> None:
-    rnd = os.urandom(SIZE)
+    rnd = random.Random(SIZE).randbytes(SIZE)
     nvs = parse(rnd)
     assert nvs.encrypted and nvs.entries == () and "entropy" in (nvs.encryption_reason or "")
     # nvs_keys present + every written entry's CRC broken (as with XTS-encrypted entries)
     enc = bytearray(image)
     for p in range(SIZE // 4096):
-        enc[p * 4096 + 64 : (p + 1) * 4096] = os.urandom(4096 - 64)
+        enc[p * 4096 + 64 : (p + 1) * 4096] = random.Random(4096 - 64).randbytes(4096 - 64)
     nvs = parse(bytes(enc), nvs_keys_present=True)
     assert nvs.encrypted and "nvs_keys" in (nvs.encryption_reason or "")
     assert not parse(image, nvs_keys_present=True).encrypted
