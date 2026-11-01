@@ -51,6 +51,11 @@ def test_aws_and_generic_tokens() -> None:
         assert list(find_generic_tokens(n)) == [] and list(find_aws_keys(n)) == []
 
 
+def test_generic_tokens_ignore_pem_bodies() -> None:
+    assert list(find_generic_tokens(pem_private_key() + pem_cert())) == []
+    assert [m.value for m in find_generic_tokens(pem_cert() + b"\x00" + TOKEN)] == [TOKEN]
+
+
 def test_mqtt_and_urls() -> None:
     data = b"mqtts://broker.example.com:8883/dev\x00tcp host iot.example.net:1883\x00x:1883"
     assert [m.value for m in find_mqtt(data)] == [

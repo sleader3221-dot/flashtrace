@@ -128,11 +128,23 @@ def _looks_random_token(tok: bytes) -> bool:
     return char_entropy(core) >= GENERIC_TOKEN_MIN_ENTROPY
 
 
+PEM_ANY_BLOCK = re.compile(
+    rb"-----BEGIN [A-Z0-9 ]{3,40}-----.{0,16384}?-----END [A-Z0-9 ]{3,40}-----", re.S
+)
+
+
+def _pem_spans(data: bytes) -> list[tuple[int, int]]:
+    return [(m.start(), m.end()) for m in PEM_ANY_BLOCK.finditer(data)]
+
+
 def find_generic_tokens(data: bytes) -> Iterator[SecretMatch]:
+    spans = _pem_spans(data) if b"-----BEGIN " in data else []
     for m in GENERIC_TOKEN.finditer(data):
         tok = m.group()
         if AWS_KEY_ID.fullmatch(tok) or not _looks_random_token(tok):
             continue
+        if any(a <= m.start() < b for a, b in spans):
+            continue  # base64 body of a PEM block: owned by SEC.PRIVATE_KEY / SEC.CERT
         yield SecretMatch("generic_token", m.start(), len(tok), tok)
 
 
