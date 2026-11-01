@@ -144,23 +144,42 @@ INVALID (3) / ABORTED (4) (`bootloader_common_ota_select_valid`). Active OTA slo
 (max valid ota_seq − 1) % number_of_ota_app_partitions. ota_state: 0 NEW,
 1 PENDING_VERIFY, 2 VALID, 3 INVALID, 4 ABORTED, 0xFFFFFFFF UNDEFINED.
 
-**NVS**: 4096-byte pages. Page header 32 bytes: state u32, seq u32, version u8,
-reserved, crc32 u32. Page states: 0xFFFFFFFF EMPTY, 0xFFFFFFFE ACTIVE,
-0xFFFFFFFC FULL, 0xFFFFFFF8 FREEING, 0xFFFFFFF0 CORRUPT.
-Then a 32-byte entry-state bitmap (2 bits per entry: 0b11 empty, 0b10 written,
-0b00 erased) and 126 entries × 32 bytes:
-ns_index u8, type u8, span u8, chunk_index u8, crc32 u32, key[16], data[8].
+**NVS** (verified against ESP-IDF v5.3.1 `nvs_page.hpp`/`nvs_types.cpp` and
+esp-idf-nvs-partition-gen 0.2.0): 4096-byte pages. Page header 32 bytes: state u32,
+seq u32, version u8 (**[clarified]** 0xFE = v2 multipage blobs, 0xFF = v1),
+reserved[19] = 0xFF, crc32 u32 **over bytes 4..28 [clarified]**. Page states:
+0xFFFFFFFF UNINITIALIZED/EMPTY, 0xFFFFFFFE ACTIVE, 0xFFFFFFFC FULL, 0xFFFFFFF8
+FREEING, 0xFFFFFFF0 CORRUPT, **0x00000000 INVALID [corrected: was missing]**.
+Then a 32-byte entry-state bitmap (2 bits per entry, entry n at bits 2n..2n+1:
+0b11 empty, 0b10 written, 0b00 erased, **0b01 illegal [added]**) and 126 entries
+× 32 bytes: ns_index u8, type u8, span u8, chunk_index u8, crc32 u32, key[16],
+data[8]. **Entry CRC [added]** = `crc32(entry[0:4] + entry[8:32], 0xFFFFFFFF)`
+(`esp_rom_crc32_le(0xffffffff,…)` == `zlib.crc32(…, 0xFFFFFFFF)`).
 Types: 0x01 U8, 0x11 I8, 0x02 U16, 0x12 I16, 0x04 U32, 0x14 I32, 0x08 U64,
-0x18 I64, 0x21 STR, 0x41 BLOB (legacy), 0x42 BLOB_DATA, 0x48 BLOB_IDX.
-Namespace names live in ns_index 0 entries. Multi-span entries carry data in
-following entry slots. Chunked blobs: reassemble BLOB_DATA chunks via BLOB_IDX.
+0x18 I64, 0x21 STR, 0x41 BLOB (legacy/v1), 0x42 BLOB_DATA, 0x48 BLOB_IDX.
+**Variable-length data [added]**: STR/BLOB/BLOB_DATA `data` = size u16, 2 reserved
+bytes (0xFF), crc32 u32 of the payload; payload in the following span-1 slots
+(STR payload includes the trailing NUL). **BLOB_IDX [added]**: `data` = total size
+u32, chunk_count u8, chunk_start u8 (0x00 or 0x80, `VerOffset`); chunks are
+BLOB_DATA with chunk_index chunk_start..chunk_start+count-1. Since v2 the
+partition generator writes ALL `hex2bin`/`base64`/`binary` values as
+BLOB_DATA+BLOB_IDX, even 4-byte ones; legacy 0x41 only appears in v1 images.
+Namespace names live in ns_index 0 entries (type U8, value = index).
 FORENSIC REQUIREMENT: parse ERASED entries too and report them separately as
-"deleted but recoverable" — this is a key differentiator.
-Wi-Fi station config is expected under namespace `nvs.net80211`
-(e.g. keys `sta.ssid`, `sta.pswd`); confirm exact key names and blob layouts
-by generating NVS images with esp-idf-nvs-partition-gen and inspecting real
-ESP-IDF source if available in the environment. Encrypted NVS (nvs_keys
-partition present, random-looking pages) → report "NVS encrypted", do not parse.
+"deleted but recoverable" — this is a key differentiator. An erased entry is only
+trusted when its header CRC is valid (erasure flips only bitmap bits).
+**Wi-Fi [verified, partially]**: namespace `nvs.net80211`; key names confirmed
+from strings in the Wi-Fi driver binary (`esp32-wifi-lib/esp32/libnet80211.a`):
+`sta.ssid`, `sta.pswd`, `ap.ssid`, `ap.passwd`, `sta.pmk`, `ap.pmk_info`,
+`sta.apinfo`, `sta.authmode`, … esp-idf-nvs-partition-gen 0.2.0 special-cases
+`sta.ssid`/`sta.pswd` (it auto-adds `sta.apinfo`, `sta.pmk`, `sta.apsw`) and adds
+the `blob_sz_fill(N;0xPP)` (u32 length + bytes + padding) and `blob_fill` encodings
+for them. UNVERIFIED: the exact blob layout written by the closed-source driver.
+FlashTrace decodes defensively: u32 length prefix when plausible (1..32 SSID,
+1..64 passphrase, zero padding after), else NUL-terminated; STR values accepted too.
+Encrypted NVS: page headers/bitmaps stay plaintext, entries are XTS-encrypted, so
+FlashTrace reports "NVS encrypted" when an nvs_keys partition exists and no
+written entry has a valid CRC, or when no page header is valid and entropy > 7.5.
 
 **Encryption heuristics**: if partition-table magic absent at expected offset AND
 Shannon entropy of the region > 7.5 bits/byte, report likely flash encryption.
