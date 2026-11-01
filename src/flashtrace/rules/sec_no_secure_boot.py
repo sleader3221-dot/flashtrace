@@ -14,6 +14,7 @@ RULE_ID = "SEC.NO_SECURE_BOOT"
     "No app image has a Secure Boot V2 signature block (magic 0xE7, version 0x02/0x03) at the"
     " first 4 KB boundary after the image: images are unsigned (structural check only).",
     "Secure Boot V1 (ESP32 ECO<3) uses a different scheme and is not detected here.",
+    category="posture",
 )
 def check(ctx: AnalysisContext) -> list[Finding]:
     complete = {lbl: img for lbl, img in ctx.apps.items() if img.image_length}

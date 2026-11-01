@@ -13,6 +13,7 @@ from flashtrace.rules._common import OWNED_ANOMALIES
     "A parser met malformed or unexpected structure (truncation, bad magic, CRC mismatch, …)"
     " and recorded it instead of failing. Anomalies with a dedicated rule are excluded.",
     "Normal wear (e.g. a FREEING NVS page) can produce low-value anomalies.",
+    category="diagnostic",
 )
 def check(ctx: AnalysisContext) -> list[Finding]:
     return [

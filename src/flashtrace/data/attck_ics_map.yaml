@@ -71,6 +71,10 @@ IMG.SHA256_BAD:
   technique: T0857
   review: true
   note: Modified or corrupted image; proposed T0857 System Firmware when tampering is confirmed.
+IMG.SIGNATURE_INVALID:
+  technique: T0857
+  review: true
+  note: Unsigned or foreign-signed firmware; proposed T0857 System Firmware.
 IMG.NO_APP_DESC:
   technique: null
   review: true

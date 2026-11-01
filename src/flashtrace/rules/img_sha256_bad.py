@@ -15,6 +15,7 @@ RULE_ID = "IMG.SHA256_BAD"
     "The appended SHA-256 does not match the image bytes: the image was modified after build "
     "or is corrupted.",
     "Partially written OTA slots (interrupted update) also fail.",
+    category="integrity",
 )
 def check(ctx: AnalysisContext) -> list[Finding]:
     return anomaly_rule(ctx, "IMG_SHA256_BAD", RULE_ID, "high", "App image SHA-256 invalid")

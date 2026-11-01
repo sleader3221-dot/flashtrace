@@ -15,6 +15,7 @@ RULE_ID = "IMG.CHECKSUM_BAD"
     "The XOR checksum (seed 0xEF) stored after the segments does not match the segment data: "
     "the image was modified or corrupted.",
     "Partially written OTA slots (interrupted update) also fail.",
+    category="integrity",
 )
 def check(ctx: AnalysisContext) -> list[Finding]:
     return anomaly_rule(ctx, "IMG_CHECKSUM_BAD", RULE_ID, "high", "App image checksum invalid")

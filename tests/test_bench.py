@@ -18,7 +18,7 @@ def corpus(tmp_path_factory: pytest.TempPathFactory) -> Path:
 
 def test_corpus_is_complete_and_deterministic(corpus: Path, tmp_path: Path) -> None:
     names = sorted(p.name for p in corpus.iterdir())
-    assert names == sorted(d.name for d in devices()) and len(names) == 10
+    assert names == sorted(d.name for d in devices()) and len(names) >= 17
     generate(tmp_path, use_esptool=False)
     for n in names:
         assert (corpus / n / "dump.bin").read_bytes() == (tmp_path / n / "dump.bin").read_bytes()
@@ -51,7 +51,8 @@ def test_gate_fails_on_forbidden_and_missed(corpus: Path, tmp_path: Path) -> Non
     assert not res.passed
     text = "\n".join(res.violations)
     assert "recall" in text and "forbidden SEC.NO_FLASH_ENCRYPTION" in text
-    assert "unexpected medium finding SEC.NO_FLASH_ENCRYPTION" in text
+    # posture rules are scored through ground truth, never as "unexpected" on the clean device
+    assert "unexpected medium finding SEC.NO_FLASH_ENCRYPTION" not in text
     empty = tmp_path / "empty"
     empty.mkdir()
     assert not run_bench(empty).passed

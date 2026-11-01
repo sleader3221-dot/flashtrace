@@ -15,6 +15,7 @@ RULE_ID = "PT.OVERLAP"
     "Two non-empty partitions share flash addresses, which can hide data or let one partition"
     " overwrite another.",
     "Rare in legitimate builds; gen_esp32part.py refuses overlapping layouts.",
+    category="integrity",
 )
 def check(ctx: AnalysisContext) -> list[Finding]:
     return anomaly_rule(ctx, "PT_OVERLAP", RULE_ID, "high", "Overlapping partitions")

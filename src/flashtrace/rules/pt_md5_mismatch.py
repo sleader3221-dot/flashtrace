@@ -15,6 +15,7 @@ RULE_ID = "PT.MD5_MISMATCH"
     "The MD5 entry of the partition table does not match the entries before it: the table was"
     " edited after it was generated.",
     "Some very old ESP-IDF tables have no MD5 entry; absence is not reported, only mismatch.",
+    category="integrity",
 )
 def check(ctx: AnalysisContext) -> list[Finding]:
     return anomaly_rule(ctx, "PT_MD5_MISMATCH", RULE_ID, "high", "Partition table MD5 mismatch")

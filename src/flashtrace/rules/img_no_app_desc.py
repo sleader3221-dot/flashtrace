@@ -14,6 +14,7 @@ RULE_ID = "IMG.NO_APP_DESC"
     "An app partition holds a parseable image but no esp_app_desc_t (magic 0xABCD5432) at the"
     " start of any segment: not built by the ESP-IDF app build, or the descriptor was stripped.",
     "Non-ESP-IDF toolchains (bare-metal, some Arduino/Rust builds) may legitimately omit it.",
+    category="integrity",
 )
 def check(ctx: AnalysisContext) -> list[Finding]:
     out: list[Finding] = []

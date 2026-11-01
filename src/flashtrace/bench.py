@@ -7,9 +7,10 @@ listed in ``must_not_fire`` and fired -> FP. ``dont_care`` rules are not scored.
 Gate (CI fails when any is violated):
 * overall recall >= 0.95;
 * no forbidden (``must_not_fire``) rule fires on any device;
-* on ``clean_control``, no finding of severity >= medium whose rule is not in its
-  ``must_fire`` list (the clean device's only expected finding is the inherent
-  plaintext-flash posture finding, see PROGRESS.md "Blocked / needs human").
+* on ``clean_control``, no finding of severity >= medium unless its rule is in that
+  device's ``must_fire`` list or is a ``posture`` rule (configuration weaknesses such as
+  SEC.NO_FLASH_ENCRYPTION are true of every plaintext dump; they keep their severity and
+  are scored like any other rule through ground truth).
 """
 
 from __future__ import annotations
@@ -19,7 +20,9 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+from flashtrace.keys import KeyMaterial
 from flashtrace.pipeline import SEVERITY_RANK, analyze, load_baselines
+from flashtrace.rules import load_rules
 
 RECALL_GATE = 0.95
 CLEAN_DEVICE = "clean_control"
@@ -92,8 +95,20 @@ class BenchResult:
         }
 
 
+def keys_for_device(d: Path, gt: dict[str, Any]) -> KeyMaterial | None:
+    """Key material named in a device's ground_truth.json (flash_key, nvs_key), if any."""
+    if not gt.get("flash_key") and not gt.get("nvs_key"):
+        return None
+    return KeyMaterial(
+        flash_key=(d / gt["flash_key"]).read_bytes() if gt.get("flash_key") else None,
+        flash_crypt_conf=int(gt.get("flash_crypt_conf", 0xF)),
+        nvs_key=(d / gt["nvs_key"]).read_bytes() if gt.get("nvs_key") else None,
+    )
+
+
 def run_bench(corpus: Path) -> BenchResult:
     res = BenchResult()
+    categories = {rid: r.category for rid, r in load_rules().items()}
     device_dirs = sorted(p for p in corpus.iterdir() if (p / "ground_truth.json").is_file())
     if not device_dirs:
         res.violations.append(f"no devices with ground_truth.json under {corpus}")
@@ -101,7 +116,12 @@ def run_bench(corpus: Path) -> BenchResult:
     for d in device_dirs:
         gt = json.loads((d / "ground_truth.json").read_text())
         baselines = load_baselines(d / b for b in gt.get("baselines", []))
-        result = analyze((d / "dump.bin").read_bytes(), baselines=baselines)
+        result = analyze(
+            (d / "dump.bin").read_bytes(),
+            baselines=baselines,
+            keys=keys_for_device(d, gt),
+            sb_public_key=(d / gt["sb_pubkey"]).read_bytes() if gt.get("sb_pubkey") else None,
+        )
         fired = {f.rule_id for f in result.findings}
         must, forbid = set(gt["must_fire"]), set(gt["must_not_fire"])
         for rule in must:
@@ -116,7 +136,11 @@ def run_bench(corpus: Path) -> BenchResult:
             res.violations.append(f"{d.name}: forbidden {rule} fired")
         if d.name == CLEAN_DEVICE:
             for f in result.findings:
-                if SEVERITY_RANK[f.severity] >= SEVERITY_RANK["medium"] and f.rule_id not in must:
+                if (
+                    SEVERITY_RANK[f.severity] >= SEVERITY_RANK["medium"]
+                    and f.rule_id not in must
+                    and categories.get(f.rule_id) != "posture"
+                ):
                     res.violations.append(
                         f"{d.name}: unexpected {f.severity} finding {f.rule_id} ({f.title})"
                     )
