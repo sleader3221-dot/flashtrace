@@ -304,14 +304,23 @@ def build_nvs(rows: list[tuple[str, str, str, str]], size: int = 0x6000) -> byte
     return NvsWriter(size).rows(rows).to_bytes()
 
 
-def erase(data: bytes, nvs: NvsPartition, namespace: str, key: str) -> bytes:
+def erase(
+    data: bytes, nvs: NvsPartition, namespace: str, key: str, occurrence: int | None = None
+) -> bytes:
     """Flip bitmap state 0b10 -> 0b00 for every slot of an item (incl. blob chunks).
 
     Mirrors what nvs_flash does on erase; nothing else (CRCs, data) is touched.
+    ``occurrence`` selects one of several live copies of the key (0 = oldest), as left
+    behind by a value update; ``None`` erases them all.
     """
     buf = bytearray(data)
-    targets = [e for e in nvs.entries if e.namespace == namespace and e.key == key]
+    targets = sorted(
+        (e for e in nvs.entries if e.namespace == namespace and e.key == key),
+        key=lambda e: e.offset,
+    )
     assert targets, (namespace, key)
+    if occurrence is not None:
+        targets = [targets[occurrence]]
     slots: list[tuple[int, int, int]] = []
     for e in targets:
         slots.append((e.page, e.slot, e.span))
@@ -324,4 +333,32 @@ def erase(data: bytes, nvs: NvsPartition, namespace: str, key: str) -> bytes:
         for s in range(slot, slot + span):
             bit = s * 2
             buf[page * 4096 + 32 + bit // 8] &= ~(0b11 << (bit % 8)) & 0xFF
+    return bytes(buf)
+
+
+def nvs_keys_image(key: bytes, size: int = 0x1000) -> bytes:
+    """nvs_keys partition: e_key || t_key, crc32(key, 0xFFFFFFFF), 0xFF fill (nvs gen layout)."""
+    if len(key) != 64:
+        raise ValueError("NVS key must be 64 bytes")
+    body = key + struct.pack("<I", zlib.crc32(key, 0xFFFFFFFF) & 0xFFFFFFFF)
+    return body + b"\xff" * (size - len(body))
+
+
+def encrypt_nvs(plain: bytes, key: bytes) -> bytes:
+    """Encrypt every written/erased entry slot like nvs_partition_gen ``encrypt``."""
+    from flashtrace.crypto import nvs_crypt_entry  # noqa: PLC0415 - keep writer import-light
+
+    buf = bytearray(plain)
+    for p in range(len(buf) // PAGE_SIZE):
+        page = p * PAGE_SIZE
+        if buf[page : page + 4] == b"\xff\xff\xff\xff":
+            continue
+        for slot in range(MAX_ENTRIES):
+            bit = slot * 2
+            if (buf[page + 32 + bit // 8] >> (bit % 8)) & 0b11 == 0b11:
+                continue
+            off = page + FIRST_ENTRY_OFFSET + slot * ENTRY_SIZE
+            buf[off : off + ENTRY_SIZE] = nvs_crypt_entry(
+                bytes(buf[off : off + ENTRY_SIZE]), off, key, decrypt=False
+            )
     return bytes(buf)
