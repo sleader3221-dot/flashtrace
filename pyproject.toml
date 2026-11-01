@@ -11,6 +11,7 @@ requires-python = ">=3.11"
 license = { text = "MIT" }
 dependencies = [
     "cryptography==50.0.1",
+    "littlefs-python==0.19.0",
 ]
 
 [project.optional-dependencies]
@@ -51,7 +52,7 @@ ignore = [
 known-first-party = ["flashtrace", "tests", "tools"]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**" = ["S101", "S105", "S106", "S603", "PLC0415"]
+"tests/**" = ["S101", "S105", "S106", "S311", "S603", "PLC0415"]
 "tools/**" = ["S101", "S603", "S311"]
 
 [tool.mypy]
