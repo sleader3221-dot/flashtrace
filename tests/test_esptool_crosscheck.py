@@ -83,7 +83,9 @@ def test_generated_image_matches_esptool(chip: str, tmp_path: Path) -> None:
     img = parse_app_image(raw)
     assert img is not None and img.anomalies == ()
     assert_agrees(out, img)
-    assert f"Detected image type: {chip.upper()}" in out
+    # esptool prints CHIP_NAME, e.g. "ESP32" / "ESP32-C3" (targets/*.py)
+    name = "ESP32" if chip == "esp32" else f"ESP32-{chip[5:].upper()}"
+    assert f"Detected image type: {name}" in out
 
 
 def test_image_inside_dump_matches_esptool(tmp_path: Path) -> None:
