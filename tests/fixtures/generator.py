@@ -74,13 +74,19 @@ def app_image(
     corrupt_checksum: bool = False,
     corrupt_sha256: bool = False,
     seed: int = 0,
+    rodata: bytes = b"",
 ) -> bytes:
     """Build an app image the way esptool ``elf2image`` lays it out (minus IROM alignment)."""
     drom, dram, iram, irom = SEGMENT_ADDRS[chip]
     if segments is None:
         filler = hashlib.sha256(f"{chip}-{seed}".encode()).digest()
         segments = [
-            (drom, _pad4((desc if desc is not None else app_desc()) + b"rodata:" + filler * 8)),
+            (
+                drom,
+                _pad4(
+                    (desc if desc is not None else app_desc()) + b"rodata:" + filler * 8 + rodata
+                ),
+            ),
             (dram, _pad4(b"dram-init" + filler * 4)),
             (iram, _pad4(b"\x13\x00\x00\x00" * 64 + filler)),
             (irom, _pad4(b"text" + filler * 16)),
@@ -201,6 +207,7 @@ class DumpSpec:
     apps: dict[str, bytes] = field(default_factory=dict)
     otadata: bytes | None = None
     corrupt_md5: bool = False
+    data: dict[str, bytes] = field(default_factory=dict)  # raw bytes per partition label
 
 
 def build_dump(spec: DumpSpec) -> bytes:
@@ -218,6 +225,10 @@ def build_dump(spec: DumpSpec) -> bytes:
         put(part.offset, image)
     if spec.otadata is not None:
         put(by_label["otadata"].offset, spec.otadata)
+    for label, blob in spec.data.items():
+        part = by_label[label]
+        assert len(blob) <= part.size, label
+        put(part.offset, blob)
     return bytes(dump)
 
 
@@ -231,5 +242,34 @@ def default_dump(chip: str = "esp32") -> bytes:
                 "ota_1": app_image(chip, desc=app_desc(version="1.1.0"), seed=1),
             },
             otadata=otadata((otadata_entry(1, 2), otadata_entry(2, 2))),
+        )
+    )
+
+
+CLEAN_NVS_ROWS = [
+    ("storage", "namespace", "", ""),
+    ("boot_count", "data", "u32", "7"),
+    ("device_name", "data", "string", "sensor-01"),
+    ("calib", "data", "hex2bin", "0102030405060708"),
+]
+
+
+def clean_nvs() -> bytes:
+    from tools.corpus.nvs_writer import build_nvs
+
+    return build_nvs(CLEAN_NVS_ROWS, 0x4000)
+
+
+def clean_dump(chip: str = "esp32") -> bytes:
+    """A benign device: valid images, otadata, NVS without secrets, blank spiffs."""
+    return build_dump(
+        DumpSpec(
+            chip=chip,
+            apps={
+                "ota_0": app_image(chip, desc=app_desc(version="1.0.0"), seed=0),
+                "ota_1": app_image(chip, desc=app_desc(version="1.1.0"), seed=1),
+            },
+            otadata=otadata((otadata_entry(1, 2), otadata_entry(2, 2))),
+            data={"nvs": clean_nvs()},
         )
     )
