@@ -5,6 +5,9 @@ from __future__ import annotations
 import base64
 
 from flashtrace.nvs import NvsPartition, parse_nvs
+from tools.corpus.nvs_writer import erase
+
+__all__ = ["EXPECTED", "ROWS", "SIZE", "erase", "parse", "values"]
 
 Row = tuple[str, str, str, str]
 
@@ -56,29 +59,6 @@ SIZE = 0x6000
 
 def values(nvs: NvsPartition) -> dict[tuple[str, str], int | str | bytes]:
     return {(e.namespace or "", e.key): e.value for e in nvs.entries if e.value is not None}
-
-
-def erase(data: bytes, nvs: NvsPartition, namespace: str, key: str) -> bytes:
-    """Flip bitmap state 0b10 -> 0b00 for every slot of an item (incl. blob chunks).
-
-    Mirrors what nvs_flash does on erase; nothing else (CRCs, data) is touched.
-    """
-    buf = bytearray(data)
-    targets = [e for e in nvs.entries if e.namespace == namespace and e.key == key]
-    assert targets, (namespace, key)
-    slots: list[tuple[int, int, int]] = []
-    for e in targets:
-        slots.append((e.page, e.slot, e.span))
-        for ev in e.evidence[1:]:
-            rel = ev.offset - nvs.offset
-            page, off = divmod(rel, 4096)
-            if off >= 64 and (off - 64) % 32 == 0 and ev.length % 32 == 0 and ev.length:
-                slots.append((page, (off - 64) // 32, ev.length // 32))
-    for page, slot, span in slots:
-        for s in range(slot, slot + span):
-            bit = s * 2
-            buf[page * 4096 + 32 + bit // 8] &= ~(0b11 << (bit % 8)) & 0xFF
-    return bytes(buf)
 
 
 def parse(data: bytes, **kw: bool) -> NvsPartition:
