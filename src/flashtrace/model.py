@@ -29,6 +29,15 @@ class Evidence:
 
 
 @dataclass(frozen=True)
+class Segment:
+    """Maps ``region[rel : rel+length]`` to ``dump[abs_offset : abs_offset+length]``."""
+
+    rel: int
+    abs_offset: int
+    length: int
+
+
+@dataclass(frozen=True)
 class Finding:
     id: str  # stable: rule_id + evidence hash prefix
     rule_id: str  # e.g. "NVS.WIFI_CREDENTIALS"
