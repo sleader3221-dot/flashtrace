@@ -60,3 +60,33 @@ def secret_finding(
         attck=attck,
         confidence=confidence * (0.5 if ctx.encryption_likely else 1.0),
     )
+
+
+# Parser anomaly kinds owned by dedicated rules (everything else -> PARSE.ANOMALY).
+OWNED_ANOMALIES: dict[str, str] = {
+    "PT_MD5_MISMATCH": "PT.MD5_MISMATCH",
+    "PT_OVERLAP": "PT.OVERLAP",
+    "PT_OUT_OF_BOUNDS": "PT.OUT_OF_BOUNDS",
+    "IMG_CHECKSUM_BAD": "IMG.CHECKSUM_BAD",
+    "IMG_SHA256_BAD": "IMG.SHA256_BAD",
+}
+
+
+def anomaly_rule(
+    ctx: AnalysisContext, kind: str, rule_id: str, severity: Severity, title: str
+) -> list[Finding]:
+    out: list[Finding] = []
+    for partition, a in ctx.anomalies:
+        if a.kind != kind:
+            continue
+        out.append(
+            make_finding(
+                rule_id,
+                severity=severity,
+                title=f"{title}: {a.message}",
+                detail={"kind": a.kind, "partition": partition, **a.detail},
+                evidence=(ctx.ev(a.offset, a.length, partition),),
+                confidence=0.5 if ctx.encryption_likely else 1.0,
+            )
+        )
+    return out

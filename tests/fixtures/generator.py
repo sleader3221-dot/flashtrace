@@ -198,6 +198,18 @@ DEFAULT_LAYOUT = (
 )
 
 
+LAYOUT_WITH_COREDUMP = (
+    *DEFAULT_LAYOUT[:-1],
+    Part("spiffs", 1, 0x82, 0x310000, 0xE0000),
+    Part("coredump", 1, 0x03, 0x3F0000, 0x10000),
+)
+
+
+def signed(image: bytes, version: int = 0x02) -> bytes:
+    """Append a (structural) Secure Boot V2 signature sector after an image."""
+    return image + b"\xff" * (-len(image) % 4096) + sig_block(version)
+
+
 @dataclass
 class DumpSpec:
     chip: str = "esp32"
