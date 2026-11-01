@@ -111,3 +111,68 @@ coredump header, Secure Boot V2 version 0x03 (ECDSA).
 **Known gaps**: SPIFFS deleted-page semantics are an assumption (spiffsgen only writes
 fresh images); LittleFS file offsets come from content search; ELF coredump prefix
 layout not verified against a real device dump.
+
+## Phase C — CLI, benchmark corpus, scoring, CI gate ✅
+
+**Done**
+- `pipeline.py`: dump → chip/bootloader → table → per-partition dispatch → registry rules
+  (`rules.load_rules()` auto-discovers modules; nothing hardcoded) → evidence store →
+  device-reported timeline (app_desc build date/time per slot; NVS U32/I32/U64/I64 in a
+  plausible epoch range (s or ms) and ISO-8601 strings), each entry recording its source
+  and labelled "device-reported, untrusted". A crashing rule is contained (exit code 2)
+  and does not hide other findings. Finding IDs are stable across runs (tested).
+- `cli.py` (typer 0.27.3) + `commands.py` + argparse fallback in `python -m flashtrace`:
+  `analyze`, `diff`, `bench`; exit 0/1/2 as specified.
+- `diff.py`: DIFF.PARTITION_TABLE / PARTITION_CHANGED / APP_DESC / OTA_STATE /
+  NVS_ADDED / NVS_REMOVED / NVS_CHANGED / FS_ADDED / FS_REMOVED / FS_CHANGED, evidence in
+  the dump the bytes come from (`detail.evidence_dumps`).
+- `tools/corpus/generate.py`: 10 deterministic 4 MB ESP32 devices + `ground_truth.json`
+  (must_fire / must_not_fire / dont_care). In CI all 10 are merged with **esptool v5
+  `merge-bin`** (`merge_tool: esptool`), and `tests/test_corpus_esptool.py` proves the
+  internal merge is byte-identical, so the corpus is also reproducible locally.
+- `bench.py`: per-rule TP/FP/FN, precision/recall/F1, overall; `bench_results.json` + `.md`.
+- CI: cached corpus (key includes rules, because ground truth embeds the rule list) and
+  `flashtrace bench` gate.
+
+**Benchmark (local and CI, identical)**
+
+| Rule | TP | FP | FN | Precision | Recall | F1 |
+|---|---:|---:|---:|---:|---:|---:|
+| `FS.SUSPICIOUS_FILE` | 1 | 0 | 0 | 1.00 | 1.00 | 1.00 |
+| `IMG.SLOT_DIVERGENCE` | 1 | 0 | 0 | 1.00 | 1.00 | 1.00 |
+| `IMG.UNKNOWN_BUILD` | 1 | 0 | 0 | 1.00 | 1.00 | 1.00 |
+| `NVS.DELETED_SECRET` | 1 | 0 | 0 | 1.00 | 1.00 | 1.00 |
+| `NVS.WIFI_CREDENTIALS` | 1 | 0 | 0 | 1.00 | 1.00 | 1.00 |
+| `OTA.PENDING_VERIFY` | 1 | 0 | 0 | 1.00 | 1.00 | 1.00 |
+| `OTA.ROLLBACK_OR_DOWNGRADE` | 1 | 0 | 0 | 1.00 | 1.00 | 1.00 |
+| `PT.MD5_MISMATCH` | 1 | 0 | 0 | 1.00 | 1.00 | 1.00 |
+| `SEC.API_KEY` | 1 | 0 | 0 | 1.00 | 1.00 | 1.00 |
+| `SEC.FLASH_ENCRYPTION_LIKELY` | 1 | 0 | 0 | 1.00 | 1.00 | 1.00 |
+| `SEC.NO_FLASH_ENCRYPTION` | 9 | 0 | 0 | 1.00 | 1.00 | 1.00 |
+| `SEC.NO_SECURE_BOOT` | 1 | 0 | 0 | 1.00 | 1.00 | 1.00 |
+| `SEC.PRIVATE_KEY` | 1 | 0 | 0 | 1.00 | 1.00 | 1.00 |
+| **Overall** | **21** | **0** | **0** | **1.00** | **1.00** | **1.00** |
+
+Every device also lists all other registered rules as `must_not_fire` (except explicit
+`dont_care`), so the 0 FP covers ~29 forbidden rules × 10 devices.
+
+**Rule fixed because of the benchmark** (ground truth untouched): SEC.API_KEY's generic
+token detector fired on the base64 body of the PEM key in `pem_private_key_in_spiffs`;
+PEM-armoured blocks are now excluded from generic-token matching.
+
+**Tests**: CI 205 passed / 0 skipped (incl. typer CLI, esptool merge equality);
+local 175 passed / 7 skipped.
+
+## Blocked / needs human
+
+1. **clean_control vs. SEC.NO_FLASH_ENCRYPTION.** The spec asks for SEC.NO_FLASH_ENCRYPTION
+   (medium) whenever a plaintext table and app parse, *and* for clean_control to have
+   "zero SEC.*" and "no finding ≥ medium". Both cannot hold for any plaintext dump.
+   Fallback chosen: clean_control's apps carry Secure Boot V2 signature blocks (so
+   SEC.NO_SECURE_BOOT stays silent), SEC.NO_FLASH_ENCRYPTION is its single `must_fire`
+   posture finding, and the gate fails on any *unexpected* ≥ medium finding there.
+   Decide whether posture rules should be info-level or excluded from the clean gate.
+2. **No PyPI in the dev container** (see top). Everything tool-dependent is verified in
+   CI only; local runs skip those modules.
+3. **Wi-Fi blob layout** written by the closed-source driver is unverified (decoder is
+   defensive; see CLAUDE.md).
