@@ -12,7 +12,12 @@ license = { text = "MIT" }
 dependencies = [
     "cryptography==50.0.1",
     "littlefs-python==0.19.0",
+    "PyYAML==6.0.3",
+    "typer==0.27.3",
 ]
+
+[project.scripts]
+flashtrace = "flashtrace.cli:run"
 
 [project.optional-dependencies]
 # Versions are pinned (CLAUDE.md rule 5). The esptool and hypothesis APIs used
@@ -53,7 +58,7 @@ known-first-party = ["flashtrace", "tests", "tools"]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = ["S101", "S105", "S106", "S311", "S603", "PLC0415"]
-"tools/**" = ["S101", "S603", "S311"]
+"tools/**" = ["S101", "S105", "S603", "S311"]
 
 [tool.mypy]
 python_version = "3.11"
@@ -64,6 +69,12 @@ files = ["src"]
 # Only consulted when the package is missing (local dev without PyPI); CI installs them.
 module = ["typer", "typer.*", "littlefs", "littlefs.*", "yaml"]
 ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+# typer's decorators are fully typed when typer is installed (CI); this only matters
+# for local runs without it, where they would otherwise be reported as untyped.
+module = ["flashtrace.cli"]
+disallow_untyped_decorators = false
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
