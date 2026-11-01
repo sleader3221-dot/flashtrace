@@ -133,6 +133,9 @@ PEM_ANY_BLOCK = re.compile(
 )
 
 
+DATA_URI_PREFIX = re.compile(rb"data:[A-Za-z0-9.+/-]{1,64}(?:;[A-Za-z0-9=.-]{1,32})*;base64,$")
+
+
 def _pem_spans(data: bytes) -> list[tuple[int, int]]:
     return [(m.start(), m.end()) for m in PEM_ANY_BLOCK.finditer(data)]
 
@@ -145,6 +148,8 @@ def find_generic_tokens(data: bytes) -> Iterator[SecretMatch]:
             continue
         if any(a <= m.start() < b for a, b in spans):
             continue  # base64 body of a PEM block: owned by SEC.PRIVATE_KEY / SEC.CERT
+        if DATA_URI_PREFIX.search(data[max(0, m.start() - 80) : m.start()]):
+            continue  # payload of a data: URI (embedded image/font), encoded content
         yield SecretMatch("generic_token", m.start(), len(tok), tok)
 
 

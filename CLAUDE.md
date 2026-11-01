@@ -208,6 +208,13 @@ emits 0x03 (ECDSA). SEC.NO_SECURE_BOOT accepts either.
 
 **Encryption heuristics**: if partition-table magic absent at expected offset AND
 Shannon entropy of the region > 7.5 bits/byte, report likely flash encryption.
+**[clarified]** "the region" = the table's own 0xC00 bytes. Measuring a larger window
+fails on real devices: the NVS partition right after the table is never flash-encrypted
+(ESP-IDF flash-encryption docs, "Encrypted Partitions") and is mostly 0xFF.
+With a key (`--flash-key`) FlashTrace decrypts exactly the regions ESP-IDF encrypts
+(bootloader, partition table, nvs_keys, otadata, app partitions, `encrypted`-flag
+partitions), choosing AES-XTS or the ESP32 scheme by which one reveals the table;
+`--nvs-key` (or a decrypted nvs_keys partition) decrypts NVS. See src/flashtrace/crypto.py.
 Compute per-partition entropy and include it in the report.
 
 ## Detection rules (initial set; each = one file in rules/, each tested)

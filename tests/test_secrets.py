@@ -56,6 +56,16 @@ def test_generic_tokens_ignore_pem_bodies() -> None:
     assert [m.value for m in find_generic_tokens(pem_cert() + b"\x00" + TOKEN)] == [TOKEN]
 
 
+def test_generic_tokens_ignore_data_uri_payloads() -> None:
+    png = (
+        b"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk"
+        b"+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
+    )
+    assert list(find_generic_tokens(b"icon=data:image/png;base64," + png)) == []
+    # the same bytes outside a data: URI are still reported
+    assert [m.value for m in find_generic_tokens(b"token=" + png[:60])] == [png[:60]]
+
+
 def test_mqtt_and_urls() -> None:
     data = b"mqtts://broker.example.com:8883/dev\x00tcp host iot.example.net:1883\x00x:1883"
     assert [m.value for m in find_mqtt(data)] == [
