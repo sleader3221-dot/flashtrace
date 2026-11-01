@@ -44,23 +44,30 @@ def rules_markdown() -> str:
         "exact bytes). Secret values are redacted unless `--reveal-secrets` is given; the",
         "SHA-256 of the unredacted value is always stored.",
         "",
+        "Categories: `detection` (something planted or exposed), `integrity` (structure or",
+        "signatures do not check out), `posture` (a configuration weakness true of most",
+        "plaintext dumps; excluded from the benchmark's clean-device gate but still scored),",
+        "`diagnostic` (parser anomalies).",
+        "",
         "## Summary",
         "",
-        "| Rule | Severity | ATT&CK for ICS |",
-        "|---|---|---|",
+        "| Rule | Severity | Category | ATT&CK for ICS |",
+        "|---|---|---|---|",
     ]
     rules = load_rules()
     for rid, r in rules.items():
-        out.append(f"| [`{rid}`](#{rid.lower().replace('.', '')}) | {r.severity} | {_attck(rid)} |")
+        anchor = rid.lower().replace(".", "")
+        out.append(f"| [`{rid}`](#{anchor}) | {r.severity} | {r.category} | {_attck(rid)} |")
     for rid, (sev, _title) in sorted(DIFF_RULES.items()):
-        out.append(f"| `{rid}` (diff only) | {sev} | {_attck(rid)} |")
+        out.append(f"| `{rid}` (diff only) | {sev} | diff | {_attck(rid)} |")
     for rid, r in rules.items():
         note = load_map().get(rid)
         out += [
             "",
             f"## {rid}",
             "",
-            f"**Severity:** {r.severity} · **ATT&CK for ICS:** {_attck(rid)}",
+            f"**Severity:** {r.severity} · **Category:** {r.category} ·"
+            f" **ATT&CK for ICS:** {_attck(rid)}",
             "",
             f"**{r.title}.** {r.description}",
             "",

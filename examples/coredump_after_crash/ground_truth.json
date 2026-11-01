@@ -1,0 +1,39 @@
+{
+  "device": "coredump_after_crash",
+  "description": "A binary-format coredump (5 tasks) was saved after a crash.",
+  "chip": "esp32",
+  "flash_size": 4194304,
+  "merge_tool": "internal",
+  "baselines": [],
+  "must_fire": [
+    "CORE.PRESENT",
+    "SEC.NO_FLASH_ENCRYPTION"
+  ],
+  "must_not_fire": [
+    "FS.SUSPICIOUS_FILE",
+    "IMG.CHECKSUM_BAD",
+    "IMG.NO_APP_DESC",
+    "IMG.SHA256_BAD",
+    "IMG.SIGNATURE_INVALID",
+    "IMG.SLOT_DIVERGENCE",
+    "IMG.UNKNOWN_BUILD",
+    "NVS.DELETED_SECRET",
+    "NVS.WIFI_CREDENTIALS",
+    "OTA.INVALID_ACTIVE",
+    "OTA.PENDING_VERIFY",
+    "OTA.ROLLBACK_OR_DOWNGRADE",
+    "PARSE.ANOMALY",
+    "PT.MD5_MISMATCH",
+    "PT.OUT_OF_BOUNDS",
+    "PT.OVERLAP",
+    "SEC.API_KEY",
+    "SEC.CERT",
+    "SEC.FLASH_ENCRYPTION_LIKELY",
+    "SEC.HARDCODED_CREDENTIAL",
+    "SEC.MQTT_BROKER",
+    "SEC.NO_SECURE_BOOT",
+    "SEC.PRIVATE_KEY",
+    "SEC.URL"
+  ],
+  "dont_care": []
+}

@@ -165,7 +165,9 @@ local 175 passed / 7 skipped.
 
 ## Blocked / needs human
 
-1. **clean_control vs. SEC.NO_FLASH_ENCRYPTION.** The spec asks for SEC.NO_FLASH_ENCRYPTION
+1. ~~**clean_control vs. SEC.NO_FLASH_ENCRYPTION.**~~ **Resolved in 0.2.0**: posture rules
+   keep `medium` and carry `category="posture"`; the clean-device gate excludes that
+   category explicitly (still scored via ground truth). Original note: the spec asks for SEC.NO_FLASH_ENCRYPTION
    (medium) whenever a plaintext table and app parse, *and* for clean_control to have
    "zero SEC.*" and "no finding ≥ medium". Both cannot hold for any plaintext dump.
    Fallback chosen: clean_control's apps carry Secure Boot V2 signature blocks (so
@@ -204,3 +206,47 @@ local 175 passed / 7 skipped.
 **Bugs found while building reports and fixed**: entropy printed as `-0.00` (IEEE
 negative zero); diff evidence lacked previews and was mislabelled as redacted; diff
 findings were not severity-sorted.
+
+
+## Follow-up — 0.2.0 (keys, signatures, wider benchmark, release, explain)
+
+Branch `claude/nice-fermi-3tx67n`, restarted from `main` after PR #2 merged.
+
+**Done**
+- `crypto.py`: flash decryption (AES-XTS and the ESP32 tweaked-AES scheme, key
+  normalisation), NVS decryption, nvs_keys parsing, Secure Boot V2 verification (RSA-3072
+  PSS, ECDSA P-192/P-256/P-384) and a deterministic signer for fixtures. Every algorithm
+  follows `espsecure` (esptool 5.1.0) / nvs_partition_gen 0.2.0 source; CI cross-checks:
+  `espsecure encrypt-flash-data` (XTS 128/256/512-bit, ESP32 scheme) output must equal
+  FlashTrace's and decrypt back, `espsecure sign-data --version 2` (RSA, ECDSA) must
+  verify, `nvs_partition_gen encrypt` output must equal FlashTrace's encryption and
+  decrypt to the plaintext generator output (`tests/test_crypto_official.py`).
+- `keys.py`: decrypted view of a dump. Regions follow ESP-IDF's flash-encryption docs
+  (bootloader, table, nvs_keys, otadata, apps, `encrypted` flag; NVS excluded); scheme
+  auto-detected by which reveals the table; NVS key from `--nvs-key` or the decrypted
+  nvs_keys partition. Report records original/view hashes and regions.
+- `IMG.SIGNATURE_INVALID` (integrity, with `--sb-pubkey`); posture rules react to a
+  successful decryption (encryption confirmed).
+- Rule categories; bench clean gate excludes `posture` by category.
+- `explain.py` + `flashtrace explain`: Claude (`claude-opus-5-5`, structured JSON output,
+  `fallbacks: "default"`), validated against the report's finding IDs (never creates
+  findings), refuses revealed reports. anthropic SDK pinned to 2.2.0 after reading its
+  source (both 2.2.0 and 2.3.0 were published 9 days before this work; no older 2.x has
+  the `"default"` fallback form).
+- Corpus 10 → 18 devices (17 without littlefs-python): esp32s3_encrypted_with_keys,
+  esp32_encrypted_esp32_scheme, esp32c3_mqtt_credentials, coredump_after_crash,
+  littlefs_with_script (CI), ca_bundle_and_urls_negative, signed_ota_tampered,
+  rotated_password_in_nvs. Deterministic (fixed keys, RFC 6979 ECDSA).
+- Release: `CHANGELOG.md`, version 0.2.0, `release.yml` (tag → checks → build → PyPI
+  trusted publishing → GitHub release), CI builds and smoke-installs the wheel.
+
+**Bugs found by the new devices/tests and fixed (rules, not ground truth)**
+- Flash-encryption heuristic measured entropy over 64 KB; on a real encrypted device the
+  plaintext (mostly 0xFF) NVS after the table pulls it under 7.5 → reported "no partition
+  table" instead of "encryption likely". Now measured over the table's 0xC00 bytes.
+- SEC.API_KEY flagged the base64 payload of a `data:image/png;base64,` URI.
+
+**Benchmark (local, 17 devices)**: 37 TP / 0 FP / 0 FN, precision = recall = F1 = 1.00.
+
+**Still needs a human**: real-hardware dumps; ATT&CK `review: true` entries; PyPI trusted
+publisher setup and pushing a `v0.2.0` tag (not done by me).

@@ -1,0 +1,502 @@
+{
+  "schema_version": "1.0",
+  "kind": "analysis",
+  "tool": {
+    "name": "flashtrace",
+    "version": "0.2.0"
+  },
+  "dump": {
+    "sha256": "3fa3f4becf42f5f3e3b0b1ea6cbcab6d1417cddd4dd5a67bbfda9f7077960e6e",
+    "size": 4194304,
+    "chip": "esp32",
+    "chip_detected": "esp32",
+    "chip_id": 0,
+    "bootloader_offset": 4096,
+    "analysed_at": "2026-01-01T00:00:00+00:00",
+    "secrets_revealed": false,
+    "decryption": null
+  },
+  "encryption": {
+    "likely": false,
+    "reason": null
+  },
+  "partition_table": {
+    "offset": 32768,
+    "md5_present": true,
+    "md5_valid": true,
+    "end_marker_found": true
+  },
+  "partitions": [
+    {
+      "label": "nvs",
+      "type": "data",
+      "subtype": "nvs",
+      "offset": 36864,
+      "offset_hex": "0x9000",
+      "size": 16384,
+      "present_bytes": 16384,
+      "entropy": 0.1304,
+      "sha256": "1827577be9840afb4acadccbeb33a8cc7e385b1ac33afb2d5f1fce1d40a10319",
+      "encrypted_flag": false,
+      "readonly_flag": false
+    },
+    {
+      "label": "otadata",
+      "type": "data",
+      "subtype": "ota",
+      "offset": 53248,
+      "offset_hex": "0xd000",
+      "size": 8192,
+      "present_bytes": 8192,
+      "entropy": 0.0365,
+      "sha256": "b7e293bb607d3bddb99b7f38a7a45afd5823c0c61e3216e67858bbc759535282",
+      "encrypted_flag": false,
+      "readonly_flag": false
+    },
+    {
+      "label": "phy_init",
+      "type": "data",
+      "subtype": "phy",
+      "offset": 61440,
+      "offset_hex": "0xf000",
+      "size": 4096,
+      "present_bytes": 4096,
+      "entropy": 0.0,
+      "sha256": "f47a8ec3e9aff2318d896942282ad4fe37d6391c82914f54a5da8a37de1300c6",
+      "encrypted_flag": false,
+      "readonly_flag": false
+    },
+    {
+      "label": "ota_0",
+      "type": "app",
+      "subtype": "ota_0",
+      "offset": 65536,
+      "offset_hex": "0x10000",
+      "size": 1572864,
+      "present_bytes": 1572864,
+      "entropy": 0.0245,
+      "sha256": "c549ed148548b3e7368a434ffc323916eaa923b2f33c87df023463401465bbdb",
+      "encrypted_flag": false,
+      "readonly_flag": false
+    },
+    {
+      "label": "ota_1",
+      "type": "app",
+      "subtype": "ota_1",
+      "offset": 1638400,
+      "offset_hex": "0x190000",
+      "size": 1572864,
+      "present_bytes": 1572864,
+      "entropy": 0.0319,
+      "sha256": "ef44b11e5e857bdc1653144a785da3b156a413c826218a70d9c140ec0f125c44",
+      "encrypted_flag": false,
+      "readonly_flag": false
+    },
+    {
+      "label": "spiffs",
+      "type": "data",
+      "subtype": "spiffs",
+      "offset": 3211264,
+      "offset_hex": "0x310000",
+      "size": 983040,
+      "present_bytes": 983040,
+      "entropy": 0.0121,
+      "sha256": "935cefc99435de690bad46fa2e09052827e24092bd23a523b781937992b28334",
+      "encrypted_flag": false,
+      "readonly_flag": false
+    }
+  ],
+  "apps": [
+    {
+      "partition": "ota_0",
+      "offset": 65536,
+      "image_length": 1568,
+      "chip": "esp32",
+      "segments": 4,
+      "checksum_valid": true,
+      "sha256_valid": true,
+      "image_sha256": "2ca964a7d39b3fab15ad7679123575e458d5d5ab39e431803d10976e816ea2f7",
+      "signature_blocks": [
+        {
+          "offset": 69632,
+          "version": 2,
+          "scheme": "RSA"
+        }
+      ],
+      "signature_verification": null,
+      "app_desc": {
+        "project_name": "sensor_fw",
+        "version": "1.0.0",
+        "secure_version": 0,
+        "idf_ver": "v5.3.1",
+        "date": "Jan  1 2026",
+        "time": "12:00:00",
+        "app_elf_sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+      }
+    },
+    {
+      "partition": "ota_1",
+      "offset": 1638400,
+      "image_length": 2288,
+      "chip": "esp32",
+      "segments": 4,
+      "checksum_valid": true,
+      "sha256_valid": true,
+      "image_sha256": "bccb785618d78d85b0ef84c1153a3d9061214b26aecc49aa2ec6f76e48c760d0",
+      "signature_blocks": [
+        {
+          "offset": 1642496,
+          "version": 2,
+          "scheme": "RSA"
+        }
+      ],
+      "signature_verification": null,
+      "app_desc": {
+        "project_name": "sensor_fw",
+        "version": "1.1.0",
+        "secure_version": 0,
+        "idf_ver": "v5.3.1",
+        "date": "Jan  1 2026",
+        "time": "12:00:00",
+        "app_elf_sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+      }
+    }
+  ],
+  "otadata": {
+    "offset": 53248,
+    "active_slot": "ota_1",
+    "entries": [
+      {
+        "index": 0,
+        "offset": 53248,
+        "seq": 1,
+        "state": "VALID",
+        "crc_ok": true,
+        "valid": true,
+        "erased": false
+      },
+      {
+        "index": 1,
+        "offset": 57344,
+        "seq": 2,
+        "state": "VALID",
+        "crc_ok": true,
+        "valid": true,
+        "erased": false
+      }
+    ]
+  },
+  "nvs": [
+    {
+      "partition": "nvs",
+      "encrypted": false,
+      "encryption_reason": null,
+      "pages": 1,
+      "namespaces": {
+        "1": "storage"
+      },
+      "entries": [
+        {
+          "namespace": "storage",
+          "key": "boot_count",
+          "type": "U32",
+          "status": "written",
+          "value": 7,
+          "value_redacted": false,
+          "value_sha256": "e8613f5a5bc9f9feeda32a8e7c80b69dd4878e47b6a91723fb15eb84236b6a2b",
+          "offset": 36960,
+          "offset_hex": "0x9060",
+          "page": 0,
+          "slot": 1,
+          "header_crc_ok": true,
+          "data_crc_ok": null,
+          "complete": true
+        },
+        {
+          "namespace": "storage",
+          "key": "device_name",
+          "type": "STR",
+          "status": "written",
+          "value": "sensor-01",
+          "value_redacted": false,
+          "value_sha256": "15055309a83745ba0a30f704af12fd54fef195cbcd721c55b2705251d2152c7f",
+          "offset": 36992,
+          "offset_hex": "0x9080",
+          "page": 0,
+          "slot": 2,
+          "header_crc_ok": true,
+          "data_crc_ok": true,
+          "complete": true
+        },
+        {
+          "namespace": "storage",
+          "key": "calib",
+          "type": "BLOB_IDX",
+          "status": "written",
+          "value": "0102030405060708",
+          "value_redacted": false,
+          "value_sha256": "66840dda154e8a113c31dd0ad32f7f3a366a80e8136979d8f5a101d3d29d6f72",
+          "offset": 37120,
+          "offset_hex": "0x9100",
+          "page": 0,
+          "slot": 6,
+          "header_crc_ok": true,
+          "data_crc_ok": true,
+          "complete": true
+        }
+      ],
+      "recovered_deleted": []
+    }
+  ],
+  "filesystems": [
+    {
+      "partition": "spiffs",
+      "type": "spiffs",
+      "mounted": true,
+      "detail": "page=256 block=4096 blocks=240 deleted_pages=0",
+      "directories": [],
+      "files": [
+        {
+          "path": "/index.html",
+          "size": 54,
+          "sha256": "c5e8299bdccd2c57c3ba73cf91fff14b46ce755a4510182a726500010c7067e7",
+          "located": true,
+          "complete": true,
+          "offset": 3211781
+        },
+        {
+          "path": "/config.json",
+          "size": 38,
+          "sha256": "f00f1bd1437e2b0e2a3c0d454d4f13f12718e40fb6681b7468db3c438119d7d8",
+          "located": true,
+          "complete": true,
+          "offset": 3212293
+        }
+      ]
+    }
+  ],
+  "coredump": null,
+  "summary": {
+    "finding_count": 6,
+    "severity_counts": {
+      "info": 5,
+      "low": 0,
+      "medium": 1,
+      "high": 0,
+      "critical": 0
+    },
+    "max_severity": "medium",
+    "rules_fired": [
+      "SEC.CERT",
+      "SEC.NO_FLASH_ENCRYPTION",
+      "SEC.URL"
+    ]
+  },
+  "findings": [
+    {
+      "id": "SEC.NO_FLASH_ENCRYPTION:124eaa6fc18233d2",
+      "rule_id": "SEC.NO_FLASH_ENCRYPTION",
+      "severity": "medium",
+      "title": "Flash contents are plaintext (no flash encryption)",
+      "detail": {
+        "table_offset": 32768,
+        "apps_parsed": [
+          "ota_0",
+          "ota_1"
+        ]
+      },
+      "evidence": [
+        {
+          "partition": null,
+          "offset": 32768,
+          "offset_hex": "0x8000",
+          "length": 256,
+          "sha256": "ef10d4e2fae054433b3a4bca368d6b04813ccd5b41cd64ad14b0770d852332ca",
+          "preview_hex": "aa50010200900000004000006e76730000000000000000000000000000000000aa50010000d00000002000006f74616461746100000000000000000000000000",
+          "preview_redacted": false
+        },
+        {
+          "partition": "ota_0",
+          "offset": 65536,
+          "offset_hex": "0x10000",
+          "length": 24,
+          "sha256": "e83ca7e6caaf048152c79f81e458c2dd938b40cfc63c5580d057f62b6338a927",
+          "preview_hex": "e904022004000840ee00000000000000008f010000000001",
+          "preview_redacted": false
+        }
+      ],
+      "attck": [],
+      "confidence": 1.0
+    },
+    {
+      "id": "SEC.CERT:e700a91cbf5d61fc",
+      "rule_id": "SEC.CERT",
+      "severity": "info",
+      "title": "Certificate in app:ota_1: CN=FlashTrace Test Root CA",
+      "detail": {
+        "kind": "der_cert",
+        "region": "app:ota_1",
+        "source": "app",
+        "value": "0\\x82\u000100\\x81\u0620\u0003\u0002\u0001\u0002\u0002\u0002\u001240\n\u0006\b*\\x86H\\xce=\u0004\u0003\u00020\"1 0\u001e\u0006\u0003U\u0004\u0003\f\u0017FlashTrace Test Root CA0\u001e\u0017\r260101000000Z\u0017\r351230000000Z0\"1 0\u001e\u0006\u0003U\u0004\u0003\f\u0017FlashTrace Test Root CA0Y0\u0013\u0006\u0007*\\x86H\\xce=\u0002\u0001\u0006\b*\\x86H\\xce=\u0003\u0001\u0007\u0003B\u0000\u0004VM1&)\\xeb!\u000f\\xa0\\x9ex\u06e7\\xbd\\xe9\\xc3\u00072\\x92gj\u0015\u0012\\x87`s\\xcctp\\xb3\\xe0\u0004\"\u07e5\\x81\\x9f\\xd8\u059b[q0&\\x9bBw.'-\\x88\\xb7\\xbe\\x99\\x87\\xe1\\xcd\u001d.\\xccIU\u0002\\xa10\n\u0006\b*\\x86H\\xce=\u0004\u0003\u0002\u0003G\u00000D\u0002 H\u039d.\\x85-\u0251\u0012\\xbc\\x84\\xabJ\\^\\x95\\xf9;\\x93t\\xce\u000f\u0000\b_\\x81\u0005\\xbf\\xa2J\\x95'\u0002 \u000b6\u0017x\u001d\u0016Yk;7%\u0012Iz\\xf0\\xa4\u00f1\\x93l\\xe9\\x88D\\xdcC\\x81\\xf1c0LI\u0019",
+        "redacted": false,
+        "value_sha256": "530f865a0119db399840d1bd9dcbf543f7d558d5cbb09969a173cee4f5000e50",
+        "value_length": 308,
+        "context": "CN=FlashTrace Test Root CA"
+      },
+      "evidence": [
+        {
+          "partition": "ota_1",
+          "offset": 1638952,
+          "offset_hex": "0x190228",
+          "length": 308,
+          "sha256": "530f865a0119db399840d1bd9dcbf543f7d558d5cbb09969a173cee4f5000e50",
+          "preview_hex": "308201303081d8a00302010202021234300a06082a8648ce3d04030230223120301e06035504030c17466c6173685472616365205465737420526f6f74204341",
+          "preview_redacted": false
+        }
+      ],
+      "attck": [],
+      "confidence": 0.9
+    },
+    {
+      "id": "SEC.URL:1d5ffcc9d6866467",
+      "rule_id": "SEC.URL",
+      "severity": "info",
+      "title": "URL in app:ota_1",
+      "detail": {
+        "kind": "url",
+        "region": "app:ota_1",
+        "source": "app",
+        "value": "https://docs.espressif.com/projects/esp-idf/en/latest/",
+        "redacted": false,
+        "value_sha256": "ecda3e794565477e569bb36401fab1deeaffb9b3fa028abd863138c5171b7aec",
+        "value_length": 54
+      },
+      "evidence": [
+        {
+          "partition": "ota_1",
+          "offset": 1639261,
+          "offset_hex": "0x19035d",
+          "length": 54,
+          "sha256": "ecda3e794565477e569bb36401fab1deeaffb9b3fa028abd863138c5171b7aec",
+          "preview_hex": "68747470733a2f2f646f63732e6573707265737369662e636f6d2f70726f6a656374732f6573702d6964662f656e2f6c61746573742f",
+          "preview_redacted": false
+        }
+      ],
+      "attck": [],
+      "confidence": 0.9
+    },
+    {
+      "id": "SEC.URL:e57bbd81154f393f",
+      "rule_id": "SEC.URL",
+      "severity": "info",
+      "title": "URL in app:ota_1",
+      "detail": {
+        "kind": "url",
+        "region": "app:ota_1",
+        "source": "app",
+        "value": "http://pool.ntp.org/",
+        "redacted": false,
+        "value_sha256": "197a7c8f20da9d0b1b3bde1f5801f6f95ed62ea2f9597d6e2288f8e7e2ad1760",
+        "value_length": 20
+      },
+      "evidence": [
+        {
+          "partition": "ota_1",
+          "offset": 1639316,
+          "offset_hex": "0x190394",
+          "length": 20,
+          "sha256": "197a7c8f20da9d0b1b3bde1f5801f6f95ed62ea2f9597d6e2288f8e7e2ad1760",
+          "preview_hex": "687474703a2f2f706f6f6c2e6e74702e6f72672f",
+          "preview_redacted": false
+        }
+      ],
+      "attck": [],
+      "confidence": 0.9
+    },
+    {
+      "id": "SEC.URL:47d2e4080feb38c8",
+      "rule_id": "SEC.URL",
+      "severity": "info",
+      "title": "URL in app:ota_1",
+      "detail": {
+        "kind": "url",
+        "region": "app:ota_1",
+        "source": "app",
+        "value": "https://github.com/espressif/esp-idf/issues",
+        "redacted": false,
+        "value_sha256": "7c0405ac1e52c8916e667f48f6561a9c030838f2a8c0bf77973be202bbe71456",
+        "value_length": 43
+      },
+      "evidence": [
+        {
+          "partition": "ota_1",
+          "offset": 1639337,
+          "offset_hex": "0x1903a9",
+          "length": 43,
+          "sha256": "7c0405ac1e52c8916e667f48f6561a9c030838f2a8c0bf77973be202bbe71456",
+          "preview_hex": "68747470733a2f2f6769746875622e636f6d2f6573707265737369662f6573702d6964662f697373756573",
+          "preview_redacted": false
+        }
+      ],
+      "attck": [],
+      "confidence": 0.9
+    },
+    {
+      "id": "SEC.URL:310e11375203c56e",
+      "rule_id": "SEC.URL",
+      "severity": "info",
+      "title": "URL in app:ota_1",
+      "detail": {
+        "kind": "url",
+        "region": "app:ota_1",
+        "source": "app",
+        "value": "https://ota.example.com/firmware/sensor_fw.bin",
+        "redacted": false,
+        "value_sha256": "8140e307a1ec45e3933b8cf07764cf4244c0a17e7f1b2711bed6027ea3ba3875",
+        "value_length": 46
+      },
+      "evidence": [
+        {
+          "partition": "ota_1",
+          "offset": 1639381,
+          "offset_hex": "0x1903d5",
+          "length": 46,
+          "sha256": "8140e307a1ec45e3933b8cf07764cf4244c0a17e7f1b2711bed6027ea3ba3875",
+          "preview_hex": "68747470733a2f2f6f74612e6578616d706c652e636f6d2f6669726d776172652f73656e736f725f66772e62696e",
+          "preview_redacted": false
+        }
+      ],
+      "attck": [],
+      "confidence": 0.9
+    }
+  ],
+  "timeline": [
+    {
+      "ts_source": "app_desc.date+time of ota_0 (build time, timezone unknown)",
+      "value": "Jan  1 2026 12:00:00",
+      "iso": "2026-01-01T12:00:00+00:00",
+      "trust": "device-reported, untrusted",
+      "evidence": {
+        "partition": "ota_0",
+        "offset": 65648,
+        "offset_hex": "0x10070",
+        "length": 32,
+        "sha256": "edd22dc8099a172eab53fac82b4fde708669fcbbc2929ac4fab70069d3ef8d02"
+      }
+    },
+    {
+      "ts_source": "app_desc.date+time of ota_1 (build time, timezone unknown)",
+      "value": "Jan  1 2026 12:00:00",
+      "iso": "2026-01-01T12:00:00+00:00",
+      "trust": "device-reported, untrusted",
+      "evidence": {
+        "partition": "ota_1",
+        "offset": 1638512,
+        "offset_hex": "0x190070",
+        "length": 32,
+        "sha256": "edd22dc8099a172eab53fac82b4fde708669fcbbc2929ac4fab70069d3ef8d02"
+      }
+    }
+  ],
+  "rule_errors": []
+}

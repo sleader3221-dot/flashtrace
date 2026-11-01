@@ -1,0 +1,554 @@
+{
+  "schema_version": "1.0",
+  "kind": "analysis",
+  "tool": {
+    "name": "flashtrace",
+    "version": "0.2.0"
+  },
+  "dump": {
+    "sha256": "3e8ed1549ac905aac7e51d1c4236cec5925a342dc294b2f5dc9b4b6f7003e41a",
+    "size": 4194304,
+    "chip": "esp32s3",
+    "chip_detected": "esp32s3",
+    "chip_id": 9,
+    "bootloader_offset": 0,
+    "analysed_at": "2026-01-01T00:00:00+00:00",
+    "secrets_revealed": false,
+    "decryption": {
+      "original_sha256": "3e8ed1549ac905aac7e51d1c4236cec5925a342dc294b2f5dc9b4b6f7003e41a",
+      "view_sha256": "11c0c39e3b245a76c7963e846ea87790d8b26a30d256409b59cb05cb303fe8c5",
+      "flash_scheme": "aes-xts",
+      "flash_regions": [
+        {
+          "what": "bootloader",
+          "offset": 0,
+          "length": 32768
+        },
+        {
+          "what": "partition_table",
+          "offset": 32768,
+          "length": 3072
+        },
+        {
+          "what": "otadata",
+          "offset": 53248,
+          "length": 8192
+        },
+        {
+          "what": "nvs_keys",
+          "offset": 61440,
+          "length": 4096
+        },
+        {
+          "what": "ota_0",
+          "offset": 65536,
+          "length": 1572864
+        },
+        {
+          "what": "ota_1",
+          "offset": 1638400,
+          "length": 1572864
+        }
+      ],
+      "nvs_partitions": [
+        "nvs"
+      ],
+      "nvs_key_source": "partition nvs_keys",
+      "errors": [],
+      "evidence_basis": "decrypted view"
+    }
+  },
+  "encryption": {
+    "likely": false,
+    "reason": null
+  },
+  "partition_table": {
+    "offset": 32768,
+    "md5_present": true,
+    "md5_valid": true,
+    "end_marker_found": true
+  },
+  "partitions": [
+    {
+      "label": "nvs",
+      "type": "data",
+      "subtype": "nvs",
+      "offset": 36864,
+      "offset_hex": "0x9000",
+      "size": 16384,
+      "present_bytes": 16384,
+      "entropy": 0.401,
+      "sha256": "794d1ab79c78bddfb26912350734ad4a2fc20b62ba426543beb701f0382136f5",
+      "encrypted_flag": false,
+      "readonly_flag": false
+    },
+    {
+      "label": "otadata",
+      "type": "data",
+      "subtype": "ota",
+      "offset": 53248,
+      "offset_hex": "0xd000",
+      "size": 8192,
+      "present_bytes": 8192,
+      "entropy": 0.0365,
+      "sha256": "b7e293bb607d3bddb99b7f38a7a45afd5823c0c61e3216e67858bbc759535282",
+      "encrypted_flag": false,
+      "readonly_flag": false
+    },
+    {
+      "label": "nvs_keys",
+      "type": "data",
+      "subtype": "nvs_keys",
+      "offset": 61440,
+      "offset_hex": "0xf000",
+      "size": 4096,
+      "present_bytes": 4096,
+      "entropy": 0.2225,
+      "sha256": "f7d95a917f3670a4c000b58287337e4b7bebbdf91654f9c0032e5e0266b2c37c",
+      "encrypted_flag": true,
+      "readonly_flag": false
+    },
+    {
+      "label": "ota_0",
+      "type": "app",
+      "subtype": "ota_0",
+      "offset": 65536,
+      "offset_hex": "0x10000",
+      "size": 1572864,
+      "present_bytes": 1572864,
+      "entropy": 0.0244,
+      "sha256": "5c5ea30c4b3764df0cd5eb480b3cebd36e579517caded617d21e7f7c1b717b9e",
+      "encrypted_flag": false,
+      "readonly_flag": false
+    },
+    {
+      "label": "ota_1",
+      "type": "app",
+      "subtype": "ota_1",
+      "offset": 1638400,
+      "offset_hex": "0x190000",
+      "size": 1572864,
+      "present_bytes": 1572864,
+      "entropy": 0.0244,
+      "sha256": "1d37100f2caff664dfcfb8a5aa636b5282a0f2a134485047b31cc77d44c4a964",
+      "encrypted_flag": false,
+      "readonly_flag": false
+    },
+    {
+      "label": "spiffs",
+      "type": "data",
+      "subtype": "spiffs",
+      "offset": 3211264,
+      "offset_hex": "0x310000",
+      "size": 983040,
+      "present_bytes": 983040,
+      "entropy": 0.0121,
+      "sha256": "935cefc99435de690bad46fa2e09052827e24092bd23a523b781937992b28334",
+      "encrypted_flag": false,
+      "readonly_flag": false
+    }
+  ],
+  "apps": [
+    {
+      "partition": "ota_0",
+      "offset": 65536,
+      "image_length": 1568,
+      "chip": "esp32s3",
+      "segments": 4,
+      "checksum_valid": true,
+      "sha256_valid": true,
+      "image_sha256": "87d32ef84a61078eb187284f6a9f455a3ce8e962a790b96f36d6a94001f818e5",
+      "signature_blocks": [
+        {
+          "offset": 69632,
+          "version": 2,
+          "scheme": "RSA"
+        }
+      ],
+      "signature_verification": null,
+      "app_desc": {
+        "project_name": "sensor_fw",
+        "version": "1.0.0",
+        "secure_version": 0,
+        "idf_ver": "v5.3.1",
+        "date": "Jan  1 2026",
+        "time": "12:00:00",
+        "app_elf_sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+      }
+    },
+    {
+      "partition": "ota_1",
+      "offset": 1638400,
+      "image_length": 1568,
+      "chip": "esp32s3",
+      "segments": 4,
+      "checksum_valid": true,
+      "sha256_valid": true,
+      "image_sha256": "336a78b57a4b11140a1476b234e73765f55c6460a23826acd8e56ad7309933fe",
+      "signature_blocks": [
+        {
+          "offset": 1642496,
+          "version": 2,
+          "scheme": "RSA"
+        }
+      ],
+      "signature_verification": null,
+      "app_desc": {
+        "project_name": "sensor_fw",
+        "version": "1.1.0",
+        "secure_version": 0,
+        "idf_ver": "v5.3.1",
+        "date": "Jan  1 2026",
+        "time": "12:00:00",
+        "app_elf_sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+      }
+    }
+  ],
+  "otadata": {
+    "offset": 53248,
+    "active_slot": "ota_1",
+    "entries": [
+      {
+        "index": 0,
+        "offset": 53248,
+        "seq": 1,
+        "state": "VALID",
+        "crc_ok": true,
+        "valid": true,
+        "erased": false
+      },
+      {
+        "index": 1,
+        "offset": 57344,
+        "seq": 2,
+        "state": "VALID",
+        "crc_ok": true,
+        "valid": true,
+        "erased": false
+      }
+    ]
+  },
+  "nvs": [
+    {
+      "partition": "nvs",
+      "encrypted": false,
+      "encryption_reason": null,
+      "pages": 1,
+      "namespaces": {
+        "1": "storage",
+        "2": "nvs.net80211"
+      },
+      "entries": [
+        {
+          "namespace": "storage",
+          "key": "boot_count",
+          "type": "U32",
+          "status": "written",
+          "value": 7,
+          "value_redacted": false,
+          "value_sha256": "e8613f5a5bc9f9feeda32a8e7c80b69dd4878e47b6a91723fb15eb84236b6a2b",
+          "offset": 36960,
+          "offset_hex": "0x9060",
+          "page": 0,
+          "slot": 1,
+          "header_crc_ok": true,
+          "data_crc_ok": null,
+          "complete": true
+        },
+        {
+          "namespace": "storage",
+          "key": "device_name",
+          "type": "STR",
+          "status": "written",
+          "value": "sensor-01",
+          "value_redacted": false,
+          "value_sha256": "15055309a83745ba0a30f704af12fd54fef195cbcd721c55b2705251d2152c7f",
+          "offset": 36992,
+          "offset_hex": "0x9080",
+          "page": 0,
+          "slot": 2,
+          "header_crc_ok": true,
+          "data_crc_ok": true,
+          "complete": true
+        },
+        {
+          "namespace": "storage",
+          "key": "calib",
+          "type": "BLOB_IDX",
+          "status": "written",
+          "value": "0102030405060708",
+          "value_redacted": false,
+          "value_sha256": "66840dda154e8a113c31dd0ad32f7f3a366a80e8136979d8f5a101d3d29d6f72",
+          "offset": 37120,
+          "offset_hex": "0x9100",
+          "page": 0,
+          "slot": 6,
+          "header_crc_ok": true,
+          "data_crc_ok": true,
+          "complete": true
+        },
+        {
+          "namespace": "nvs.net80211",
+          "key": "sta.ssid",
+          "type": "BLOB_IDX",
+          "status": "written",
+          "value": "11000000456e637279707465644c61622d57694669000000000000000000000000000000",
+          "value_redacted": false,
+          "value_sha256": "e90c57ee9b59ed2cdc65a321a83a076e4dbfd4fd9bd58b188d2b038ea97961c9",
+          "offset": 37280,
+          "offset_hex": "0x91a0",
+          "page": 0,
+          "slot": 11,
+          "header_crc_ok": true,
+          "data_crc_ok": true,
+          "complete": true
+        },
+        {
+          "namespace": "nvs.net80211",
+          "key": "sta.apinfo",
+          "type": "BLOB_IDX",
+          "status": "written",
+          "value": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\u2026",
+          "value_redacted": false,
+          "value_sha256": "55bc213a5c81ab0420998d11a2bbbe5d6eb75e5b030602de376cefcca5fab23f",
+          "offset": 37504,
+          "offset_hex": "0x9280",
+          "page": 0,
+          "slot": 18,
+          "header_crc_ok": true,
+          "data_crc_ok": true,
+          "complete": true
+        },
+        {
+          "namespace": "nvs.net80211",
+          "key": "sta.pmk",
+          "type": "BLOB_IDX",
+          "status": "written",
+          "value": "\u0000\u0000****************************\u0000\u0000",
+          "value_redacted": true,
+          "value_sha256": "66687aadf862bd776c8fc18b8e9f8e20089714856ee233b3902a591d0d5f2925",
+          "offset": 37600,
+          "offset_hex": "0x92e0",
+          "page": 0,
+          "slot": 21,
+          "header_crc_ok": true,
+          "data_crc_ok": true,
+          "complete": true
+        },
+        {
+          "namespace": "nvs.net80211",
+          "key": "sta.apsw",
+          "type": "BLOB_IDX",
+          "status": "written",
+          "value": "0000",
+          "value_redacted": false,
+          "value_sha256": "96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7",
+          "offset": 37696,
+          "offset_hex": "0x9340",
+          "page": 0,
+          "slot": 24,
+          "header_crc_ok": true,
+          "data_crc_ok": true,
+          "complete": true
+        },
+        {
+          "namespace": "nvs.net80211",
+          "key": "sta.pswd",
+          "type": "BLOB_IDX",
+          "status": "written",
+          "value": "ex************************************************************\u0000\u0000",
+          "value_redacted": true,
+          "value_sha256": "056f8d26b8f9d7cad6ba98b529b2e97dd67201981fd1a9855a2e50a1236a70ce",
+          "offset": 37824,
+          "offset_hex": "0x93c0",
+          "page": 0,
+          "slot": 28,
+          "header_crc_ok": true,
+          "data_crc_ok": true,
+          "complete": true
+        }
+      ],
+      "recovered_deleted": []
+    }
+  ],
+  "filesystems": [
+    {
+      "partition": "spiffs",
+      "type": "spiffs",
+      "mounted": true,
+      "detail": "page=256 block=4096 blocks=240 deleted_pages=0",
+      "directories": [],
+      "files": [
+        {
+          "path": "/index.html",
+          "size": 54,
+          "sha256": "c5e8299bdccd2c57c3ba73cf91fff14b46ce755a4510182a726500010c7067e7",
+          "located": true,
+          "complete": true,
+          "offset": 3211781
+        },
+        {
+          "path": "/config.json",
+          "size": 38,
+          "sha256": "f00f1bd1437e2b0e2a3c0d454d4f13f12718e40fb6681b7468db3c438119d7d8",
+          "located": true,
+          "complete": true,
+          "offset": 3212293
+        }
+      ]
+    }
+  ],
+  "coredump": null,
+  "summary": {
+    "finding_count": 2,
+    "severity_counts": {
+      "info": 1,
+      "low": 0,
+      "medium": 0,
+      "high": 1,
+      "critical": 0
+    },
+    "max_severity": "high",
+    "rules_fired": [
+      "NVS.WIFI_CREDENTIALS",
+      "SEC.FLASH_ENCRYPTION_LIKELY"
+    ]
+  },
+  "findings": [
+    {
+      "id": "NVS.WIFI_CREDENTIALS:8e66a2dc959da2b4",
+      "rule_id": "NVS.WIFI_CREDENTIALS",
+      "severity": "high",
+      "title": "Wi-Fi STA credentials in NVS (SSID 'EncryptedLab-WiFi')",
+      "detail": {
+        "nvs_partition": "nvs",
+        "role": "sta",
+        "ssid": "EncryptedLab-WiFi",
+        "password": "ex************************se",
+        "redacted": true,
+        "password_sha256": "024c7364163c1992b8ec1c59074c5469842b8adba2c997e3910f3dabced6ca54",
+        "password_layout": "nul-terminated",
+        "ssid_layout": "length-prefixed"
+      },
+      "evidence": [
+        {
+          "partition": "nvs",
+          "offset": 37280,
+          "offset_hex": "0x91a0",
+          "length": 32,
+          "sha256": "5af0f670115c52f1a1a7de6b0af17799e267c790c048804381d0fcbf541a0993",
+          "preview_hex": null,
+          "preview_redacted": true
+        },
+        {
+          "partition": "nvs",
+          "offset": 37184,
+          "offset_hex": "0x9140",
+          "length": 32,
+          "sha256": "7c4e658cf2afc49ef3c4d94286214fff3093b875b51b6cb0a3caa2aefee96c0c",
+          "preview_hex": null,
+          "preview_redacted": true
+        },
+        {
+          "partition": "nvs",
+          "offset": 37216,
+          "offset_hex": "0x9160",
+          "length": 36,
+          "sha256": "e90c57ee9b59ed2cdc65a321a83a076e4dbfd4fd9bd58b188d2b038ea97961c9",
+          "preview_hex": null,
+          "preview_redacted": true
+        },
+        {
+          "partition": "nvs",
+          "offset": 37824,
+          "offset_hex": "0x93c0",
+          "length": 32,
+          "sha256": "e7961c0ab2d653f587747a314dc66c1f540334450934c4c3497700b73ed33298",
+          "preview_hex": null,
+          "preview_redacted": true
+        },
+        {
+          "partition": "nvs",
+          "offset": 37728,
+          "offset_hex": "0x9360",
+          "length": 32,
+          "sha256": "83ba2c8f57ddc5c07acea7b0c2feedd7ce1501d16d3ac87892babc2709ef65a4",
+          "preview_hex": null,
+          "preview_redacted": true
+        },
+        {
+          "partition": "nvs",
+          "offset": 37760,
+          "offset_hex": "0x9380",
+          "length": 64,
+          "sha256": "056f8d26b8f9d7cad6ba98b529b2e97dd67201981fd1a9855a2e50a1236a70ce",
+          "preview_hex": null,
+          "preview_redacted": true
+        }
+      ],
+      "attck": [],
+      "confidence": 0.95
+    },
+    {
+      "id": "SEC.FLASH_ENCRYPTION_LIKELY:927d32c763d6721f",
+      "rule_id": "SEC.FLASH_ENCRYPTION_LIKELY",
+      "severity": "info",
+      "title": "Flash encryption enabled (aes-xts); analysed with supplied key",
+      "detail": {
+        "confirmed": true,
+        "scheme": "aes-xts",
+        "decrypted_regions": [
+          "bootloader",
+          "partition_table",
+          "otadata",
+          "nvs_keys",
+          "ota_0",
+          "ota_1"
+        ],
+        "original_sha256": "3e8ed1549ac905aac7e51d1c4236cec5925a342dc294b2f5dc9b4b6f7003e41a"
+      },
+      "evidence": [
+        {
+          "partition": null,
+          "offset": 32768,
+          "offset_hex": "0x8000",
+          "length": 3072,
+          "sha256": "c42483f68a002245bee88113c4bf38cf2eef3137c616df59bc238010288bb3a1",
+          "preview_hex": "aa50010200900000004000006e76730000000000000000000000000000000000aa50010000d00000002000006f74616461746100000000000000000000000000",
+          "preview_redacted": false
+        }
+      ],
+      "attck": [],
+      "confidence": 1.0
+    }
+  ],
+  "timeline": [
+    {
+      "ts_source": "app_desc.date+time of ota_0 (build time, timezone unknown)",
+      "value": "Jan  1 2026 12:00:00",
+      "iso": "2026-01-01T12:00:00+00:00",
+      "trust": "device-reported, untrusted",
+      "evidence": {
+        "partition": "ota_0",
+        "offset": 65648,
+        "offset_hex": "0x10070",
+        "length": 32,
+        "sha256": "edd22dc8099a172eab53fac82b4fde708669fcbbc2929ac4fab70069d3ef8d02"
+      }
+    },
+    {
+      "ts_source": "app_desc.date+time of ota_1 (build time, timezone unknown)",
+      "value": "Jan  1 2026 12:00:00",
+      "iso": "2026-01-01T12:00:00+00:00",
+      "trust": "device-reported, untrusted",
+      "evidence": {
+        "partition": "ota_1",
+        "offset": 1638512,
+        "offset_hex": "0x190070",
+        "length": 32,
+        "sha256": "edd22dc8099a172eab53fac82b4fde708669fcbbc2929ac4fab70069d3ef8d02"
+      }
+    }
+  ],
+  "rule_errors": []
+}

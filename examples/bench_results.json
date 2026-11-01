@@ -1,6 +1,6 @@
 {
   "overall": {
-    "tp": 21,
+    "tp": 37,
     "fp": 0,
     "fn": 0,
     "precision": 1.0,
@@ -13,7 +13,23 @@
     "violations": []
   },
   "per_rule": {
+    "CORE.PRESENT": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
     "FS.SUSPICIOUS_FILE": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "IMG.SIGNATURE_INVALID": {
       "tp": 1,
       "fp": 0,
       "fn": 0,
@@ -38,7 +54,7 @@
       "f1": 1.0
     },
     "NVS.DELETED_SECRET": {
-      "tp": 1,
+      "tp": 2,
       "fp": 0,
       "fn": 0,
       "precision": 1.0,
@@ -46,7 +62,7 @@
       "f1": 1.0
     },
     "NVS.WIFI_CREDENTIALS": {
-      "tp": 1,
+      "tp": 2,
       "fp": 0,
       "fn": 0,
       "precision": 1.0,
@@ -78,6 +94,14 @@
       "f1": 1.0
     },
     "SEC.API_KEY": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "SEC.CERT": {
       "tp": 1,
       "fp": 0,
       "fn": 0,
@@ -86,6 +110,22 @@
       "f1": 1.0
     },
     "SEC.FLASH_ENCRYPTION_LIKELY": {
+      "tp": 3,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "SEC.HARDCODED_CREDENTIAL": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "SEC.MQTT_BROKER": {
       "tp": 1,
       "fp": 0,
       "fn": 0,
@@ -94,7 +134,7 @@
       "f1": 1.0
     },
     "SEC.NO_FLASH_ENCRYPTION": {
-      "tp": 9,
+      "tp": 14,
       "fp": 0,
       "fn": 0,
       "precision": 1.0,
@@ -110,6 +150,14 @@
       "f1": 1.0
     },
     "SEC.PRIVATE_KEY": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "SEC.URL": {
       "tp": 1,
       "fp": 0,
       "fn": 0,
@@ -137,6 +185,23 @@
       "rule_errors": []
     },
     {
+      "device": "ca_bundle_and_urls_negative",
+      "must_fire": [
+        "SEC.CERT",
+        "SEC.NO_FLASH_ENCRYPTION",
+        "SEC.URL"
+      ],
+      "fired": [
+        "SEC.CERT",
+        "SEC.NO_FLASH_ENCRYPTION",
+        "SEC.URL"
+      ],
+      "missed": [],
+      "forbidden_fired": [],
+      "finding_count": 6,
+      "rule_errors": []
+    },
+    {
       "device": "clean_control",
       "must_fire": [
         "SEC.NO_FLASH_ENCRYPTION"
@@ -147,6 +212,21 @@
       "missed": [],
       "forbidden_fired": [],
       "finding_count": 1,
+      "rule_errors": []
+    },
+    {
+      "device": "coredump_after_crash",
+      "must_fire": [
+        "CORE.PRESENT",
+        "SEC.NO_FLASH_ENCRYPTION"
+      ],
+      "fired": [
+        "CORE.PRESENT",
+        "SEC.NO_FLASH_ENCRYPTION"
+      ],
+      "missed": [],
+      "forbidden_fired": [],
+      "finding_count": 2,
       "rule_errors": []
     },
     {
@@ -190,6 +270,53 @@
       "missed": [],
       "forbidden_fired": [],
       "finding_count": 1,
+      "rule_errors": []
+    },
+    {
+      "device": "esp32_encrypted_esp32_scheme",
+      "must_fire": [
+        "SEC.API_KEY",
+        "SEC.FLASH_ENCRYPTION_LIKELY"
+      ],
+      "fired": [
+        "SEC.API_KEY",
+        "SEC.FLASH_ENCRYPTION_LIKELY"
+      ],
+      "missed": [],
+      "forbidden_fired": [],
+      "finding_count": 2,
+      "rule_errors": []
+    },
+    {
+      "device": "esp32c3_mqtt_credentials",
+      "must_fire": [
+        "SEC.HARDCODED_CREDENTIAL",
+        "SEC.MQTT_BROKER",
+        "SEC.NO_FLASH_ENCRYPTION"
+      ],
+      "fired": [
+        "SEC.HARDCODED_CREDENTIAL",
+        "SEC.MQTT_BROKER",
+        "SEC.NO_FLASH_ENCRYPTION"
+      ],
+      "missed": [],
+      "forbidden_fired": [],
+      "finding_count": 3,
+      "rule_errors": []
+    },
+    {
+      "device": "esp32s3_encrypted_with_keys",
+      "must_fire": [
+        "NVS.WIFI_CREDENTIALS",
+        "SEC.FLASH_ENCRYPTION_LIKELY"
+      ],
+      "fired": [
+        "NVS.WIFI_CREDENTIALS",
+        "SEC.FLASH_ENCRYPTION_LIKELY"
+      ],
+      "missed": [],
+      "forbidden_fired": [],
+      "finding_count": 2,
       "rule_errors": []
     },
     {
@@ -250,6 +377,36 @@
       ],
       "fired": [
         "OTA.PENDING_VERIFY",
+        "SEC.NO_FLASH_ENCRYPTION"
+      ],
+      "missed": [],
+      "forbidden_fired": [],
+      "finding_count": 2,
+      "rule_errors": []
+    },
+    {
+      "device": "rotated_password_in_nvs",
+      "must_fire": [
+        "NVS.DELETED_SECRET",
+        "SEC.NO_FLASH_ENCRYPTION"
+      ],
+      "fired": [
+        "NVS.DELETED_SECRET",
+        "SEC.NO_FLASH_ENCRYPTION"
+      ],
+      "missed": [],
+      "forbidden_fired": [],
+      "finding_count": 2,
+      "rule_errors": []
+    },
+    {
+      "device": "signed_ota_tampered",
+      "must_fire": [
+        "IMG.SIGNATURE_INVALID",
+        "SEC.NO_FLASH_ENCRYPTION"
+      ],
+      "fired": [
+        "IMG.SIGNATURE_INVALID",
         "SEC.NO_FLASH_ENCRYPTION"
       ],
       "missed": [],

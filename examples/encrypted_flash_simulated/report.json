@@ -3,7 +3,7 @@
   "kind": "analysis",
   "tool": {
     "name": "flashtrace",
-    "version": "0.1.0"
+    "version": "0.2.0"
   },
   "dump": {
     "sha256": "00cf91481b2df786b71a12b4ded5b926ff66cbc9249f254cbc2422d7a11e891d",
@@ -13,11 +13,12 @@
     "chip_id": 0,
     "bootloader_offset": 4096,
     "analysed_at": "2026-01-01T00:00:00+00:00",
-    "secrets_revealed": false
+    "secrets_revealed": false,
+    "decryption": null
   },
   "encryption": {
     "likely": true,
-    "reason": "no partition table magic at 0x8000 and entropy 8.00 bits/byte > 7.5"
+    "reason": "no partition table magic at 0x8000 and the table region's entropy is 7.94 bits/byte (> 7.5)"
   },
   "partition_table": null,
   "partitions": [],
@@ -47,7 +48,7 @@
       "severity": "info",
       "title": "Flash encryption likely enabled; structural parsing skipped",
       "detail": {
-        "reason": "no partition table magic at 0x8000 and entropy 8.00 bits/byte > 7.5"
+        "reason": "no partition table magic at 0x8000 and the table region's entropy is 7.94 bits/byte (> 7.5)"
       },
       "evidence": [
         {

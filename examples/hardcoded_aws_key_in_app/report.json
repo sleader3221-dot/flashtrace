@@ -3,7 +3,7 @@
   "kind": "analysis",
   "tool": {
     "name": "flashtrace",
-    "version": "0.1.0"
+    "version": "0.2.0"
   },
   "dump": {
     "sha256": "a4656a6e51c58f5189189dcd4baea38b5120e96d617e7abf6b543a936c42e79a",
@@ -13,7 +13,8 @@
     "chip_id": 0,
     "bootloader_offset": 4096,
     "analysed_at": "2026-01-01T00:00:00+00:00",
-    "secrets_revealed": false
+    "secrets_revealed": false,
+    "decryption": null
   },
   "encryption": {
     "likely": false,
@@ -116,6 +117,7 @@
       "sha256_valid": true,
       "image_sha256": "2ca964a7d39b3fab15ad7679123575e458d5d5ab39e431803d10976e816ea2f7",
       "signature_blocks": [],
+      "signature_verification": null,
       "app_desc": {
         "project_name": "sensor_fw",
         "version": "1.0.0",
@@ -136,6 +138,7 @@
       "sha256_valid": true,
       "image_sha256": "c114ebe9d434a985ba69d4f5154502744d3236b9c79daa860ec433354de2fa46",
       "signature_blocks": [],
+      "signature_verification": null,
       "app_desc": {
         "project_name": "sensor_fw",
         "version": "1.1.0",

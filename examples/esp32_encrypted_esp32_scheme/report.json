@@ -1,0 +1,413 @@
+{
+  "schema_version": "1.0",
+  "kind": "analysis",
+  "tool": {
+    "name": "flashtrace",
+    "version": "0.2.0"
+  },
+  "dump": {
+    "sha256": "25d989c0e9698dbecc3ac00127a8af766b4d23dc86a0bc8c886a002cbef70c60",
+    "size": 4194304,
+    "chip": "esp32",
+    "chip_detected": "esp32",
+    "chip_id": 0,
+    "bootloader_offset": 4096,
+    "analysed_at": "2026-01-01T00:00:00+00:00",
+    "secrets_revealed": false,
+    "decryption": {
+      "original_sha256": "25d989c0e9698dbecc3ac00127a8af766b4d23dc86a0bc8c886a002cbef70c60",
+      "view_sha256": "7f8cf8f835dca7aceb6e356cfcd2aebb08abfbf9fd81bb6dc501528bf764aed3",
+      "flash_scheme": "esp32",
+      "flash_regions": [
+        {
+          "what": "bootloader",
+          "offset": 4096,
+          "length": 28672
+        },
+        {
+          "what": "partition_table",
+          "offset": 32768,
+          "length": 3072
+        },
+        {
+          "what": "otadata",
+          "offset": 53248,
+          "length": 8192
+        },
+        {
+          "what": "ota_0",
+          "offset": 65536,
+          "length": 1572864
+        },
+        {
+          "what": "ota_1",
+          "offset": 1638400,
+          "length": 1572864
+        }
+      ],
+      "nvs_partitions": [],
+      "nvs_key_source": null,
+      "errors": [],
+      "evidence_basis": "decrypted view"
+    }
+  },
+  "encryption": {
+    "likely": false,
+    "reason": null
+  },
+  "partition_table": {
+    "offset": 32768,
+    "md5_present": true,
+    "md5_valid": true,
+    "end_marker_found": true
+  },
+  "partitions": [
+    {
+      "label": "nvs",
+      "type": "data",
+      "subtype": "nvs",
+      "offset": 36864,
+      "offset_hex": "0x9000",
+      "size": 16384,
+      "present_bytes": 16384,
+      "entropy": 0.1304,
+      "sha256": "1827577be9840afb4acadccbeb33a8cc7e385b1ac33afb2d5f1fce1d40a10319",
+      "encrypted_flag": false,
+      "readonly_flag": false
+    },
+    {
+      "label": "otadata",
+      "type": "data",
+      "subtype": "ota",
+      "offset": 53248,
+      "offset_hex": "0xd000",
+      "size": 8192,
+      "present_bytes": 8192,
+      "entropy": 0.0365,
+      "sha256": "b7e293bb607d3bddb99b7f38a7a45afd5823c0c61e3216e67858bbc759535282",
+      "encrypted_flag": false,
+      "readonly_flag": false
+    },
+    {
+      "label": "phy_init",
+      "type": "data",
+      "subtype": "phy",
+      "offset": 61440,
+      "offset_hex": "0xf000",
+      "size": 4096,
+      "present_bytes": 4096,
+      "entropy": 0.0,
+      "sha256": "f47a8ec3e9aff2318d896942282ad4fe37d6391c82914f54a5da8a37de1300c6",
+      "encrypted_flag": false,
+      "readonly_flag": false
+    },
+    {
+      "label": "ota_0",
+      "type": "app",
+      "subtype": "ota_0",
+      "offset": 65536,
+      "offset_hex": "0x10000",
+      "size": 1572864,
+      "present_bytes": 1572864,
+      "entropy": 0.0245,
+      "sha256": "c549ed148548b3e7368a434ffc323916eaa923b2f33c87df023463401465bbdb",
+      "encrypted_flag": false,
+      "readonly_flag": false
+    },
+    {
+      "label": "ota_1",
+      "type": "app",
+      "subtype": "ota_1",
+      "offset": 1638400,
+      "offset_hex": "0x190000",
+      "size": 1572864,
+      "present_bytes": 1572864,
+      "entropy": 0.0158,
+      "sha256": "07e8cb469525cdb29bf4e5d0a8e8f88bbbb84fa0b49b14695e900fa5c8fc8589",
+      "encrypted_flag": false,
+      "readonly_flag": false
+    },
+    {
+      "label": "spiffs",
+      "type": "data",
+      "subtype": "spiffs",
+      "offset": 3211264,
+      "offset_hex": "0x310000",
+      "size": 983040,
+      "present_bytes": 983040,
+      "entropy": 0.0121,
+      "sha256": "935cefc99435de690bad46fa2e09052827e24092bd23a523b781937992b28334",
+      "encrypted_flag": false,
+      "readonly_flag": false
+    }
+  ],
+  "apps": [
+    {
+      "partition": "ota_0",
+      "offset": 65536,
+      "image_length": 1568,
+      "chip": "esp32",
+      "segments": 4,
+      "checksum_valid": true,
+      "sha256_valid": true,
+      "image_sha256": "2ca964a7d39b3fab15ad7679123575e458d5d5ab39e431803d10976e816ea2f7",
+      "signature_blocks": [
+        {
+          "offset": 69632,
+          "version": 2,
+          "scheme": "RSA"
+        }
+      ],
+      "signature_verification": null,
+      "app_desc": {
+        "project_name": "sensor_fw",
+        "version": "1.0.0",
+        "secure_version": 0,
+        "idf_ver": "v5.3.1",
+        "date": "Jan  1 2026",
+        "time": "12:00:00",
+        "app_elf_sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+      }
+    },
+    {
+      "partition": "ota_1",
+      "offset": 1638400,
+      "image_length": 1600,
+      "chip": "esp32",
+      "segments": 4,
+      "checksum_valid": true,
+      "sha256_valid": true,
+      "image_sha256": "c114ebe9d434a985ba69d4f5154502744d3236b9c79daa860ec433354de2fa46",
+      "signature_blocks": [],
+      "signature_verification": null,
+      "app_desc": {
+        "project_name": "sensor_fw",
+        "version": "1.1.0",
+        "secure_version": 0,
+        "idf_ver": "v5.3.1",
+        "date": "Jan  1 2026",
+        "time": "12:00:00",
+        "app_elf_sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+      }
+    }
+  ],
+  "otadata": {
+    "offset": 53248,
+    "active_slot": "ota_1",
+    "entries": [
+      {
+        "index": 0,
+        "offset": 53248,
+        "seq": 1,
+        "state": "VALID",
+        "crc_ok": true,
+        "valid": true,
+        "erased": false
+      },
+      {
+        "index": 1,
+        "offset": 57344,
+        "seq": 2,
+        "state": "VALID",
+        "crc_ok": true,
+        "valid": true,
+        "erased": false
+      }
+    ]
+  },
+  "nvs": [
+    {
+      "partition": "nvs",
+      "encrypted": false,
+      "encryption_reason": null,
+      "pages": 1,
+      "namespaces": {
+        "1": "storage"
+      },
+      "entries": [
+        {
+          "namespace": "storage",
+          "key": "boot_count",
+          "type": "U32",
+          "status": "written",
+          "value": 7,
+          "value_redacted": false,
+          "value_sha256": "e8613f5a5bc9f9feeda32a8e7c80b69dd4878e47b6a91723fb15eb84236b6a2b",
+          "offset": 36960,
+          "offset_hex": "0x9060",
+          "page": 0,
+          "slot": 1,
+          "header_crc_ok": true,
+          "data_crc_ok": null,
+          "complete": true
+        },
+        {
+          "namespace": "storage",
+          "key": "device_name",
+          "type": "STR",
+          "status": "written",
+          "value": "sensor-01",
+          "value_redacted": false,
+          "value_sha256": "15055309a83745ba0a30f704af12fd54fef195cbcd721c55b2705251d2152c7f",
+          "offset": 36992,
+          "offset_hex": "0x9080",
+          "page": 0,
+          "slot": 2,
+          "header_crc_ok": true,
+          "data_crc_ok": true,
+          "complete": true
+        },
+        {
+          "namespace": "storage",
+          "key": "calib",
+          "type": "BLOB_IDX",
+          "status": "written",
+          "value": "0102030405060708",
+          "value_redacted": false,
+          "value_sha256": "66840dda154e8a113c31dd0ad32f7f3a366a80e8136979d8f5a101d3d29d6f72",
+          "offset": 37120,
+          "offset_hex": "0x9100",
+          "page": 0,
+          "slot": 6,
+          "header_crc_ok": true,
+          "data_crc_ok": true,
+          "complete": true
+        }
+      ],
+      "recovered_deleted": []
+    }
+  ],
+  "filesystems": [
+    {
+      "partition": "spiffs",
+      "type": "spiffs",
+      "mounted": true,
+      "detail": "page=256 block=4096 blocks=240 deleted_pages=0",
+      "directories": [],
+      "files": [
+        {
+          "path": "/index.html",
+          "size": 54,
+          "sha256": "c5e8299bdccd2c57c3ba73cf91fff14b46ce755a4510182a726500010c7067e7",
+          "located": true,
+          "complete": true,
+          "offset": 3211781
+        },
+        {
+          "path": "/config.json",
+          "size": 38,
+          "sha256": "f00f1bd1437e2b0e2a3c0d454d4f13f12718e40fb6681b7468db3c438119d7d8",
+          "located": true,
+          "complete": true,
+          "offset": 3212293
+        }
+      ]
+    }
+  ],
+  "coredump": null,
+  "summary": {
+    "finding_count": 2,
+    "severity_counts": {
+      "info": 1,
+      "low": 0,
+      "medium": 0,
+      "high": 1,
+      "critical": 0
+    },
+    "max_severity": "high",
+    "rules_fired": [
+      "SEC.API_KEY",
+      "SEC.FLASH_ENCRYPTION_LIKELY"
+    ]
+  },
+  "findings": [
+    {
+      "id": "SEC.API_KEY:1f24d4c08ee9de36",
+      "rule_id": "SEC.API_KEY",
+      "severity": "high",
+      "title": "AWS access key ID in app:ota_1",
+      "detail": {
+        "kind": "aws_key_id",
+        "region": "app:ota_1",
+        "source": "app",
+        "value": "AK****************01",
+        "redacted": true,
+        "value_sha256": "f666d85146d001a88b5104895fdec802a625da4463a773c4647bf70eb779c080",
+        "value_length": 20
+      },
+      "evidence": [
+        {
+          "partition": "ota_1",
+          "offset": 1638970,
+          "offset_hex": "0x19023a",
+          "length": 20,
+          "sha256": "f666d85146d001a88b5104895fdec802a625da4463a773c4647bf70eb779c080",
+          "preview_hex": null,
+          "preview_redacted": true
+        }
+      ],
+      "attck": [],
+      "confidence": 0.95
+    },
+    {
+      "id": "SEC.FLASH_ENCRYPTION_LIKELY:7ac4254dab225456",
+      "rule_id": "SEC.FLASH_ENCRYPTION_LIKELY",
+      "severity": "info",
+      "title": "Flash encryption enabled (esp32); analysed with supplied key",
+      "detail": {
+        "confirmed": true,
+        "scheme": "esp32",
+        "decrypted_regions": [
+          "bootloader",
+          "partition_table",
+          "otadata",
+          "ota_0",
+          "ota_1"
+        ],
+        "original_sha256": "25d989c0e9698dbecc3ac00127a8af766b4d23dc86a0bc8c886a002cbef70c60"
+      },
+      "evidence": [
+        {
+          "partition": null,
+          "offset": 32768,
+          "offset_hex": "0x8000",
+          "length": 3072,
+          "sha256": "14d756b68b76ead4599afe8594e2ef772c8a3033b394d8e6f43e75976b1d08e0",
+          "preview_hex": "aa50010200900000004000006e76730000000000000000000000000000000000aa50010000d00000002000006f74616461746100000000000000000000000000",
+          "preview_redacted": false
+        }
+      ],
+      "attck": [],
+      "confidence": 1.0
+    }
+  ],
+  "timeline": [
+    {
+      "ts_source": "app_desc.date+time of ota_0 (build time, timezone unknown)",
+      "value": "Jan  1 2026 12:00:00",
+      "iso": "2026-01-01T12:00:00+00:00",
+      "trust": "device-reported, untrusted",
+      "evidence": {
+        "partition": "ota_0",
+        "offset": 65648,
+        "offset_hex": "0x10070",
+        "length": 32,
+        "sha256": "edd22dc8099a172eab53fac82b4fde708669fcbbc2929ac4fab70069d3ef8d02"
+      }
+    },
+    {
+      "ts_source": "app_desc.date+time of ota_1 (build time, timezone unknown)",
+      "value": "Jan  1 2026 12:00:00",
+      "iso": "2026-01-01T12:00:00+00:00",
+      "trust": "device-reported, untrusted",
+      "evidence": {
+        "partition": "ota_1",
+        "offset": 1638512,
+        "offset_hex": "0x190070",
+        "length": 32,
+        "sha256": "edd22dc8099a172eab53fac82b4fde708669fcbbc2929ac4fab70069d3ef8d02"
+      }
+    }
+  ],
+  "rule_errors": []
+}

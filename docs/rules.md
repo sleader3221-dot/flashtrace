@@ -7,49 +7,55 @@ Every finding cites evidence (absolute offset, length, partition, SHA-256 of the
 exact bytes). Secret values are redacted unless `--reveal-secrets` is given; the
 SHA-256 of the unredacted value is always stored.
 
+Categories: `detection` (something planted or exposed), `integrity` (structure or
+signatures do not check out), `posture` (a configuration weakness true of most
+plaintext dumps; excluded from the benchmark's clean-device gate but still scored),
+`diagnostic` (parser anomalies).
+
 ## Summary
 
-| Rule | Severity | ATT&CK for ICS |
-|---|---|---|
-| [`CORE.PRESENT`](#corepresent) | medium | none — needs review |
-| [`FS.SUSPICIOUS_FILE`](#fssuspicious_file) | medium | none — needs review |
-| [`IMG.CHECKSUM_BAD`](#imgchecksum_bad) | high | T0857 proposed — needs review |
-| [`IMG.NO_APP_DESC`](#imgno_app_desc) | medium | none — needs review |
-| [`IMG.SHA256_BAD`](#imgsha256_bad) | high | T0857 proposed — needs review |
-| [`IMG.SLOT_DIVERGENCE`](#imgslot_divergence) | medium | T0857 proposed — needs review |
-| [`IMG.UNKNOWN_BUILD`](#imgunknown_build) | high | T0857 (confirmed) |
-| [`NVS.DELETED_SECRET`](#nvsdeleted_secret) | high | none — needs review |
-| [`NVS.WIFI_CREDENTIALS`](#nvswifi_credentials) | high | none — needs review |
-| [`OTA.INVALID_ACTIVE`](#otainvalid_active) | high | none — needs review |
-| [`OTA.PENDING_VERIFY`](#otapending_verify) | low | none — needs review |
-| [`OTA.ROLLBACK_OR_DOWNGRADE`](#otarollback_or_downgrade) | high | T0857 proposed — needs review |
-| [`PARSE.ANOMALY`](#parseanomaly) | low | none — needs review |
-| [`PT.MD5_MISMATCH`](#ptmd5_mismatch) | high | none — needs review |
-| [`PT.OUT_OF_BOUNDS`](#ptout_of_bounds) | high | none — needs review |
-| [`PT.OVERLAP`](#ptoverlap) | high | none — needs review |
-| [`SEC.API_KEY`](#secapi_key) | high | T0891 proposed — needs review |
-| [`SEC.CERT`](#seccert) | info | none — needs review |
-| [`SEC.FLASH_ENCRYPTION_LIKELY`](#secflash_encryption_likely) | info | none — needs review |
-| [`SEC.HARDCODED_CREDENTIAL`](#sechardcoded_credential) | high | T0891 (confirmed) |
-| [`SEC.MQTT_BROKER`](#secmqtt_broker) | medium | none — needs review |
-| [`SEC.NO_FLASH_ENCRYPTION`](#secno_flash_encryption) | medium | none — needs review |
-| [`SEC.NO_SECURE_BOOT`](#secno_secure_boot) | medium | none — needs review |
-| [`SEC.PRIVATE_KEY`](#secprivate_key) | critical | none — needs review |
-| [`SEC.URL`](#securl) | info | none — needs review |
-| `DIFF.APP_DESC` (diff only) | medium | none — needs review |
-| `DIFF.FS_ADDED` (diff only) | info | none — needs review |
-| `DIFF.FS_CHANGED` (diff only) | info | none — needs review |
-| `DIFF.FS_REMOVED` (diff only) | info | none — needs review |
-| `DIFF.NVS_ADDED` (diff only) | info | none — needs review |
-| `DIFF.NVS_CHANGED` (diff only) | info | none — needs review |
-| `DIFF.NVS_REMOVED` (diff only) | info | none — needs review |
-| `DIFF.OTA_STATE` (diff only) | low | none — needs review |
-| `DIFF.PARTITION_CHANGED` (diff only) | info | none — needs review |
-| `DIFF.PARTITION_TABLE` (diff only) | medium | none — needs review |
+| Rule | Severity | Category | ATT&CK for ICS |
+|---|---|---|---|
+| [`CORE.PRESENT`](#corepresent) | medium | detection | none — needs review |
+| [`FS.SUSPICIOUS_FILE`](#fssuspicious_file) | medium | detection | none — needs review |
+| [`IMG.CHECKSUM_BAD`](#imgchecksum_bad) | high | integrity | T0857 proposed — needs review |
+| [`IMG.NO_APP_DESC`](#imgno_app_desc) | medium | integrity | none — needs review |
+| [`IMG.SHA256_BAD`](#imgsha256_bad) | high | integrity | T0857 proposed — needs review |
+| [`IMG.SIGNATURE_INVALID`](#imgsignature_invalid) | high | integrity | T0857 proposed — needs review |
+| [`IMG.SLOT_DIVERGENCE`](#imgslot_divergence) | medium | detection | T0857 proposed — needs review |
+| [`IMG.UNKNOWN_BUILD`](#imgunknown_build) | high | detection | T0857 (confirmed) |
+| [`NVS.DELETED_SECRET`](#nvsdeleted_secret) | high | detection | none — needs review |
+| [`NVS.WIFI_CREDENTIALS`](#nvswifi_credentials) | high | detection | none — needs review |
+| [`OTA.INVALID_ACTIVE`](#otainvalid_active) | high | detection | none — needs review |
+| [`OTA.PENDING_VERIFY`](#otapending_verify) | low | detection | none — needs review |
+| [`OTA.ROLLBACK_OR_DOWNGRADE`](#otarollback_or_downgrade) | high | detection | T0857 proposed — needs review |
+| [`PARSE.ANOMALY`](#parseanomaly) | low | diagnostic | none — needs review |
+| [`PT.MD5_MISMATCH`](#ptmd5_mismatch) | high | integrity | none — needs review |
+| [`PT.OUT_OF_BOUNDS`](#ptout_of_bounds) | high | integrity | none — needs review |
+| [`PT.OVERLAP`](#ptoverlap) | high | integrity | none — needs review |
+| [`SEC.API_KEY`](#secapi_key) | high | detection | T0891 proposed — needs review |
+| [`SEC.CERT`](#seccert) | info | detection | none — needs review |
+| [`SEC.FLASH_ENCRYPTION_LIKELY`](#secflash_encryption_likely) | info | posture | none — needs review |
+| [`SEC.HARDCODED_CREDENTIAL`](#sechardcoded_credential) | high | detection | T0891 (confirmed) |
+| [`SEC.MQTT_BROKER`](#secmqtt_broker) | medium | detection | none — needs review |
+| [`SEC.NO_FLASH_ENCRYPTION`](#secno_flash_encryption) | medium | posture | none — needs review |
+| [`SEC.NO_SECURE_BOOT`](#secno_secure_boot) | medium | posture | none — needs review |
+| [`SEC.PRIVATE_KEY`](#secprivate_key) | critical | detection | none — needs review |
+| [`SEC.URL`](#securl) | info | detection | none — needs review |
+| `DIFF.APP_DESC` (diff only) | medium | diff | none — needs review |
+| `DIFF.FS_ADDED` (diff only) | info | diff | none — needs review |
+| `DIFF.FS_CHANGED` (diff only) | info | diff | none — needs review |
+| `DIFF.FS_REMOVED` (diff only) | info | diff | none — needs review |
+| `DIFF.NVS_ADDED` (diff only) | info | diff | none — needs review |
+| `DIFF.NVS_CHANGED` (diff only) | info | diff | none — needs review |
+| `DIFF.NVS_REMOVED` (diff only) | info | diff | none — needs review |
+| `DIFF.OTA_STATE` (diff only) | low | diff | none — needs review |
+| `DIFF.PARTITION_CHANGED` (diff only) | info | diff | none — needs review |
+| `DIFF.PARTITION_TABLE` (diff only) | medium | diff | none — needs review |
 
 ## CORE.PRESENT
 
-**Severity:** medium · **ATT&CK for ICS:** none — needs review
+**Severity:** medium · **Category:** detection · **ATT&CK for ICS:** none — needs review
 
 **Coredump present.** The coredump partition is not erased: the device crashed at least once and saved a core dump (task stacks/memory, possibly containing secrets).
 
@@ -59,7 +65,7 @@ SHA-256 of the unredacted value is always stored.
 
 ## FS.SUSPICIOUS_FILE
 
-**Severity:** medium · **ATT&CK for ICS:** none — needs review
+**Severity:** medium · **Category:** detection · **ATT&CK for ICS:** none — needs review
 
 **Suspicious file in filesystem.** A SPIFFS/LittleFS file is a key/cert/script by extension (.pem .key .der .crt .p12 .pfx .sh .py .lua), is an executable (ELF or ESP image), or its content triggers a SEC.* detector.
 
@@ -69,7 +75,7 @@ SHA-256 of the unredacted value is always stored.
 
 ## IMG.CHECKSUM_BAD
 
-**Severity:** high · **ATT&CK for ICS:** T0857 proposed — needs review
+**Severity:** high · **Category:** integrity · **ATT&CK for ICS:** T0857 proposed — needs review
 
 **App image checksum invalid.** The XOR checksum (seed 0xEF) stored after the segments does not match the segment data: the image was modified or corrupted.
 
@@ -79,7 +85,7 @@ SHA-256 of the unredacted value is always stored.
 
 ## IMG.NO_APP_DESC
 
-**Severity:** medium · **ATT&CK for ICS:** none — needs review
+**Severity:** medium · **Category:** integrity · **ATT&CK for ICS:** none — needs review
 
 **App image without esp_app_desc_t.** An app partition holds a parseable image but no esp_app_desc_t (magic 0xABCD5432) at the start of any segment: not built by the ESP-IDF app build, or the descriptor was stripped.
 
@@ -89,7 +95,7 @@ SHA-256 of the unredacted value is always stored.
 
 ## IMG.SHA256_BAD
 
-**Severity:** high · **ATT&CK for ICS:** T0857 proposed — needs review
+**Severity:** high · **Category:** integrity · **ATT&CK for ICS:** T0857 proposed — needs review
 
 **App image SHA-256 invalid.** The appended SHA-256 does not match the image bytes: the image was modified after build or is corrupted.
 
@@ -97,9 +103,19 @@ SHA-256 of the unredacted value is always stored.
 
 **Mapping note:** Modified or corrupted image; proposed T0857 System Firmware when tampering is confirmed.
 
+## IMG.SIGNATURE_INVALID
+
+**Severity:** high · **Category:** integrity · **ATT&CK for ICS:** T0857 proposed — needs review
+
+**App image not signed by the supplied Secure Boot key.** With --sb-pubkey, every app image must carry a Secure Boot V2 signature block that verifies (CRC, image digest and RSA-PSS/ECDSA signature) against the supplied key. Fires for unsigned images, tampered images and images signed by another key.
+
+**False positives:** Inactive without --sb-pubkey. An image legitimately signed with a second (revoked or rotated) key also fires; supply the key that should be trusted.
+
+**Mapping note:** Unsigned or foreign-signed firmware; proposed T0857 System Firmware.
+
 ## IMG.SLOT_DIVERGENCE
 
-**Severity:** medium · **ATT&CK for ICS:** T0857 proposed — needs review
+**Severity:** medium · **Category:** detection · **ATT&CK for ICS:** T0857 proposed — needs review
 
 **OTA slots diverge.** Two OTA slots carry different project_name or idf_ver, or their versions are not monotonic with the OTA sequence (the most recently written slot has the lower semantic version) or jump by more than one major version.
 
@@ -109,7 +125,7 @@ SHA-256 of the unredacted value is always stored.
 
 ## IMG.UNKNOWN_BUILD
 
-**Severity:** high · **ATT&CK for ICS:** T0857 (confirmed)
+**Severity:** high · **Category:** detection · **ATT&CK for ICS:** T0857 (confirmed)
 
 **App image not in baseline set.** With --baseline images supplied, an app image whose SHA-256 (over the whole image incl. checksum and appended digest) matches none of them. Inactive without baselines.
 
@@ -119,7 +135,7 @@ SHA-256 of the unredacted value is always stored.
 
 ## NVS.DELETED_SECRET
 
-**Severity:** high · **ATT&CK for ICS:** none — needs review
+**Severity:** high · **Category:** detection · **ATT&CK for ICS:** none — needs review
 
 **Deleted secret recoverable from NVS.** An ERASED NVS entry (bitmap 0b00) still holds a value whose key or content looks like a credential, token or key.
 
@@ -129,7 +145,7 @@ SHA-256 of the unredacted value is always stored.
 
 ## NVS.WIFI_CREDENTIALS
 
-**Severity:** high · **ATT&CK for ICS:** none — needs review
+**Severity:** high · **Category:** detection · **ATT&CK for ICS:** none — needs review
 
 **Wi-Fi credentials stored in NVS.** A station or soft-AP passphrase is present in the live nvs.net80211 namespace.
 
@@ -139,7 +155,7 @@ SHA-256 of the unredacted value is always stored.
 
 ## OTA.INVALID_ACTIVE
 
-**Severity:** high · **ATT&CK for ICS:** none — needs review
+**Severity:** high · **Category:** detection · **ATT&CK for ICS:** none — needs review
 
 **Selected or latest OTA image is invalid.** Either the otadata entry with the highest sequence (the latest OTA) is INVALID/ABORTED and the device fell back, or the slot the bootloader will select holds no image or one that fails its checksum / SHA-256.
 
@@ -149,7 +165,7 @@ SHA-256 of the unredacted value is always stored.
 
 ## OTA.PENDING_VERIFY
 
-**Severity:** low · **ATT&CK for ICS:** none — needs review
+**Severity:** low · **Category:** detection · **ATT&CK for ICS:** none — needs review
 
 **Active OTA image awaiting verification.** The selected otadata entry is in ESP_OTA_IMG_PENDING_VERIFY: a new image booted but was never marked valid; with rollback enabled the next reboot marks it ABORTED.
 
@@ -159,7 +175,7 @@ SHA-256 of the unredacted value is always stored.
 
 ## OTA.ROLLBACK_OR_DOWNGRADE
 
-**Severity:** high · **ATT&CK for ICS:** T0857 proposed — needs review
+**Severity:** high · **Category:** detection · **ATT&CK for ICS:** T0857 proposed — needs review
 
 **Active OTA slot is older than the inactive one.** The slot selected by otadata has a lower secure_version than another OTA slot, or a lower semantic version when both versions parse as semver: a rollback or forced downgrade.
 
@@ -169,7 +185,7 @@ SHA-256 of the unredacted value is always stored.
 
 ## PARSE.ANOMALY
 
-**Severity:** low · **ATT&CK for ICS:** none — needs review
+**Severity:** low · **Category:** diagnostic · **ATT&CK for ICS:** none — needs review
 
 **Structural anomaly.** A parser met malformed or unexpected structure (truncation, bad magic, CRC mismatch, …) and recorded it instead of failing. Anomalies with a dedicated rule are excluded.
 
@@ -179,7 +195,7 @@ SHA-256 of the unredacted value is always stored.
 
 ## PT.MD5_MISMATCH
 
-**Severity:** high · **ATT&CK for ICS:** none — needs review
+**Severity:** high · **Category:** integrity · **ATT&CK for ICS:** none — needs review
 
 **Partition table MD5 mismatch.** The MD5 entry of the partition table does not match the entries before it: the table was edited after it was generated.
 
@@ -189,7 +205,7 @@ SHA-256 of the unredacted value is always stored.
 
 ## PT.OUT_OF_BOUNDS
 
-**Severity:** high · **ATT&CK for ICS:** none — needs review
+**Severity:** high · **Category:** integrity · **ATT&CK for ICS:** none — needs review
 
 **Partition beyond end of dump.** A partition extends past the end of the dump: the table is inconsistent with the flash size, or the dump is truncated.
 
@@ -199,7 +215,7 @@ SHA-256 of the unredacted value is always stored.
 
 ## PT.OVERLAP
 
-**Severity:** high · **ATT&CK for ICS:** none — needs review
+**Severity:** high · **Category:** integrity · **ATT&CK for ICS:** none — needs review
 
 **Overlapping partitions.** Two non-empty partitions share flash addresses, which can hide data or let one partition overwrite another.
 
@@ -209,7 +225,7 @@ SHA-256 of the unredacted value is always stored.
 
 ## SEC.API_KEY
 
-**Severity:** high · **ATT&CK for ICS:** T0891 proposed — needs review
+**Severity:** high · **Category:** detection · **ATT&CK for ICS:** T0891 proposed — needs review
 
 **API key or access token in flash.** An AWS access key ID (AKIA/ASIA + 16 chars) or a generic token (>= 32 base64/url-safe characters mixing upper, lower and digits with >= 4.0 bits/char entropy) is present.
 
@@ -219,7 +235,7 @@ SHA-256 of the unredacted value is always stored.
 
 ## SEC.CERT
 
-**Severity:** info · **ATT&CK for ICS:** none — needs review
+**Severity:** info · **Category:** detection · **ATT&CK for ICS:** none — needs review
 
 **X.509 certificate in flash.** A PEM certificate, or a DER certificate (ASN.1 SEQUENCE header that parses with cryptography), is present.
 
@@ -229,7 +245,7 @@ SHA-256 of the unredacted value is always stored.
 
 ## SEC.FLASH_ENCRYPTION_LIKELY
 
-**Severity:** info · **ATT&CK for ICS:** none — needs review
+**Severity:** info · **Category:** posture · **ATT&CK for ICS:** none — needs review
 
 **Flash encryption likely enabled.** No partition table magic at the expected offset and the region's Shannon entropy exceeds 7.5 bits/byte: the dump is most likely ciphertext, so FlashTrace skips structural parsing.
 
@@ -239,7 +255,7 @@ SHA-256 of the unredacted value is always stored.
 
 ## SEC.HARDCODED_CREDENTIAL
 
-**Severity:** high · **ATT&CK for ICS:** T0891 (confirmed)
+**Severity:** high · **Category:** detection · **ATT&CK for ICS:** T0891 (confirmed)
 
 **Hardcoded credential in flash.** A password/secret/token assignment (e.g. password=..., "pwd": ...) or URL userinfo (scheme://user:pass@) is embedded.
 
@@ -249,7 +265,7 @@ SHA-256 of the unredacted value is always stored.
 
 ## SEC.MQTT_BROKER
 
-**Severity:** medium · **ATT&CK for ICS:** none — needs review
+**Severity:** medium · **Category:** detection · **ATT&CK for ICS:** none — needs review
 
 **MQTT broker endpoint in flash.** An mqtt:// or mqtts:// URI, or a host:1883 / host:8883 endpoint, reveals the device's broker.
 
@@ -259,7 +275,7 @@ SHA-256 of the unredacted value is always stored.
 
 ## SEC.NO_FLASH_ENCRYPTION
 
-**Severity:** medium · **ATT&CK for ICS:** none — needs review
+**Severity:** medium · **Category:** posture · **ATT&CK for ICS:** none — needs review
 
 **Flash encryption not enabled.** The partition table and at least one app image parse as plaintext, so anyone with physical access can read firmware, NVS and filesystems.
 
@@ -269,7 +285,7 @@ SHA-256 of the unredacted value is always stored.
 
 ## SEC.NO_SECURE_BOOT
 
-**Severity:** medium · **ATT&CK for ICS:** none — needs review
+**Severity:** medium · **Category:** posture · **ATT&CK for ICS:** none — needs review
 
 **No Secure Boot V2 signature on any app.** No app image has a Secure Boot V2 signature block (magic 0xE7, version 0x02/0x03) at the first 4 KB boundary after the image: images are unsigned (structural check only).
 
@@ -279,7 +295,7 @@ SHA-256 of the unredacted value is always stored.
 
 ## SEC.PRIVATE_KEY
 
-**Severity:** critical · **ATT&CK for ICS:** none — needs review
+**Severity:** critical · **Category:** detection · **ATT&CK for ICS:** none — needs review
 
 **PEM private key in flash.** A PEM-armoured private key block (RSA/EC/DSA/OpenSSH/PKCS#8, incl. ENCRYPTED) is present in an app image, NVS value or filesystem file.
 
@@ -289,7 +305,7 @@ SHA-256 of the unredacted value is always stored.
 
 ## SEC.URL
 
-**Severity:** info · **ATT&CK for ICS:** none — needs review
+**Severity:** info · **Category:** detection · **ATT&CK for ICS:** none — needs review
 
 **URL in flash.** An http:// or https:// URL is present (update servers, APIs, telemetry endpoints).
 

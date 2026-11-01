@@ -3,7 +3,7 @@
 - **Dump SHA-256:** `35328cc3c49dcac4216188ed7983f3f046ccd23866afb7ca69a34c07fbdd658a`
 - **Size:** 4194304 bytes
 - **Chip:** esp32 (bootloader at `0x1000`)
-- **Analysed:** 2026-01-01T00:00:00+00:00 with flashtrace 0.1.0
+- **Analysed:** 2026-01-01T00:00:00+00:00 with flashtrace 0.2.0
 - **Secrets:** redacted
 
 ## Executive summary

@@ -11,6 +11,7 @@ import shutil
 import tempfile
 from pathlib import Path
 
+from flashtrace.bench import keys_for_device as bench_keys
 from flashtrace.bench import markdown_table, run_bench
 from flashtrace.commands import write_reports
 from flashtrace.diff import diff_dumps
@@ -33,7 +34,13 @@ def main() -> int:
         for dev in sorted(p for p in corpus.iterdir() if p.is_dir()):
             gt = json.loads((dev / "ground_truth.json").read_text())
             base = load_baselines(dev / b for b in gt["baselines"])
-            r = analyze((dev / "dump.bin").read_bytes(), baselines=base, analysed_at=FIXED_TIME)
+            r = analyze(
+                (dev / "dump.bin").read_bytes(),
+                baselines=base,
+                analysed_at=FIXED_TIME,
+                keys=bench_keys(dev, gt),
+                sb_public_key=(dev / gt["sb_pubkey"]).read_bytes() if gt.get("sb_pubkey") else None,
+            )
             write_reports(result_dict(r), OUT / dev.name, ["json", "md", "html"], "report")
             (OUT / dev.name / "ground_truth.json").write_text(json.dumps(gt, indent=2) + "\n")
         d = diff_dumps(

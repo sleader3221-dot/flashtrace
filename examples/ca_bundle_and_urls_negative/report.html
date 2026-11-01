@@ -1,0 +1,98 @@
+<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>FlashTrace 3fa3f4becf42</title><style>
+:root{--bg:#fff;--fg:#1d2330;--muted:#5f6b7a;--card:#f4f6f9;--border:#d9dee5;
+--critical:#8b1d2c;--high:#c0392b;--medium:#d68910;--low:#2e86c1;--info:#6c7a89}
+@media (prefers-color-scheme:dark){:root{--bg:#14171c;--fg:#e6e9ee;--muted:#9aa5b1;
+--card:#1e232b;--border:#2e3540}}
+*{box-sizing:border-box}body{margin:0;padding:16px;background:var(--bg);color:var(--fg);
+font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;max-width:1200px;margin:auto}
+h1{font-size:22px;margin:0 0 4px}h2{font-size:17px;margin:28px 0 8px;border-bottom:1px solid
+var(--border);padding-bottom:4px}code,.mono{font-family:ui-monospace,Menlo,Consolas,monospace;
+font-size:12.5px}.muted{color:var(--muted)}.meta{display:grid;grid-template-columns:max-content 1fr;
+gap:2px 12px;margin-top:8px}.meta div:nth-child(odd){color:var(--muted)}
+.meta div{overflow-wrap:anywhere}.cards{display:flex;flex-wrap:wrap;gap:8px}
+.card{background:var(--card);border:1px solid var(--border);border-left:5px solid;border-radius:6px;
+padding:8px 14px;min-width:96px}.card b{display:block;font-size:22px}
+.sev-critical{border-left-color:var(--critical)}.sev-high{border-left-color:var(--high)}
+.sev-medium{border-left-color:var(--medium)}.sev-low{border-left-color:var(--low)}
+.sev-info{border-left-color:var(--info)}.pill{display:inline-block;border-radius:10px;padding:0 8px;
+color:#fff;font-size:12px}.pill.critical{background:var(--critical)}.pill.high{background:var(--high)}
+.pill.medium{background:var(--medium)}.pill.low{background:var(--low)}.pill.info{background:var(--info)}
+.map{display:flex;height:34px;border:1px solid var(--border);border-radius:4px;overflow:hidden}
+.map div{height:100%;min-width:2px;border-right:1px solid var(--bg);color:#fff;font-size:11px;
+overflow:hidden;white-space:nowrap;padding:2px 3px}.legend{font-size:12px;margin-top:4px}
+table{border-collapse:collapse;width:100%}th,td{text-align:left;padding:4px 6px;border-bottom:1px
+solid var(--border);vertical-align:top}.tablewrap{overflow-x:auto}
+details{border:1px solid var(--border);border-radius:6px;margin:6px 0;background:var(--card)}
+summary{cursor:pointer;padding:8px 10px;list-style:none}
+summary::-webkit-details-marker{display:none}
+details>div{padding:4px 12px 12px}pre{margin:6px 0;overflow-x:auto;white-space:pre}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}select{padding:4px;background:var(--card);
+color:var(--fg);border:1px solid var(--border);border-radius:4px}
+</style></head><body><header><h1>FlashTrace report</h1><div class='meta'><div>Dump SHA-256</div><div class='mono'>3fa3f4becf42f5f3e3b0b1ea6cbcab6d1417cddd4dd5a67bbfda9f7077960e6e</div><div>Size</div><div>4194304 bytes</div><div>Chip</div><div>esp32</div><div>Analysed</div><div>2026-01-01T00:00:00+00:00</div><div>Tool</div><div>flashtrace 0.2.0</div><div>Secrets</div><div>redacted</div></div></header><h2 id='summary'>Severity summary</h2><div class='cards'><div class='card sev-critical'><b>0</b>critical</div><div class='card sev-high'><b>0</b>high</div><div class='card sev-medium'><b>1</b>medium</div><div class='card sev-low'><b>0</b>low</div><div class='card sev-info'><b>5</b>info</div></div><h2 id='partitions'>Partition map</h2><div class='map'><div style='width:0.879%;background:#cfd5dd' title='unpartitioned'></div><div style='width:0.391%;background:#3f9a6b' title='nvs 0x9000 16384 B entropy 0.13'>nvs</div><div style='width:0.195%;background:#c47f2c' title='otadata 0xd000 8192 B entropy 0.04'>otadata</div><div style='width:0.098%;background:#8a8f98' title='phy_init 0xf000 4096 B entropy 0.00'>phy_init</div><div style='width:37.500%;background:#4f7cac' title='ota_0 0x10000 1572864 B entropy 0.02'>ota_0</div><div style='width:37.500%;background:#4f7cac' title='ota_1 0x190000 1572864 B entropy 0.03'>ota_1</div><div style='width:23.438%;background:#7a5aa6' title='spiffs 0x310000 983040 B entropy 0.01'>spiffs</div></div><div class='legend muted'>Bar widths are proportional to flash offsets; hover for entropy (bits/byte).</div><div class='tablewrap'><table><tr><th>Label</th><th>Type</th><th>Offset</th><th>Size</th><th>Entropy</th><th>SHA-256</th></tr><tr><td>nvs</td><td>data/nvs</td><td class='mono'>0x9000</td><td>16384</td><td>0.13</td><td class='mono'>1827577be9840afb…</td></tr><tr><td>otadata</td><td>data/ota</td><td class='mono'>0xd000</td><td>8192</td><td>0.04</td><td class='mono'>b7e293bb607d3bdd…</td></tr><tr><td>phy_init</td><td>data/phy</td><td class='mono'>0xf000</td><td>4096</td><td>0.00</td><td class='mono'>f47a8ec3e9aff231…</td></tr><tr><td>ota_0</td><td>app/ota_0</td><td class='mono'>0x10000</td><td>1572864</td><td>0.02</td><td class='mono'>c549ed148548b3e7…</td></tr><tr><td>ota_1</td><td>app/ota_1</td><td class='mono'>0x190000</td><td>1572864</td><td>0.03</td><td class='mono'>ef44b11e5e857bdc…</td></tr><tr><td>spiffs</td><td>data/spiffs</td><td class='mono'>0x310000</td><td>983040</td><td>0.01</td><td class='mono'>935cefc99435de69…</td></tr></table></div><h2 id='findings'>Findings</h2><div class='filters'><label>Severity <select id='f-sev' onchange='ftFilter()'><option value=''>all</option><option>critical</option><option>high</option><option>medium</option><option>low</option><option>info</option></select></label><label>Rule <select id='f-rule' onchange='ftFilter()'><option value=''>all</option><option>SEC.CERT</option><option>SEC.NO_FLASH_ENCRYPTION</option><option>SEC.URL</option></select></label></div><details class='finding' data-sev='medium' data-rule='SEC.NO_FLASH_ENCRYPTION'><summary><span class='pill medium'>medium</span> <code>SEC.NO_FLASH_ENCRYPTION</code> Flash contents are plaintext (no flash encryption)</summary><div><div class='muted'>id <code>SEC.NO_FLASH_ENCRYPTION:124eaa6fc18233d2</code> · confidence 1.0 · ATT&amp;CK for ICS: none mapped</div><pre class='mono'>{
+  &quot;table_offset&quot;: 32768,
+  &quot;apps_parsed&quot;: [
+    &quot;ota_0&quot;,
+    &quot;ota_1&quot;
+  ]
+}</pre><div class='tablewrap'><table><tr><th>Offset</th><th>Length</th><th>Partition</th><th>SHA-256</th></tr><tr><td class='mono'>0x8000</td><td>256</td><td>-</td><td class='mono'>ef10d4e2fae054433b3a4bca368d6b04813ccd5b41cd64ad14b0770d852332ca</td></tr><tr><td colspan='4'><pre class='mono'>00008000  aa 50 01 02 00 90 00 00 00 40 00 00 6e 76 73 00  .P.......@..nvs.
+00008010  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+00008020  aa 50 01 00 00 d0 00 00 00 20 00 00 6f 74 61 64  .P....... ..otad
+00008030  61 74 61 00 00 00 00 00 00 00 00 00 00 00 00 00  ata.............</pre></td></tr><tr><td class='mono'>0x10000</td><td>24</td><td>ota_0</td><td class='mono'>e83ca7e6caaf048152c79f81e458c2dd938b40cfc63c5580d057f62b6338a927</td></tr><tr><td colspan='4'><pre class='mono'>00010000  e9 04 02 20 04 00 08 40 ee 00 00 00 00 00 00 00  ... ...@........
+00010010  00 8f 01 00 00 00 00 01                          ........</pre></td></tr></table></div></div></details><details class='finding' data-sev='info' data-rule='SEC.CERT'><summary><span class='pill info'>info</span> <code>SEC.CERT</code> Certificate in app:ota_1: CN=FlashTrace Test Root CA</summary><div><div class='muted'>id <code>SEC.CERT:e700a91cbf5d61fc</code> · confidence 0.9 · ATT&amp;CK for ICS: none mapped</div><pre class='mono'>{
+  &quot;kind&quot;: &quot;der_cert&quot;,
+  &quot;region&quot;: &quot;app:ota_1&quot;,
+  &quot;source&quot;: &quot;app&quot;,
+  &quot;value&quot;: &quot;0\\x82\u000100\\x81\u0620\u0003\u0002\u0001\u0002\u0002\u0002\u001240\n\u0006\b*\\x86H\\xce=\u0004\u0003\u00020\&quot;1 0\u001e\u0006\u0003U\u0004\u0003\f\u0017FlashTrace Test Root CA0\u001e\u0017\r260101000000Z\u0017\r351230000000Z0\&quot;1 0\u001e\u0006\u0003U\u0004\u0003\f\u0017FlashTrace Test Root CA0Y0\u0013\u0006\u0007*\\x86H\\xce=\u0002\u0001\u0006\b*\\x86H\\xce=\u0003\u0001\u0007\u0003B\u0000\u0004VM1&amp;)\\xeb!\u000f\\xa0\\x9ex\u06e7\\xbd\\xe9\\xc3\u00072\\x92gj\u0015\u0012\\x87`s\\xcctp\\xb3\\xe0\u0004\&quot;\u07e5\\x81\\x9f\\xd8\u059b[q0&amp;\\x9bBw.&#x27;-\\x88\\xb7\\xbe\\x99\\x87\\xe1\\xcd\u001d.\\xccIU\u0002\\xa10\n\u0006\b*\\x86H\\xce=\u0004\u0003\u0002\u0003G\u00000D\u0002 H\u039d.\\x85-\u0251\u0012\\xbc\\x84\\xabJ\\^\\x95\\xf9;\\x93t\\xce\u000f\u0000\b_\\x81\u0005\\xbf\\xa2J\\x95&#x27;\u0002 \u000b6\u0017x\u001d\u0016Yk;7%\u0012Iz\\xf0\\xa4\u00f1\\x93l\\xe9\\x88D\\xdcC\\x81\\xf1c0LI\u0019&quot;,
+  &quot;redacted&quot;: false,
+  &quot;value_sha256&quot;: &quot;530f865a0119db399840d1bd9dcbf543f7d558d5cbb09969a173cee4f5000e50&quot;,
+  &quot;value_length&quot;: 308,
+  &quot;context&quot;: &quot;CN=FlashTrace Test Root CA&quot;
+}</pre><div class='tablewrap'><table><tr><th>Offset</th><th>Length</th><th>Partition</th><th>SHA-256</th></tr><tr><td class='mono'>0x190228</td><td>308</td><td>ota_1</td><td class='mono'>530f865a0119db399840d1bd9dcbf543f7d558d5cbb09969a173cee4f5000e50</td></tr><tr><td colspan='4'><pre class='mono'>00190228  30 82 01 30 30 81 d8 a0 03 02 01 02 02 02 12 34  0..00..........4
+00190238  30 0a 06 08 2a 86 48 ce 3d 04 03 02 30 22 31 20  0...*.H.=...0&quot;1 
+00190248  30 1e 06 03 55 04 03 0c 17 46 6c 61 73 68 54 72  0...U....FlashTr
+00190258  61 63 65 20 54 65 73 74 20 52 6f 6f 74 20 43 41  ace Test Root CA</pre></td></tr></table></div></div></details><details class='finding' data-sev='info' data-rule='SEC.URL'><summary><span class='pill info'>info</span> <code>SEC.URL</code> URL in app:ota_1</summary><div><div class='muted'>id <code>SEC.URL:1d5ffcc9d6866467</code> · confidence 0.9 · ATT&amp;CK for ICS: none mapped</div><pre class='mono'>{
+  &quot;kind&quot;: &quot;url&quot;,
+  &quot;region&quot;: &quot;app:ota_1&quot;,
+  &quot;source&quot;: &quot;app&quot;,
+  &quot;value&quot;: &quot;https://docs.espressif.com/projects/esp-idf/en/latest/&quot;,
+  &quot;redacted&quot;: false,
+  &quot;value_sha256&quot;: &quot;ecda3e794565477e569bb36401fab1deeaffb9b3fa028abd863138c5171b7aec&quot;,
+  &quot;value_length&quot;: 54
+}</pre><div class='tablewrap'><table><tr><th>Offset</th><th>Length</th><th>Partition</th><th>SHA-256</th></tr><tr><td class='mono'>0x19035d</td><td>54</td><td>ota_1</td><td class='mono'>ecda3e794565477e569bb36401fab1deeaffb9b3fa028abd863138c5171b7aec</td></tr><tr><td colspan='4'><pre class='mono'>0019035d  68 74 74 70 73 3a 2f 2f 64 6f 63 73 2e 65 73 70  https://docs.esp
+0019036d  72 65 73 73 69 66 2e 63 6f 6d 2f 70 72 6f 6a 65  ressif.com/proje
+0019037d  63 74 73 2f 65 73 70 2d 69 64 66 2f 65 6e 2f 6c  cts/esp-idf/en/l
+0019038d  61 74 65 73 74 2f                                atest/</pre></td></tr></table></div></div></details><details class='finding' data-sev='info' data-rule='SEC.URL'><summary><span class='pill info'>info</span> <code>SEC.URL</code> URL in app:ota_1</summary><div><div class='muted'>id <code>SEC.URL:e57bbd81154f393f</code> · confidence 0.9 · ATT&amp;CK for ICS: none mapped</div><pre class='mono'>{
+  &quot;kind&quot;: &quot;url&quot;,
+  &quot;region&quot;: &quot;app:ota_1&quot;,
+  &quot;source&quot;: &quot;app&quot;,
+  &quot;value&quot;: &quot;http://pool.ntp.org/&quot;,
+  &quot;redacted&quot;: false,
+  &quot;value_sha256&quot;: &quot;197a7c8f20da9d0b1b3bde1f5801f6f95ed62ea2f9597d6e2288f8e7e2ad1760&quot;,
+  &quot;value_length&quot;: 20
+}</pre><div class='tablewrap'><table><tr><th>Offset</th><th>Length</th><th>Partition</th><th>SHA-256</th></tr><tr><td class='mono'>0x190394</td><td>20</td><td>ota_1</td><td class='mono'>197a7c8f20da9d0b1b3bde1f5801f6f95ed62ea2f9597d6e2288f8e7e2ad1760</td></tr><tr><td colspan='4'><pre class='mono'>00190394  68 74 74 70 3a 2f 2f 70 6f 6f 6c 2e 6e 74 70 2e  http://pool.ntp.
+001903a4  6f 72 67 2f                                      org/</pre></td></tr></table></div></div></details><details class='finding' data-sev='info' data-rule='SEC.URL'><summary><span class='pill info'>info</span> <code>SEC.URL</code> URL in app:ota_1</summary><div><div class='muted'>id <code>SEC.URL:47d2e4080feb38c8</code> · confidence 0.9 · ATT&amp;CK for ICS: none mapped</div><pre class='mono'>{
+  &quot;kind&quot;: &quot;url&quot;,
+  &quot;region&quot;: &quot;app:ota_1&quot;,
+  &quot;source&quot;: &quot;app&quot;,
+  &quot;value&quot;: &quot;https://github.com/espressif/esp-idf/issues&quot;,
+  &quot;redacted&quot;: false,
+  &quot;value_sha256&quot;: &quot;7c0405ac1e52c8916e667f48f6561a9c030838f2a8c0bf77973be202bbe71456&quot;,
+  &quot;value_length&quot;: 43
+}</pre><div class='tablewrap'><table><tr><th>Offset</th><th>Length</th><th>Partition</th><th>SHA-256</th></tr><tr><td class='mono'>0x1903a9</td><td>43</td><td>ota_1</td><td class='mono'>7c0405ac1e52c8916e667f48f6561a9c030838f2a8c0bf77973be202bbe71456</td></tr><tr><td colspan='4'><pre class='mono'>001903a9  68 74 74 70 73 3a 2f 2f 67 69 74 68 75 62 2e 63  https://github.c
+001903b9  6f 6d 2f 65 73 70 72 65 73 73 69 66 2f 65 73 70  om/espressif/esp
+001903c9  2d 69 64 66 2f 69 73 73 75 65 73                 -idf/issues</pre></td></tr></table></div></div></details><details class='finding' data-sev='info' data-rule='SEC.URL'><summary><span class='pill info'>info</span> <code>SEC.URL</code> URL in app:ota_1</summary><div><div class='muted'>id <code>SEC.URL:310e11375203c56e</code> · confidence 0.9 · ATT&amp;CK for ICS: none mapped</div><pre class='mono'>{
+  &quot;kind&quot;: &quot;url&quot;,
+  &quot;region&quot;: &quot;app:ota_1&quot;,
+  &quot;source&quot;: &quot;app&quot;,
+  &quot;value&quot;: &quot;https://ota.example.com/firmware/sensor_fw.bin&quot;,
+  &quot;redacted&quot;: false,
+  &quot;value_sha256&quot;: &quot;8140e307a1ec45e3933b8cf07764cf4244c0a17e7f1b2711bed6027ea3ba3875&quot;,
+  &quot;value_length&quot;: 46
+}</pre><div class='tablewrap'><table><tr><th>Offset</th><th>Length</th><th>Partition</th><th>SHA-256</th></tr><tr><td class='mono'>0x1903d5</td><td>46</td><td>ota_1</td><td class='mono'>8140e307a1ec45e3933b8cf07764cf4244c0a17e7f1b2711bed6027ea3ba3875</td></tr><tr><td colspan='4'><pre class='mono'>001903d5  68 74 74 70 73 3a 2f 2f 6f 74 61 2e 65 78 61 6d  https://ota.exam
+001903e5  70 6c 65 2e 63 6f 6d 2f 66 69 72 6d 77 61 72 65  ple.com/firmware
+001903f5  2f 73 65 6e 73 6f 72 5f 66 77 2e 62 69 6e        /sensor_fw.bin</pre></td></tr></table></div></div></details><h2 id='deleted-nvs'>Recovered deleted NVS entries</h2><p class='muted'>None recovered.</p><h2 id='timeline'>Device-reported timeline</h2><p class='muted'>Device-reported values, not trusted wall-clock time.</p><div class='tablewrap'><table><tr><th>Normalised (UTC)</th><th>Raw value</th><th>Source</th><th>Evidence</th></tr><tr><td class='mono'>2026-01-01T12:00:00+00:00</td><td class='mono'>Jan  1 2026 12:00:00</td><td>app_desc.date+time of ota_0 (build time, timezone unknown)</td><td class='mono'>0x10070</td></tr><tr><td class='mono'>2026-01-01T12:00:00+00:00</td><td class='mono'>Jan  1 2026 12:00:00</td><td>app_desc.date+time of ota_1 (build time, timezone unknown)</td><td class='mono'>0x190070</td></tr></table></div><script>
+function ftFilter(){var s=document.getElementById('f-sev').value,
+r=document.getElementById('f-rule').value;
+document.querySelectorAll('details.finding').forEach(function(d){
+var ok=(!s||d.dataset.sev===s)&&(!r||d.dataset.rule===r);d.style.display=ok?'':'none';});}
+</script></body></html>
