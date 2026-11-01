@@ -160,7 +160,7 @@ Every device also lists all other registered rules as `must_not_fire` (except ex
 token detector fired on the base64 body of the PEM key in `pem_private_key_in_spiffs`;
 PEM-armoured blocks are now excluded from generic-token matching.
 
-**Tests**: CI 205 passed / 0 skipped (incl. typer CLI, esptool merge equality);
+**Tests**: CI 196 passed / 0 skipped (incl. typer CLI, esptool merge equality);
 local 175 passed / 7 skipped.
 
 ## Blocked / needs human
