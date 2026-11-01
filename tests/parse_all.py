@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+from flashtrace import secrets
 from flashtrace.appimage import find_signature_blocks, parse_app_image
+from flashtrace.context import build_context
 from flashtrace.io import detect_chip, shannon_entropy
 from flashtrace.model import Anomaly, anomaly_finding
+from flashtrace.nvs import parse_nvs
 from flashtrace.otadata import parse_otadata
 from flashtrace.partition import (
     find_partition_table,
@@ -12,6 +15,8 @@ from flashtrace.partition import (
     parse_partition_table,
     partition_slice,
 )
+from flashtrace.strings import extract_strings
+from flashtrace.wifi import decode_wifi_blob
 
 BASE = 0x10000
 
@@ -54,6 +59,29 @@ def run_all_parsers(data: bytes) -> None:
         parse_app_image(part, e.offset)
         parse_otadata(part, e.offset, len(table.ota_apps))
     find_partition_table(data)
+
+    for keys in (False, True):
+        nvs = parse_nvs(data, BASE, "nvs", nvs_keys_present=keys)
+        _check(nvs.anomalies, BASE, n, data)
+        for e in (*nvs.entries, *nvs.recovered_deleted):
+            for ev in e.evidence:
+                assert ev.offset >= BASE and ev.offset + ev.length <= BASE + n
+    for s in extract_strings(data, BASE, 4):
+        assert s.offset >= BASE and s.offset + s.length <= BASE + n
+    for fn in (
+        secrets.find_private_keys,
+        secrets.find_certificates,
+        secrets.find_aws_keys,
+        secrets.find_generic_tokens,
+        secrets.find_mqtt,
+        secrets.find_urls,
+        secrets.find_credentials,
+    ):
+        for m in fn(data):
+            assert m.rel >= 0 and m.rel + m.length <= n
+    decode_wifi_blob(data, "ssid")
+    decode_wifi_blob(data, "password")
+    build_context(data)
 
     for apps in (0, 1, 2, 16):
         ota = parse_otadata(data, BASE, apps)

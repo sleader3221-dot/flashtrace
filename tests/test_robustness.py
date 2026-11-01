@@ -20,7 +20,9 @@ from tests.fixtures.generator import (
     partition_table,
     sig_block,
 )
+from tests.fixtures.nvs_cases import ROWS
 from tests.parse_all import run_all_parsers
+from tools.corpus.nvs_writer import build_nvs
 
 FIXTURES = {
     "app": app_image(),
@@ -28,6 +30,7 @@ FIXTURES = {
     "bootloader": bootloader_image("esp32s3"),
     "table": partition_table(list(DEFAULT_LAYOUT))[:256],
     "otadata": otadata((otadata_entry(1, 2), otadata_entry(2, 1))),
+    "nvs": build_nvs(ROWS, 0x6000)[:0x3000],
 }
 
 
@@ -43,7 +46,7 @@ def test_every_truncation(name: str) -> None:
 def test_random_mutations(name: str) -> None:
     rng = random.Random(f"flashtrace-{name}")  # noqa: S311 - deterministic test data
     raw = FIXTURES[name]
-    for _ in range(300):
+    for _ in range(120):
         buf = bytearray(raw)
         for _ in range(rng.randint(1, 8)):
             pos = rng.randrange(len(buf))

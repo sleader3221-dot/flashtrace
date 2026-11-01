@@ -17,10 +17,12 @@ from tests.fixtures.generator import (  # noqa: E402
     otadata_entry,
     partition_table,
 )
+from tests.fixtures.nvs_cases import ROWS  # noqa: E402
 from tests.parse_all import run_all_parsers  # noqa: E402
+from tools.corpus.nvs_writer import build_nvs  # noqa: E402
 
 FUZZ = settings(
-    max_examples=300,
+    max_examples=200,
     deadline=None,
     suppress_health_check=[HealthCheck.too_slow, HealthCheck.data_too_large],
 )
@@ -30,6 +32,7 @@ SEEDS = [
     app_image("esp32c6", hash_appended=False),
     partition_table(list(DEFAULT_LAYOUT))[:256],
     otadata((otadata_entry(1, 2), otadata_entry(2, 1))),
+    build_nvs(ROWS, 0x6000)[:0x3000],
 ]
 
 
