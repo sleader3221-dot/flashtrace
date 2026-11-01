@@ -16,6 +16,7 @@ errors derive from ``anthropic.APIStatusError`` / ``anthropic.APIConnectionError
 
 from __future__ import annotations
 
+import importlib
 import json
 from dataclasses import dataclass, field
 from typing import Any
@@ -126,13 +127,12 @@ def explain_report(
     if not known:
         return Explanation(model=model, summary="The report contains no findings.")
     if client is None:
-        try:
-            import anthropic  # noqa: PLC0415 - optional dependency
-        except ImportError as exc:
+        sdk = _sdk()
+        if sdk is None:
             raise ExplainError(
                 "the explain command needs the Anthropic SDK: pip install 'flashtrace[explain]'"
-            ) from exc
-        client = anthropic.Anthropic()
+            )
+        client = sdk.Anthropic()
     response = _call(client, model, payload)
     if response.stop_reason == "refusal":
         raise ExplainError("the model declined to explain this report (refusal)")
@@ -164,11 +164,15 @@ def explain_report(
     )
 
 
-def _call(client: Any, model: str, payload: dict[str, Any]) -> Any:
+def _sdk() -> Any | None:
+    """The anthropic module when installed (for typed errors), else None."""
     try:
-        import anthropic  # noqa: PLC0415 - optional dependency
-    except ImportError:  # injected test client without the SDK installed
-        anthropic = None
+        return importlib.import_module("anthropic")
+    except ImportError:
+        return None
+
+
+def _call(client: Any, model: str, payload: dict[str, Any]) -> Any:
     kwargs: dict[str, Any] = {
         "model": model,
         "max_tokens": 16000,
@@ -184,19 +188,20 @@ def _call(client: Any, model: str, payload: dict[str, Any]) -> Any:
         "betas": [FALLBACK_BETA],
         "fallbacks": "default",
     }
-    if anthropic is None:
+    sdk = _sdk()
+    if sdk is None:  # injected client, SDK not installed
         return client.beta.messages.create(**kwargs)
     try:
         return client.beta.messages.create(**kwargs)
-    except anthropic.AuthenticationError as exc:
+    except sdk.AuthenticationError as exc:
         raise ExplainError("Anthropic authentication failed: set ANTHROPIC_API_KEY") from exc
-    except anthropic.RateLimitError as exc:
+    except sdk.RateLimitError as exc:
         raise ExplainError("Anthropic rate limit reached; retry later") from exc
-    except anthropic.BadRequestError as exc:
+    except sdk.BadRequestError as exc:
         raise ExplainError(f"request rejected by the API: {exc.message}") from exc
-    except anthropic.APIStatusError as exc:
+    except sdk.APIStatusError as exc:
         raise ExplainError(f"Anthropic API error {exc.status_code}: {exc.message}") from exc
-    except anthropic.APIConnectionError as exc:
+    except sdk.APIConnectionError as exc:
         raise ExplainError("could not reach the Anthropic API") from exc
 
 
