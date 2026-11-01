@@ -2,7 +2,8 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, "feat/**"]
+  workflow_dispatch:
   pull_request:
 
 permissions:
@@ -37,8 +38,8 @@ jobs:
           pytest --version
       - name: Ruff
         run: |
-          ruff check src tests
-          ruff format --check src tests
+          ruff check src tests tools
+          ruff format --check src tests tools
       - name: Mypy
         run: mypy
       - name: Pytest

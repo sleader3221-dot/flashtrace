@@ -9,13 +9,16 @@ description = "Forensic triage for ESP32-family SPI flash dumps"
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
-dependencies = []
+dependencies = [
+    "cryptography==50.0.1",
+]
 
 [project.optional-dependencies]
 # Versions are pinned (CLAUDE.md rule 5). The esptool and hypothesis APIs used
 # by the tests were confirmed by reading the source of exactly these tags.
 dev = [
     "esptool==5.1.0",
+    "esp-idf-nvs-partition-gen==0.2.0",
     "hypothesis==6.139.3",
     "pytest==9.1.1",
     "ruff==0.16.9",
@@ -41,15 +44,25 @@ ignore = [
     "PLR0912",
     "PLR0915",
     "PLR0911",
+    "PLR0917", # positional-heavy internal helpers are clearer than kwargs here
 ]
 
+[tool.ruff.lint.isort]
+known-first-party = ["flashtrace", "tests", "tools"]
+
 [tool.ruff.lint.per-file-ignores]
-"tests/**" = ["S101", "S603", "PLC0415"]
+"tests/**" = ["S101", "S105", "S106", "S603", "PLC0415"]
+"tools/**" = ["S101", "S603", "S311"]
 
 [tool.mypy]
 python_version = "3.11"
 strict = true
 files = ["src"]
+
+[[tool.mypy.overrides]]
+# Only consulted when the package is missing (local dev without PyPI); CI installs them.
+module = ["typer", "typer.*", "littlefs", "littlefs.*", "yaml"]
+ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
